@@ -328,7 +328,7 @@
             return rawData.filter(row => {
                 const rowUnit = getValue(row, 'No Unit').trim();
                 const rowSection = getValue(row, 'Section').trim();
-                const rowStatus = getValue(row, 'Stat. Desc').trim();
+                const rowStatus = getValue(row, 'Status Part').trim();
                 
                 const matchUnit = selectedUnit === 'ALL' || rowUnit === selectedUnit;
                 const matchSection = selectedSection === 'ALL' || rowSection === selectedSection;
