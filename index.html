@@ -197,21 +197,36 @@
         // Google Sheet CSV Export Link
         const GOOGLE_SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(SHEET_NAME)}`;
 
-        // Fallback mock dataset in case CORS or Sheet fetch fails
+        // Fallback mock dataset
         const fallbackData = [
             {"No Unit": "DT-051", "Section": "Engine Section", "MO": "80004512", "Maint. Order Desc.": "OVERHAUL ENGINE C175", "Part Number": "1P-3700", "Description": "GASKET KIT OVERHAUL", "Stock On Hand": "0", "Amount Price": "12500000", "Stat. Desc": "OUTSTANDING"},
-            {"No Unit": "DT-051", "Section": "Engine Section", "MO": "80004512", "Maint. Order Desc.": "OVERHAUL ENGINE C175", "Part Number": "2W-8001", "Description": "OIL FILTER ELEMENT", "Stock On Hand": "4", "Amount Price": "1850000", "Stat. Desc": "IN PROGRESS"},
-            {"No Unit": "EX-204", "Section": "Hydraulic Section", "MO": "80004890", "Maint. Order Desc.": "REPLACE MAIN PUMP EXCAVATOR", "Part Number": "3I-1200", "Description": "PUMP GP-PISTON", "Stock On Hand": "0", "Amount Price": "85000000", "Stat. Desc": "OUTSTANDING"},
-            {"No Unit": "EX-204", "Section": "Hydraulic Section", "MO": "80004890", "Maint. Order Desc.": "REPLACE MAIN PUMP EXCAVATOR", "Part Number": "4T-2211", "Description": "SEAL KIT CYLINDER", "Stock On Hand": "12", "Amount Price": "3200000", "Stat. Desc": "COMPLETED"},
-            {"No Unit": "BD-012", "Section": "Undercarriage", "MO": "80005112", "Maint. Order Desc.": "RETRACK BULLDOZER D85", "Part Number": "6Y-5544", "Description": "TRACK LINK ASSY", "Stock On Hand": "0", "Amount Price": "145000000", "Stat. Desc": "OUTSTANDING"},
-            {"No Unit": "BD-012", "Section": "Undercarriage", "MO": "80005112", "Maint. Order Desc.": "RETRACK BULLDOZER D85", "Part Number": "5P-8822", "Description": "BOLT TRACK SHOE", "Stock On Hand": "50", "Amount Price": "750000", "Stat. Desc": "COMPLETED"},
-            {"No Unit": "DT-062", "Section": "Transmission", "MO": "80005321", "Maint. Order Desc.": "TRANSMISSION REPAIR", "Part Number": "7X-1190", "Description": "CLUTCH DISC SET", "Stock On Hand": "2", "Amount Price": "15400000", "Stat. Desc": "IN PROGRESS"},
-            {"No Unit": "WL-108", "Section": "Electrical Section", "MO": "80005670", "Maint. Order Desc.": "REPLACE ALTERNATOR WHEEL LOADER", "Part Number": "9X-4310", "Description": "ALTERNATOR 24V 100A", "Stock On Hand": "0", "Amount Price": "9800000", "Stat. Desc": "OUTSTANDING"}
+            {"No Unit": "DT-051", "Section": "Engine Section", "MO": "80004512", "Maint. Order Desc.": "OVERHAUL ENGINE C175", "Part Number": "2W-8001", "Description": "OIL FILTER ELEMENT", "Stock On Hand": "4", "Amount Price": "1850000", "Stat. Desc": "IN PROGRESS"}
         ];
 
         let rawData = [];
         let barChartInstance = null;
         let pieChartInstance = null;
+
+        // Fungsi fleksibel untuk mencari nilai kolom (termasuk kolom X / Stat. Desc)
+        function getValue(row, keyName) {
+            if (!row) return '';
+            const keys = Object.keys(row);
+            
+            // 1. Cari exact match atau matching huruf kecil
+            let foundKey = keys.find(k => k.toLowerCase().trim() === keyName.toLowerCase().trim());
+            if (foundKey) return row[foundKey];
+
+            // 2. Jika mencari Status Part, cek alias nama header lain yang mungkin digunakan di Kolom X
+            if (keyName.toLowerCase().includes('status') || keyName.toLowerCase().includes('stat')) {
+                foundKey = keys.find(k => {
+                    const kLower = k.toLowerCase();
+                    return kLower.includes('stat') || kLower.includes('status');
+                });
+                if (foundKey) return row[foundKey];
+            }
+
+            return '';
+        }
 
         function fetchSheetData() {
             const statusBadge = document.getElementById('data-status');
@@ -274,12 +289,6 @@
             hideAlert();
         }
 
-        function getValue(row, keyName) {
-            if (!row) return '';
-            const foundKey = Object.keys(row).find(k => k.toLowerCase().trim() === keyName.toLowerCase().trim());
-            return foundKey ? row[foundKey] : '';
-        }
-
         function populateFilterOptions() {
             const unitSet = new Set();
             const sectionSet = new Set();
@@ -288,7 +297,7 @@
             rawData.forEach(row => {
                 const unit = getValue(row, 'No Unit').trim();
                 const section = getValue(row, 'Section').trim();
-                const status = getValue(row, 'Status Part').trim();
+                const status = getValue(row, 'Stat. Desc').trim();
 
                 if (unit) unitSet.add(unit);
                 if (section) sectionSet.add(section);
@@ -328,7 +337,7 @@
             return rawData.filter(row => {
                 const rowUnit = getValue(row, 'No Unit').trim();
                 const rowSection = getValue(row, 'Section').trim();
-                const rowStatus = getValue(row, 'Status Part').trim();
+                const rowStatus = getValue(row, 'Stat. Desc').trim();
                 
                 const matchUnit = selectedUnit === 'ALL' || rowUnit === selectedUnit;
                 const matchSection = selectedSection === 'ALL' || rowSection === selectedSection;
@@ -462,9 +471,9 @@
                 
                 const status = getValue(row, 'Stat. Desc').trim() || '-';
                 let statusBadgeClass = 'bg-slate-100 text-slate-800';
-                if (status === 'COMPLETED') statusBadgeClass = 'bg-emerald-100 text-emerald-800';
-                else if (status === 'IN PROGRESS') statusBadgeClass = 'bg-amber-100 text-amber-800';
-                else if (status === 'OUTSTANDING') statusBadgeClass = 'bg-rose-100 text-rose-800';
+                if (status.toUpperCase().includes('COMPLETED')) statusBadgeClass = 'bg-emerald-100 text-emerald-800';
+                else if (status.toUpperCase().includes('PROGRESS')) statusBadgeClass = 'bg-amber-100 text-amber-800';
+                else if (status.toUpperCase().includes('OUTSTANDING')) statusBadgeClass = 'bg-rose-100 text-rose-800';
 
                 const stock = cleanNumber(getValue(row, 'Stock On Hand'));
                 const amount = cleanNumber(getValue(row, 'Amount Price'));
