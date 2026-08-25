@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Backlog Unit & Cluster - MONRES 2026</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- PapaParse CDN for CSV parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+
+    <header class="bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-950 text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div class="flex items-center space-x-3">
+                <div class="bg-blue-600 p-2.5 rounded-xl shadow-inner text-white text-xl">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold tracking-tight">MONRES 2026 Dashboard</h1>
+                    <p class="text-xs text-blue-200">Monitoring Backlog Unit & Cluster Real-Time</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3">
+                <button onclick="refreshData()" class="bg-blue-800 hover:bg-blue-700 text-xs text-blue-100 font-medium px-3 py-1.5 rounded-lg border border-blue-700 transition flex items-center gap-1.5 shadow-sm">
+                    <i class="fa-solid fa-rotate"></i> Muat Ulang
+                </button>
+                <span id="data-status" class="text-xs bg-amber-500/90 text-slate-950 px-3 py-1 rounded-full font-semibold shadow-sm animate-pulse">
+                    <i class="fa-solid fa-spinner fa-spin mr-1"></i> Memuat Data...
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-6 flex-grow space-y-6 max-w-7xl">
+        
+        <div id="alert-banner" class="hidden bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl shadow-sm flex items-start justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="text-amber-600 text-lg"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                <div>
+                    <h4 class="text-sm font-semibold text-amber-900" id="alert-title">Perhatian</h4>
+                    <p class="text-xs text-amber-700" id="alert-msg">Menggunakan data simulasi karena akses Google Sheet dibatasi CORS atau offline.</p>
+                </div>
+            </div>
+            <button onclick="dismissAlert()" class="text-amber-500 hover:text-amber-700 text-sm font-bold">&times;</button>
+        </div>
+
+        <section class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                    <i class="fa-solid fa-truck-monster mr-1 text-blue-600"></i> Pilih No Unit
+                </label>
+                <select id="filter-unit" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
+                    <option value="ALL">Semua No Unit</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                    <i class="fa-solid fa-layer-group mr-1 text-indigo-600"></i> Pilih Cluster (Section)
+                </label>
+                <select id="filter-section" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
+                    <option value="ALL">Semua Cluster (Section)</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                    <i class="fa-solid fa-circle-check mr-1 text-emerald-600"></i> Status Part (Stat. Desc)
+                </label>
+                <select id="filter-status" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
+                    <option value="ALL">Semua Status Part</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                    <i class="fa-solid fa-magnifying-glass mr-1 text-purple-600"></i> Cari Kata Kunci
+                </label>
+                <input type="text" id="filter-search" placeholder="Cari MO, Part No, Deskripsi..." class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
+            </div>
+        </section>
+
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 border-l-4 border-l-blue-600 flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Items Backlog</p>
+                    <h2 id="kpi-total" class="text-2xl sm:text-3xl font-extrabold text-slate-800 mt-1">0</h2>
+                </div>
+                <div class="bg-blue-50 text-blue-600 p-3.5 rounded-xl text-xl">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                </div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 border-l-4 border-l-indigo-600 flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Total MO (Maint. Order)</p>
+                    <h2 id="kpi-mo" class="text-2xl sm:text-3xl font-extrabold text-slate-800 mt-1">0</h2>
+                </div>
+                <div class="bg-indigo-50 text-indigo-600 p-3.5 rounded-xl text-xl">
+                    <i class="fa-solid fa-file-invoice"></i>
+                </div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 border-l-4 border-l-emerald-600 flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Valuation Amount</p>
+                    <h2 id="kpi-cost" class="text-xl sm:text-2xl font-extrabold text-slate-800 mt-1">Rp 0</h2>
+                </div>
+                <div class="bg-emerald-50 text-emerald-600 p-3.5 rounded-xl text-xl">
+                    <i class="fa-solid fa-rupiah-sign"></i>
+                </div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 border-l-4 border-l-rose-600 flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Out of Stock Items</p>
+                    <h2 id="kpi-stockout" class="text-2xl sm:text-3xl font-extrabold text-slate-800 mt-1">0</h2>
+                </div>
+                <div class="bg-rose-50 text-rose-600 p-3.5 rounded-xl text-xl">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-column text-blue-600"></i> Top 10 MO dengan Backlog Terbanyak
+                    </h3>
+                </div>
+                <div class="relative h-72 w-full">
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie text-indigo-600"></i> Sebaran Backlog per Cluster (Section)
+                    </h3>
+                </div>
+                <div class="relative h-72 w-full flex justify-center">
+                    <canvas id="pieChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-slate-50/50">
+                <div class="flex items-center gap-2">
+                    <div class="bg-blue-600 text-white p-2 rounded-lg text-sm"><i class="fa-solid fa-table"></i></div>
+                    <h3 class="text-base font-bold text-slate-800">Rincian List Backlog Unit</h3>
+                </div>
+                <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
+                    <span id="table-count" class="text-xs bg-slate-200 text-slate-700 px-3 py-1 rounded-full font-semibold">Menampilkan 0 data</span>
+                    <button onclick="exportTableToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition shadow-sm flex items-center gap-1.5">
+                        <i class="fa-solid fa-download"></i> Ekspor CSV
+                    </button>
+                </div>
+            </div>
+            <div class="overflow-x-auto max-h-[520px] relative">
+                <table class="min-w-full divide-y divide-slate-200 text-xs text-left">
+                    <thead class="bg-slate-900 text-white sticky top-0 z-10">
+                        <tr>
+                            <th class="px-4 py-3 font-semibold tracking-wider">No Unit</th>
+                            <th class="px-4 py-3 font-semibold tracking-wider">Cluster (Section)</th>
+                            <th class="px-4 py-3 font-semibold tracking-wider">No MO</th>
+                            <th class="px-4 py-3 font-semibold tracking-wider">Status MO (Desc)</th>
+                            <th class="px-4 py-3 font-semibold tracking-wider">Part Number</th>
+                            <th class="px-4 py-3 font-semibold tracking-wider">Description Part</th>
+                            <th class="px-3 py-3 font-semibold tracking-wider text-center">Stock</th>
+                            <th class="px-4 py-3 font-semibold tracking-wider text-right">Amount Price</th>
+                            <th class="px-4 py-3 font-semibold tracking-wider text-center">Status Part</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body" class="divide-y divide-slate-100 bg-white">
+                        <!-- Filled dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 mt-12 py-4 text-center text-xs text-slate-500">
+        <p>Dashboard Monitoring Backlog Unit MONRES 2026 &copy; All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        const SHEET_ID = '1ZR7lEwe9XAWxrmGa7SiXokkAD1rCsX0VRFtnNhmQ2Ok';
+        const SHEET_NAME = 'Monres';
+        
+        // Google Sheet CSV Export Link
+        const GOOGLE_SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(SHEET_NAME)}`;
+
+        // Fallback mock dataset in case CORS or Sheet fetch fails
+        const fallbackData = [
+            {"No Unit": "DT-051", "Section": "Engine Section", "MO": "80004512", "Maint. Order Desc.": "OVERHAUL ENGINE C175", "Part Number": "1P-3700", "Description": "GASKET KIT OVERHAUL", "Stock On Hand": "0", "Amount Price": "12500000", "Stat. Desc": "OUTSTANDING"},
+            {"No Unit": "DT-051", "Section": "Engine Section", "MO": "80004512", "Maint. Order Desc.": "OVERHAUL ENGINE C175", "Part Number": "2W-8001", "Description": "OIL FILTER ELEMENT", "Stock On Hand": "4", "Amount Price": "1850000", "Stat. Desc": "IN PROGRESS"},
+            {"No Unit": "EX-204", "Section": "Hydraulic Section", "MO": "80004890", "Maint. Order Desc.": "REPLACE MAIN PUMP EXCAVATOR", "Part Number": "3I-1200", "Description": "PUMP GP-PISTON", "Stock On Hand": "0", "Amount Price": "85000000", "Stat. Desc": "OUTSTANDING"},
+            {"No Unit": "EX-204", "Section": "Hydraulic Section", "MO": "80004890", "Maint. Order Desc.": "REPLACE MAIN PUMP EXCAVATOR", "Part Number": "4T-2211", "Description": "SEAL KIT CYLINDER", "Stock On Hand": "12", "Amount Price": "3200000", "Stat. Desc": "COMPLETED"},
+            {"No Unit": "BD-012", "Section": "Undercarriage", "MO": "80005112", "Maint. Order Desc.": "RETRACK BULLDOZER D85", "Part Number": "6Y-5544", "Description": "TRACK LINK ASSY", "Stock On Hand": "0", "Amount Price": "145000000", "Stat. Desc": "OUTSTANDING"},
+            {"No Unit": "BD-012", "Section": "Undercarriage", "MO": "80005112", "Maint. Order Desc.": "RETRACK BULLDOZER D85", "Part Number": "5P-8822", "Description": "BOLT TRACK SHOE", "Stock On Hand": "50", "Amount Price": "750000", "Stat. Desc": "COMPLETED"},
+            {"No Unit": "DT-062", "Section": "Transmission", "MO": "80005321", "Maint. Order Desc.": "TRANSMISSION REPAIR", "Part Number": "7X-1190", "Description": "CLUTCH DISC SET", "Stock On Hand": "2", "Amount Price": "15400000", "Stat. Desc": "IN PROGRESS"},
+            {"No Unit": "WL-108", "Section": "Electrical Section", "MO": "80005670", "Maint. Order Desc.": "REPLACE ALTERNATOR WHEEL LOADER", "Part Number": "9X-4310", "Description": "ALTERNATOR 24V 100A", "Stock On Hand": "0", "Amount Price": "9800000", "Stat. Desc": "OUTSTANDING"}
+        ];
+
+        let rawData = [];
+        let barChartInstance = null;
+        let pieChartInstance = null;
+
+        function fetchSheetData() {
+            const statusBadge = document.getElementById('data-status');
+            statusBadge.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Memuat Data...';
+            statusBadge.className = 'text-xs bg-amber-500/95 text-slate-950 px-3 py-1 rounded-full font-semibold shadow-sm animate-pulse';
+
+            Papa.parse(GOOGLE_SHEET_CSV_URL, {
+                download: true,
+                header: true,
+                skipEmptyLines: true,
+                transformHeader: function(h) {
+                    return h.trim();
+                },
+                complete: function(results) {
+                    if (results.data && results.data.length > 0) {
+                        rawData = results.data.filter(row => getValue(row, 'No Unit') || getValue(row, 'MO'));
+                    }
+                    
+                    if (rawData.length === 0) {
+                        rawData = fallbackData;
+                        showAlert("Menggunakan data simulasi karena sheet kosong atau tidak dapat diakses.");
+                    } else {
+                        hideAlert();
+                    }
+
+                    statusBadge.innerHTML = '<i class="fa-solid fa-circle-check mr-1"></i> Data Terhubung';
+                    statusBadge.className = 'text-xs bg-emerald-500 text-white px-3 py-1 rounded-full font-semibold shadow-sm';
+                    
+                    populateFilterOptions();
+                    updateDashboard();
+                },
+                error: function(err) {
+                    console.warn("PapaParse error, falling back to mock data:", err);
+                    rawData = fallbackData;
+                    showAlert("Gagal tersambung ke Google Sheet (CORS / Jaringan). Menampilkan data simulasi.");
+
+                    statusBadge.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1"></i> Mode Simulasi';
+                    statusBadge.className = 'text-xs bg-rose-600 text-white px-3 py-1 rounded-full font-semibold shadow-sm';
+
+                    populateFilterOptions();
+                    updateDashboard();
+                }
+            });
+        }
+
+        function refreshData() {
+            fetchSheetData();
+        }
+
+        function showAlert(msg) {
+            document.getElementById('alert-msg').innerText = msg;
+            document.getElementById('alert-banner').classList.remove('hidden');
+        }
+
+        function hideAlert() {
+            document.getElementById('alert-banner').classList.add('hidden');
+        }
+
+        function dismissAlert() {
+            hideAlert();
+        }
+
+        function getValue(row, keyName) {
+            if (!row) return '';
+            const foundKey = Object.keys(row).find(k => k.toLowerCase().trim() === keyName.toLowerCase().trim());
+            return foundKey ? row[foundKey] : '';
+        }
+
+        function populateFilterOptions() {
+            const unitSet = new Set();
+            const sectionSet = new Set();
+            const statusSet = new Set();
+
+            rawData.forEach(row => {
+                const unit = getValue(row, 'No Unit').trim();
+                const section = getValue(row, 'Section').trim();
+                const status = getValue(row, 'Stat. Desc').trim();
+
+                if (unit) unitSet.add(unit);
+                if (section) sectionSet.add(section);
+                if (status) statusSet.add(status);
+            });
+
+            const unitSelect = document.getElementById('filter-unit');
+            unitSelect.innerHTML = '<option value="ALL">Semua No Unit</option>';
+            Array.from(unitSet).sort().forEach(val => {
+                unitSelect.innerHTML += `<option value="${val}">${val}</option>`;
+            });
+
+            const sectionSelect = document.getElementById('filter-section');
+            sectionSelect.innerHTML = '<option value="ALL">Semua Cluster (Section)</option>';
+            Array.from(sectionSet).sort().forEach(val => {
+                sectionSelect.innerHTML += `<option value="${val}">${val}</option>`;
+            });
+
+            const statusSelect = document.getElementById('filter-status');
+            statusSelect.innerHTML = '<option value="ALL">Semua Status Part</option>';
+            Array.from(statusSet).sort().forEach(val => {
+                statusSelect.innerHTML += `<option value="${val}">${val}</option>`;
+            });
+
+            document.getElementById('filter-unit').onchange = updateDashboard;
+            document.getElementById('filter-section').onchange = updateDashboard;
+            document.getElementById('filter-status').onchange = updateDashboard;
+            document.getElementById('filter-search').oninput = updateDashboard;
+        }
+
+        function getFilteredData() {
+            const selectedUnit = document.getElementById('filter-unit').value;
+            const selectedSection = document.getElementById('filter-section').value;
+            const selectedStatus = document.getElementById('filter-status').value;
+            const searchQuery = document.getElementById('filter-search').value.toLowerCase();
+
+            return rawData.filter(row => {
+                const rowUnit = getValue(row, 'No Unit').trim();
+                const rowSection = getValue(row, 'Section').trim();
+                const rowStatus = getValue(row, 'Stat. Desc').trim();
+                
+                const matchUnit = selectedUnit === 'ALL' || rowUnit === selectedUnit;
+                const matchSection = selectedSection === 'ALL' || rowSection === selectedSection;
+                const matchStatus = selectedStatus === 'ALL' || rowStatus === selectedStatus;
+                
+                const mo = getValue(row, 'MO').toLowerCase();
+                const partNo = getValue(row, 'Part Number').toLowerCase();
+                const desc = getValue(row, 'Description').toLowerCase();
+                const moDesc = getValue(row, 'Maint. Order Desc.').toLowerCase();
+                
+                const matchSearch = mo.includes(searchQuery) || 
+                                    partNo.includes(searchQuery) || 
+                                    desc.includes(searchQuery) ||
+                                    moDesc.includes(searchQuery);
+
+                return matchUnit && matchSection && matchStatus && matchSearch;
+            });
+        }
+
+        function cleanNumber(val) {
+            if (!val) return 0;
+            let str = val.toString().trim();
+            str = str.replace(/[^0-9,-]/g, '').replace(',', '.');
+            return parseFloat(str) || 0;
+        }
+
+        function updateDashboard() {
+            const data = getFilteredData();
+
+            let totalAmount = 0;
+            let stockOutCount = 0;
+            const moSet = new Set();
+
+            data.forEach(row => {
+                const amount = cleanNumber(getValue(row, 'Amount Price'));
+                const stock = cleanNumber(getValue(row, 'Stock On Hand'));
+                const mo = getValue(row, 'MO').trim();
+
+                totalAmount += amount;
+                if (stock === 0) stockOutCount++;
+                if (mo) moSet.add(mo);
+            });
+
+            document.getElementById('kpi-total').innerText = data.length.toLocaleString('id-ID');
+            document.getElementById('kpi-mo').innerText = moSet.size.toLocaleString('id-ID');
+            document.getElementById('kpi-cost').innerText = 'Rp ' + totalAmount.toLocaleString('id-ID', {maximumFractionDigits: 0});
+            document.getElementById('kpi-stockout').innerText = stockOutCount.toLocaleString('id-ID');
+
+            renderCharts(data);
+            renderTable(data);
+        }
+
+        function renderCharts(data) {
+            const moCounts = {};
+            const sectionCounts = {};
+
+            data.forEach(row => {
+                const mo = getValue(row, 'MO').trim() || 'N/A';
+                moCounts[mo] = (moCounts[mo] || 0) + 1;
+
+                const sec = getValue(row, 'Section').trim() || 'Unassigned';
+                sectionCounts[sec] = (sectionCounts[sec] || 0) + 1;
+            });
+
+            const sortedMO = Object.entries(moCounts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 10);
+
+            if (barChartInstance) barChartInstance.destroy();
+            if (pieChartInstance) pieChartInstance.destroy();
+
+            const ctxBar = document.getElementById('barChart').getContext('2d');
+            barChartInstance = new Chart(ctxBar, {
+                type: 'bar',
+                data: {
+                    labels: sortedMO.map(item => 'MO: ' + item[0]),
+                    datasets: [{
+                        label: 'Jumlah Part Backlog',
+                        data: sortedMO.map(item => item[1]),
+                        backgroundColor: '#2563EB',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            const ctxPie = document.getElementById('pieChart').getContext('2d');
+            pieChartInstance = new Chart(ctxPie, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(sectionCounts),
+                    datasets: [{
+                        data: Object.values(sectionCounts),
+                        backgroundColor: ['#2563EB', '#10B981', '#F59E0B', '#EF4444', '#6366F1', '#8B5CF6', '#EC4899'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
+                    }
+                }
+            });
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+            
+            document.getElementById('table-count').innerText = `Menampilkan ${data.length} data`;
+
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-8 text-slate-400"><i class="fa-solid fa-folder-open text-3xl mb-2"></i><p>Tidak ada data backlog yang sesuai dengan filter.</p></td></tr>`;
+                return;
+            }
+
+            data.forEach(row => { 
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50 transition border-b border-slate-100';
+                
+                const status = getValue(row, 'Stat. Desc').trim() || '-';
+                let statusBadgeClass = 'bg-slate-100 text-slate-800';
+                if (status === 'COMPLETED') statusBadgeClass = 'bg-emerald-100 text-emerald-800';
+                else if (status === 'IN PROGRESS') statusBadgeClass = 'bg-amber-100 text-amber-800';
+                else if (status === 'OUTSTANDING') statusBadgeClass = 'bg-rose-100 text-rose-800';
+
+                const stock = cleanNumber(getValue(row, 'Stock On Hand'));
+                const amount = cleanNumber(getValue(row, 'Amount Price'));
+
+                tr.innerHTML = `
+                    <td class="px-4 py-3 font-bold text-blue-900">${getValue(row, 'No Unit') || '-'}</td>
+                    <td class="px-4 py-3 font-medium text-slate-700">${getValue(row, 'Section') || '-'}</td>
+                    <td class="px-4 py-3 font-mono font-semibold text-slate-800">${getValue(row, 'MO') || '-'}</td>
+                    <td class="px-4 py-3 text-slate-600">${getValue(row, 'Maint. Order Desc.') || '-'}</td>
+                    <td class="px-4 py-3 font-mono text-slate-700">${getValue(row, 'Part Number') || '-'}</td>
+                    <td class="px-4 py-3 font-medium text-slate-800">${getValue(row, 'Description') || '-'}</td>
+                    <td class="px-3 py-3 text-center font-bold ${stock === 0 ? 'text-rose-600 bg-rose-50/50' : 'text-slate-700'}">${getValue(row, 'Stock On Hand') || '0'}</td>
+                    <td class="px-4 py-3 text-right font-medium text-slate-800">Rp ${amount.toLocaleString('id-ID')}</td>
+                    <td class="px-4 py-3 text-center"><span class="px-2.5 py-1 text-[11px] font-bold rounded-full ${statusBadgeClass}">${status}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function exportTableToCSV() {
+            const data = getFilteredData();
+            if (data.length === 0) {
+                return;
+            }
+
+            let csvContent = "No Unit,Section,MO,Maint. Order Desc,Part Number,Description,Stock On Hand,Amount Price,Stat. Desc\n";
+            data.forEach(row => {
+                const line = [
+                    `"${getValue(row, 'No Unit')}"`,
+                    `"${getValue(row, 'Section')}"`,
+                    `"${getValue(row, 'MO')}"`,
+                    `"${getValue(row, 'Maint. Order Desc.')}"`,
+                    `"${getValue(row, 'Part Number')}"`,
+                    `"${getValue(row, 'Description')}"`,
+                    `"${getValue(row, 'Stock On Hand')}"`,
+                    `"${getValue(row, 'Amount Price')}"`,
+                    `"${getValue(row, 'Stat. Desc')}"`
+                ].join(",");
+                csvContent += line + "\n";
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'backlog_monres_2026.csv');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        window.onload = function() {
+            fetchSheetData();
+        };
+    </script>
+</body>
+</html>
