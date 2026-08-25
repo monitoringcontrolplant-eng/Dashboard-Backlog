@@ -73,7 +73,7 @@
             </div>
             <div>
                 <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
-                    <i class="fa-solid fa-circle-check mr-1 text-emerald-600"></i> Status Part (Stat. Desc)
+                    <i class="fa-solid fa-circle-check mr-1 text-emerald-600"></i> Status Part
                 </label>
                 <select id="filter-status" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
                     <option value="ALL">Semua Status Part</option>
@@ -197,35 +197,29 @@
         // Google Sheet CSV Export Link
         const GOOGLE_SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(SHEET_NAME)}`;
 
-        // Fallback mock dataset
-        const fallbackData = [
-            {"No Unit": "DT-051", "Section": "Engine Section", "MO": "80004512", "Maint. Order Desc.": "OVERHAUL ENGINE C175", "Part Number": "1P-3700", "Description": "GASKET KIT OVERHAUL", "Stock On Hand": "0", "Amount Price": "12500000", "Stat. Desc": "OUTSTANDING"},
-            {"No Unit": "DT-051", "Section": "Engine Section", "MO": "80004512", "Maint. Order Desc.": "OVERHAUL ENGINE C175", "Part Number": "2W-8001", "Description": "OIL FILTER ELEMENT", "Stock On Hand": "4", "Amount Price": "1850000", "Stat. Desc": "IN PROGRESS"}
-        ];
+        const fallbackData = [];
 
         let rawData = [];
         let barChartInstance = null;
         let pieChartInstance = null;
 
-        // Fungsi fleksibel untuk mencari nilai kolom (termasuk kolom X / Stat. Desc)
+        // Fungsi khusus mengambil data Kolom W (Indeks ke-22 pada Spreadsheet)
+        function getColumnWValue(row) {
+            if (!row) return '';
+            const values = Object.values(row);
+            // Kolom W berada di urutan ke-23 (Indeks 22)
+            if (values.length >= 23 && values[22] !== undefined && values[22] !== null) {
+                return values[22].toString().trim();
+            }
+            // Fallback: Jika menggunakan header bernama 'Status Part' atau 'Stat. Desc'
+            return getValue(row, 'Status Part') || getValue(row, 'Stat. Desc') || '';
+        }
+
         function getValue(row, keyName) {
             if (!row) return '';
             const keys = Object.keys(row);
-            
-            // 1. Cari exact match atau matching huruf kecil
             let foundKey = keys.find(k => k.toLowerCase().trim() === keyName.toLowerCase().trim());
-            if (foundKey) return row[foundKey];
-
-            // 2. Jika mencari Status Part, cek alias nama header lain yang mungkin digunakan di Kolom X
-            if (keyName.toLowerCase().includes('status') || keyName.toLowerCase().includes('stat')) {
-                foundKey = keys.find(k => {
-                    const kLower = k.toLowerCase();
-                    return kLower.includes('stat') || kLower.includes('status');
-                });
-                if (foundKey) return row[foundKey];
-            }
-
-            return '';
+            return foundKey ? row[foundKey] : '';
         }
 
         function fetchSheetData() {
@@ -247,7 +241,7 @@
                     
                     if (rawData.length === 0) {
                         rawData = fallbackData;
-                        showAlert("Menggunakan data simulasi karena sheet kosong atau tidak dapat diakses.");
+                        showAlert("Data sheet kosong atau tidak dapat diakses.");
                     } else {
                         hideAlert();
                     }
@@ -259,15 +253,10 @@
                     updateDashboard();
                 },
                 error: function(err) {
-                    console.warn("PapaParse error, falling back to mock data:", err);
-                    rawData = fallbackData;
-                    showAlert("Gagal tersambung ke Google Sheet (CORS / Jaringan). Menampilkan data simulasi.");
-
-                    statusBadge.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1"></i> Mode Simulasi';
+                    console.warn("PapaParse error:", err);
+                    showAlert("Gagal tersambung ke Google Sheet.");
+                    statusBadge.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1"></i> Gagal Koneksi';
                     statusBadge.className = 'text-xs bg-rose-600 text-white px-3 py-1 rounded-full font-semibold shadow-sm';
-
-                    populateFilterOptions();
-                    updateDashboard();
                 }
             });
         }
@@ -297,7 +286,7 @@
             rawData.forEach(row => {
                 const unit = getValue(row, 'No Unit').trim();
                 const section = getValue(row, 'Section').trim();
-                const status = getValue(row, 'Stat. Desc').trim();
+                const status = getColumnWValue(row);
 
                 if (unit) unitSet.add(unit);
                 if (section) sectionSet.add(section);
@@ -337,7 +326,7 @@
             return rawData.filter(row => {
                 const rowUnit = getValue(row, 'No Unit').trim();
                 const rowSection = getValue(row, 'Section').trim();
-                const rowStatus = getValue(row, 'Stat. Desc').trim();
+                const rowStatus = getColumnWValue(row);
                 
                 const matchUnit = selectedUnit === 'ALL' || rowUnit === selectedUnit;
                 const matchSection = selectedSection === 'ALL' || rowSection === selectedSection;
@@ -469,11 +458,17 @@
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-slate-50 transition border-b border-slate-100';
                 
-                const status = getValue(row, 'Stat. Desc').trim() || '-';
+                const status = getColumnWValue(row) || '-';
                 let statusBadgeClass = 'bg-slate-100 text-slate-800';
-                if (status.toUpperCase().includes('COMPLETED')) statusBadgeClass = 'bg-emerald-100 text-emerald-800';
-                else if (status.toUpperCase().includes('PROGRESS')) statusBadgeClass = 'bg-amber-100 text-amber-800';
-                else if (status.toUpperCase().includes('OUTSTANDING')) statusBadgeClass = 'bg-rose-100 text-rose-800';
+                
+                const statusUpper = status.toUpperCase();
+                if (statusUpper.includes('COMPLETED') || statusUpper.includes('CLOSED') || statusUpper.includes('DELIVERED')) {
+                    statusBadgeClass = 'bg-emerald-100 text-emerald-800';
+                } else if (statusUpper.includes('PROGRESS') || statusUpper.includes('PARTIAL') || statusUpper.includes('PROCESS')) {
+                    statusBadgeClass = 'bg-amber-100 text-amber-800';
+                } else if (statusUpper.includes('OUTSTANDING') || statusUpper.includes('OPEN') || statusUpper.includes('CANCEL')) {
+                    statusBadgeClass = 'bg-rose-100 text-rose-800';
+                }
 
                 const stock = cleanNumber(getValue(row, 'Stock On Hand'));
                 const amount = cleanNumber(getValue(row, 'Amount Price'));
@@ -495,11 +490,9 @@
 
         function exportTableToCSV() {
             const data = getFilteredData();
-            if (data.length === 0) {
-                return;
-            }
+            if (data.length === 0) return;
 
-            let csvContent = "No Unit,Section,MO,Maint. Order Desc,Part Number,Description,Stock On Hand,Amount Price,Stat. Desc\n";
+            let csvContent = "No Unit,Section,MO,Maint. Order Desc,Part Number,Description,Stock On Hand,Amount Price,Status Part\n";
             data.forEach(row => {
                 const line = [
                     `"${getValue(row, 'No Unit')}"`,
@@ -510,7 +503,7 @@
                     `"${getValue(row, 'Description')}"`,
                     `"${getValue(row, 'Stock On Hand')}"`,
                     `"${getValue(row, 'Amount Price')}"`,
-                    `"${getValue(row, 'Stat. Desc')}"`
+                    `"${getColumnWValue(row)}"`
                 ].join(",");
                 csvContent += line + "\n";
             });
