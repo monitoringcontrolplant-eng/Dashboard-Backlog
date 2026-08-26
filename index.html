@@ -1,291 +1,108 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Backlog Management System</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Font -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #0b0f19;
-            color: #f1f5f9;
-        }
-        .bg-login-gradient {
-            background: linear-gradient(135deg, #0b0f19 0%, #111827 50%, #1e1b4b 100%);
-        }
-        .glow-effect {
-            box-shadow: 0 0 50px -12px rgba(99, 102, 241, 0.25);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Backlog Management System</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #0b0f19;
+      color: #f1f5f9;
+    }
+    .bg-login-gradient {
+      background: linear-gradient(135deg, #0b0f19 0%, #111827 50%, #1e1b4b 100%);
+    }
+    .glow-effect {
+      box-shadow: 0 0 50px -12px rgba(99, 102, 241, 0.25);
+    }
+  </style>
 </head>
 <body class="min-h-screen bg-login-gradient flex items-center justify-center p-4 sm:p-6 lg:p-8">
 
-    <!-- Container Utama Split Screen -->
-    <div class="w-full max-w-5xl bg-[#111827] border border-slate-800/80 rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 glow-effect min-h-[600px] relative">
+  <!-- Container Utama -->
+  <div class="w-full max-w-md bg-[#111827] border border-slate-800/80 rounded-3xl shadow-2xl p-8 sm:p-10 glow-effect relative">
+    
+    <!-- Header Brand -->
+    <div class="flex items-center gap-3 mb-8">
+      <img src="BSS_logo.jpg" alt="BSS Logo" class="h-8 w-auto" onerror="this.style.display='none'">
+      <div>
+        <h1 class="font-extrabold text-sm tracking-wider text-white uppercase">BACKLOG SYSTEM</h1>
+        <p class="text-[10px] text-indigo-400 font-bold tracking-widest uppercase">MANAGEMENT BACKLOG 2026</p>
+      </div>
+    </div>
+
+    <div class="mb-6">
+      <h2 class="text-2xl font-bold text-white tracking-tight">Selamat Datang</h2>
+      <p class="text-xs text-slate-400 mt-1">Silakan masuk untuk mengakses portal Backlog Management.</p>
+    </div>
+
+    <!-- Alert Error Login -->
+    <div id="loginError" class="hidden mb-4 p-3 bg-rose-500/10 border border-rose-500/30 rounded-xl text-xs text-rose-400 font-medium flex items-center gap-2">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      <span id="loginErrorMsg">Username atau Password salah!</span>
+    </div>
+
+    <!-- Form Login -->
+    <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+      <div>
+        <label for="username" class="block text-xs font-semibold text-slate-300 mb-1.5">Username / ID Pengguna</label>
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500 text-xs">
+            <i class="fa-solid fa-user"></i>
+          </span>
+          <input type="text" id="username" required class="w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-700/60 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition" placeholder="Masukkan username">
+        </div>
+      </div>
+
+      <div>
+        <label for="password" class="block text-xs font-semibold text-slate-300 mb-1.5">Password</label>
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500 text-xs">
+            <i class="fa-solid fa-lock"></i>
+          </span>
+          <input type="password" id="password" required class="w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-700/60 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition" placeholder="Masukkan password">
+        </div>
+      </div>
+
+      <button type="submit" class="w-full mt-2 py-3 px-4 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs rounded-xl shadow-lg shadow-indigo-600/30 transition duration-200 active:scale-[0.98]">
+        Masuk Ke Sistem
+      </button>
+    </form>
+  </div>
+
+  <!-- Logic JavaScript -->
+  <script>
+    function handleLogin(event) {
+      // Mencegah reload halaman bawaan form
+      event.preventDefault();
+
+      const usernameInput = document.getElementById('username').value.trim();
+      const passwordInput = document.getElementById('password').value.trim();
+      const errorDiv = document.getElementById('loginError');
+      const errorMsg = document.getElementById('loginErrorMsg');
+
+      // Credential Default
+      const validUser = "admin";
+      const validPass = "admin123";
+
+      if (usernameInput === validUser && passwordInput === validPass) {
+        errorDiv.classList.add('hidden');
+        alert("Login Berhasil! Mengalihkan halaman...");
         
-        <!-- KOLOM KIRI: Form Login -->
-        <div class="lg:col-span-5 p-8 sm:p-10 flex flex-col justify-between bg-[#111827]">
-            
-            <!-- Header Brand -->
-            <div>
-                <div class="flex items-center gap-3 mb-8">
-                    <img src="BSS_logo.jpg" alt="BSS Logo" class="h-8 w-auto" onerror="this.style.display='none'">
-                    <div>
-                        <h1 class="font-extrabold text-sm tracking-wider text-white uppercase">BACKLOG SYSTEM</h1>
-                        <p class="text-[10px] text-indigo-400 font-bold tracking-widest uppercase">MANAGEMENT BACKLOG 2026</p>
-                    </div>
-                </div>
-
-                <div class="mb-6">
-                    <h2 class="text-2xl font-bold text-white tracking-tight">Selamat Datang</h2>
-                    <p class="text-xs text-slate-400 mt-1">Silakan masuk untuk mengakses portal Backlog Management.</p>
-                </div>
-
-                <!-- Alert Error Login -->
-                <div id="loginError" class="hidden mb-4 p-3 bg-rose-500/10 border border-rose-500/30 rounded-xl text-xs text-rose-400 font-medium flex items-center gap-2">
-                    <i class="fa-solid fa-circle-exclamation"></i>
-                    <span id="loginErrorMsg">Username atau Password salah!</span>
-                </div>
-
-                <!-- Form Login -->
-                <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">Username / ID Pengguna</label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500 text-xs">
-                                <i class="fa-solid fa-user"></i>
-                            </span>
-                            <input type="text" id="username" required placeholder="admin" 
-                                class="w-full bg-[#1f2937] border border-slate-700/80 text-xs text-white placeholder-slate-500 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition">
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between items-center mb-1.5">
-                            <label class="block text-xs font-semibold text-slate-300">Password</label>
-                            <a href="#" class="text-[11px] text-indigo-400 hover:text-indigo-300 font-medium">Lupa Password?</a>
-                        </div>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500 text-xs">
-                                <i class="fa-solid fa-lock"></i>
-                            </span>
-                            <input type="password" id="password" required placeholder="••••••••" 
-                                class="w-full bg-[#1f2937] border border-slate-700/80 text-xs text-white placeholder-slate-500 rounded-xl py-3 pl-10 pr-10 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition">
-                            <button type="button" onclick="togglePasswordVisibility()" class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-500 hover:text-slate-300 text-xs">
-                                <i id="eyeIcon" class="fa-solid fa-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs py-3.5 rounded-xl transition duration-200 shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 mt-2">
-                        <span>Masuk ke Dashboard</span>
-                        <i class="fa-solid fa-arrow-right text-xs"></i>
-                    </button>
-                </form>
-
-                <!-- Tombol Kelola & Tambah Akses User -->
-                <div class="mt-4 text-center">
-                    <button onclick="toggleUserModal(true)" class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold inline-flex items-center gap-1.5">
-                        <i class="fa-solid fa-user-plus"></i> Kelola / Tambah Akses User
-                    </button>
-                </div>
-            </div>
-
-            <!-- Footer Login Info -->
-            <div class="mt-8 pt-4 border-t border-slate-800/80 text-center lg:text-left">
-                <p class="text-[11px] text-slate-500">Default Access: <b>admin</b> / <b>admin123</b></p>
-            </div>
-        </div>
-
-        <!-- KOLOM KANAN: Visual Hero -->
-        <div class="lg:col-span-7 bg-gradient-to-br from-[#1e1b4b] via-[#0f172a] to-[#0b0f19] p-8 sm:p-12 flex flex-col justify-between relative overflow-hidden border-t lg:border-t-0 lg:border-l border-slate-800/80">
-            <div class="absolute -right-16 -top-16 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="absolute -left-16 -bottom-16 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-            <div class="relative z-10 flex justify-between items-center">
-                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[11px] font-semibold tracking-wide">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Control Plant System
-                </span>
-                <span class="text-xs text-slate-500 font-mono">v2.0.26</span>
-            </div>
-
-            <div class="my-auto py-8 relative z-10 space-y-6">
-                <div>
-                    <h3 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight leading-snug">
-                        Monitoring & Evaluation <br> Backlog Unit & Cluster
-                    </h3>
-                    <p class="text-xs text-slate-400 mt-2 max-w-md leading-relaxed">
-                        Kelola data sparepart backlog, pemantauan status Maintenance Order (MO), serta evaluasi biaya operasional secara *real-time* dan terintegrasi.
-                    </p>
-                </div>
-
-                <div class="grid grid-cols-3 gap-3 pt-2">
-                    <div class="bg-[#111827]/80 backdrop-blur-md p-3.5 rounded-2xl border border-slate-800">
-                        <div class="text-indigo-400 text-xs mb-1"><i class="fa-solid fa-boxes-packing"></i></div>
-                        <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Available</p>
-                        <p class="text-sm font-extrabold text-white mt-0.5">Live Stock</p>
-                    </div>
-                    <div class="bg-[#111827]/80 backdrop-blur-md p-3.5 rounded-2xl border border-slate-800">
-                        <div class="text-emerald-400 text-xs mb-1"><i class="fa-solid fa-file-invoice-dollar"></i></div>
-                        <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Valuation</p>
-                        <p class="text-sm font-extrabold text-white mt-0.5">Real-time Cost</p>
-                    </div>
-                    <div class="bg-[#111827]/80 backdrop-blur-md p-3.5 rounded-2xl border border-slate-800">
-                        <div class="text-amber-400 text-xs mb-1"><i class="fa-solid fa-chart-line"></i></div>
-                        <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Analytics</p>
-                        <p class="text-sm font-extrabold text-white mt-0.5">Executive View</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="relative z-10 border-t border-slate-800/80 pt-4 flex justify-between items-center text-[11px] text-slate-500">
-                <span>© 2026 MONRES. All rights reserved.</span>
-                <span class="font-medium text-slate-400">BSS Engineering</span>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- MODAL: Tambah & Kelola Akses Pengguna -->
-    <div id="userModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-[#111827] border border-slate-800 rounded-2xl p-6 w-full max-w-md shadow-2xl space-y-4">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-users-gear text-indigo-400"></i> Kelola Akses Pengguna
-                </h3>
-                <button onclick="toggleUserModal(false)" class="text-slate-400 hover:text-white text-sm"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-
-            <!-- Form Tambah User -->
-            <form id="addUserForm" onsubmit="handleAddUser(event)" class="space-y-3 bg-[#1f2937]/50 p-3.5 rounded-xl border border-slate-800">
-                <p class="text-xs font-semibold text-indigo-300">Beri Akses User Baru</p>
-                <div>
-                    <input type="text" id="newUsername" required placeholder="Username Baru" class="w-full bg-[#111827] border border-slate-700 text-xs text-white rounded-lg p-2.5 focus:outline-none focus:border-indigo-500">
-                </div>
-                <div>
-                    <input type="text" id="newRole" required placeholder="Role (cth: Supervisor / Maintenance)" class="w-full bg-[#111827] border border-slate-700 text-xs text-white rounded-lg p-2.5 focus:outline-none focus:border-indigo-500">
-                </div>
-                <div>
-                    <input type="password" id="newPassword" required placeholder="Password Akses" class="w-full bg-[#111827] border border-slate-700 text-xs text-white rounded-lg p-2.5 focus:outline-none focus:border-indigo-500">
-                </div>
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs py-2 rounded-lg transition">
-                    + Tambahkan Akses
-                </button>
-            </form>
-
-            <!-- List User Terdaftar -->
-            <div>
-                <p class="text-xs font-semibold text-slate-300 mb-2">Daftar Akun Terdaftar:</p>
-                <div id="userList" class="max-h-36 overflow-y-auto space-y-1.5 pr-1">
-                    <!-- User list akan dimasukkan via JavaScript -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Script Logika Login & User Management -->
-    <script>
-        // Ambil data user dari LocalStorage, jika belum ada buat default
-        let allowedUsers = JSON.parse(localStorage.getItem('backlog_users')) || [
-            { username: 'admin', password: 'admin123', role: 'Administrator' }
-        ];
-
-        function saveUsers() {
-            localStorage.setItem('backlog_users', JSON.stringify(allowedUsers));
-        }
-
-        function togglePasswordVisibility() {
-            const pwdInput = document.getElementById('password');
-            const eyeIcon = document.getElementById('eyeIcon');
-            if (pwdInput.type === 'password') {
-                pwdInput.type = 'text';
-                eyeIcon.classList.remove('fa-eye');
-                eyeIcon.classList.add('fa-eye-slash');
-            } else {
-                pwdInput.type = 'password';
-                eyeIcon.classList.remove('fa-eye-slash');
-                eyeIcon.classList.add('fa-eye');
-            }
-        }
-
-        function handleLogin(e) {
-            e.preventDefault();
-            const uInput = document.getElementById('username').value.trim();
-            const pInput = document.getElementById('password').value.trim();
-            const errorBox = document.getElementById('loginError');
-
-            // Cek apakah username & password cocok
-            const foundUser = allowedUsers.find(user => user.username.toLowerCase() === uInput.toLowerCase() && user.password === pInput);
-
-            if (foundUser) {
-                errorBox.classList.add('hidden');
-                // Simpan info sesi login
-                sessionStorage.setItem('active_user', JSON.stringify(foundUser));
-                
-                // Redirect ke Halaman Utama Dashboard
-                window.location.href = 'index.html'; 
-            } else {
-                errorBox.classList.remove('hidden');
-            }
-        }
-
-        function toggleUserModal(show) {
-            const modal = document.getElementById('userModal');
-            if (show) {
-                modal.classList.remove('hidden');
-                renderUserList();
-            } else {
-                modal.classList.add('hidden');
-            }
-        }
-
-        function handleAddUser(e) {
-            e.preventDefault();
-            const username = document.getElementById('newUsername').value.trim();
-            const role = document.getElementById('newRole').value.trim();
-            const password = document.getElementById('newPassword').value.trim();
-
-            if (allowedUsers.some(u => u.username.toLowerCase() === username.toLowerCase())) {
-                alert('Username sudah terdaftar!');
-                return;
-            }
-
-            allowedUsers.push({ username, password, role });
-            saveUsers();
-            document.getElementById('addUserForm').reset();
-            renderUserList();
-            alert(`Akses berhasil ditambahkan untuk: ${username}`);
-        }
-
-        function deleteUser(index) {
-            if (confirm(`Hapus akses untuk ${allowedUsers[index].username}?`)) {
-                allowedUsers.splice(index, 1);
-                saveUsers();
-                renderUserList();
-            }
-        }
-
-        function renderUserList() {
-            const container = document.getElementById('userList');
-            container.innerHTML = '';
-            allowedUsers.forEach((user, idx) => {
-                container.innerHTML += `
-                    <div class="flex items-center justify-between bg-[#1f2937] p-2 rounded-lg border border-slate-800 text-xs">
-                        <div>
-                            <span class="font-bold text-white">${user.username}</span>
-                            <span class="text-[10px] text-slate-400 block">${user.role}</span>
-                        </div>
-                        ${idx === 0 ? '<span class="text-[10px] text-indigo-400 font-bold">Owner</span>' : `<button onclick="deleteUser(${idx})" class="text-rose-400 hover:text-rose-300 text-xs"><i class="fa-solid fa-trash"></i></button>`}
-                    </div>
-                `;
-            });
-        }
-    </script>
+        // Ganti 'dashboard.html' dengan nama file halaman utama kamu jika sudah ada
+        // window.location.href = 'dashboard.html';
+      } else {
+        errorDiv.classList.remove('hidden');
+        errorMsg.textContent = "Username atau Password salah!";
+      }
+    }
+  </script>
 </body>
 </html>
