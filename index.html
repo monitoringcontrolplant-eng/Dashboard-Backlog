@@ -16,13 +16,13 @@
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: radial-gradient(circle at top left, #0f172a, #020617, #090d16);
+            background: radial-gradient(circle at 50% 0%, #0f172a 0%, #020617 75%, #000000 100%);
             background-attachment: fixed;
         }
 
-        /* Glassmorphism Classes */
+        /* Glassmorphism Styles */
         .glass-card {
-            background: rgba(30, 41, 59, 0.45);
+            background: rgba(15, 23, 42, 0.55);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -30,7 +30,7 @@
         }
 
         .glass-header {
-            background: rgba(15, 23, 42, 0.75);
+            background: rgba(15, 23, 42, 0.8);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -38,16 +38,23 @@
 
         .glass-input {
             background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             color: #f8fafc;
+            transition: all 0.2s ease-in-out;
         }
 
         .glass-input:focus {
-            background: rgba(15, 23, 42, 0.8);
+            background: rgba(15, 23, 42, 0.85);
             border-color: #3b82f6;
             outline: none;
-            box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.35);
         }
+
+        /* Dynamic Glow Effects */
+        .card-glow-blue { border-top: 2px solid #3b82f6; }
+        .card-glow-indigo { border-top: 2px solid #6366f1; }
+        .card-glow-emerald { border-top: 2px solid #10b981; }
+        .card-glow-rose { border-top: 2px solid #f43f5e; }
 
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
@@ -68,25 +75,25 @@
 </head>
 <body class="text-slate-100 antialiased min-h-screen flex flex-col justify-between">
 
-    <!-- Header dengan Glass Effect -->
+    <!-- Header -->
     <header class="glass-header sticky top-0 z-50 transition-all duration-300">
-        <div class="container mx-auto px-4 py-3.5 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="container mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-4 max-w-7xl">
             <div class="flex items-center space-x-4">
                 <div class="bg-white/90 p-1.5 rounded-xl shadow-lg border border-white/20 backdrop-blur-md">
                     <img src="BSS_logo.jpg" alt="Logo BSS" class="h-10 w-auto rounded-lg object-contain">
                 </div>
                 <div>
                     <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white flex items-center gap-2">
-                        MONRES <span class="text-blue-400 font-light">2026</span>
+                        MONRES <span class="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">2026</span>
                     </h1>
-                    <p class="text-xs text-slate-400">Monitoring Backlog Unit & Cluster Real-Time</p>
+                    <p class="text-xs text-slate-400 font-medium">Monitoring Backlog Unit & Cluster Real-Time</p>
                 </div>
             </div>
             <div class="flex items-center space-x-3">
-                <button onclick="refreshData()" class="bg-blue-600/30 hover:bg-blue-600/50 text-xs text-blue-200 font-medium px-3.5 py-2 rounded-xl border border-blue-500/30 transition flex items-center gap-2 shadow-inner">
+                <button onclick="refreshData()" class="bg-blue-600/20 hover:bg-blue-600/40 text-xs text-blue-300 font-semibold px-4 py-2 rounded-xl border border-blue-500/30 transition duration-200 flex items-center gap-2 shadow-inner">
                     <i class="fa-solid fa-rotate"></i> Muat Ulang
                 </button>
-                <span id="data-status" class="text-xs bg-amber-500/80 text-amber-950 px-3 py-1.5 rounded-full font-bold shadow-lg backdrop-blur-md animate-pulse">
+                <span id="data-status" class="text-xs bg-amber-500/80 text-amber-950 px-3.5 py-2 rounded-xl font-bold shadow-lg backdrop-blur-md animate-pulse">
                     <i class="fa-solid fa-spinner fa-spin mr-1"></i> Memuat Data...
                 </span>
             </div>
@@ -143,39 +150,39 @@
 
         <!-- KPI Summary Cards -->
         <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            <div class="glass-card p-5 rounded-2xl border-l-4 border-l-blue-500 flex items-center justify-between">
+            <div class="glass-card p-5 rounded-2xl card-glow-blue flex items-center justify-between hover:scale-[1.01] transition duration-200">
                 <div>
-                    <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Items Backlog</p>
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total Items Backlog</p>
                     <h2 id="kpi-total" class="text-2xl sm:text-3xl font-extrabold text-white mt-1">0</h2>
                 </div>
-                <div class="bg-blue-500/20 border border-blue-500/30 text-blue-400 p-3.5 rounded-xl text-xl">
+                <div class="bg-blue-500/20 border border-blue-500/30 text-blue-400 p-3.5 rounded-2xl text-xl shadow-inner">
                     <i class="fa-solid fa-boxes-stacked"></i>
                 </div>
             </div>
-            <div class="glass-card p-5 rounded-2xl border-l-4 border-l-indigo-500 flex items-center justify-between">
+            <div class="glass-card p-5 rounded-2xl card-glow-indigo flex items-center justify-between hover:scale-[1.01] transition duration-200">
                 <div>
-                    <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Total MO (Maint. Order)</p>
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total MO (Maint. Order)</p>
                     <h2 id="kpi-mo" class="text-2xl sm:text-3xl font-extrabold text-white mt-1">0</h2>
                 </div>
-                <div class="bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 p-3.5 rounded-xl text-xl">
+                <div class="bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 p-3.5 rounded-2xl text-xl shadow-inner">
                     <i class="fa-solid fa-file-invoice"></i>
                 </div>
             </div>
-            <div class="glass-card p-5 rounded-2xl border-l-4 border-l-emerald-500 flex items-center justify-between">
+            <div class="glass-card p-5 rounded-2xl card-glow-emerald flex items-center justify-between hover:scale-[1.01] transition duration-200">
                 <div>
-                    <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Valuation Amount</p>
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total Valuation Amount</p>
                     <h2 id="kpi-cost" class="text-xl sm:text-2xl font-extrabold text-emerald-400 mt-1">Rp 0</h2>
                 </div>
-                <div class="bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 p-3.5 rounded-xl text-xl">
+                <div class="bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 p-3.5 rounded-2xl text-xl shadow-inner">
                     <i class="fa-solid fa-rupiah-sign"></i>
                 </div>
             </div>
-            <div class="glass-card p-5 rounded-2xl border-l-4 border-l-rose-500 flex items-center justify-between">
+            <div class="glass-card p-5 rounded-2xl card-glow-rose flex items-center justify-between hover:scale-[1.01] transition duration-200">
                 <div>
-                    <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Out of Stock Items</p>
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Out of Stock Items</p>
                     <h2 id="kpi-stockout" class="text-2xl sm:text-3xl font-extrabold text-rose-400 mt-1">0</h2>
                 </div>
-                <div class="bg-rose-500/20 border border-rose-500/30 text-rose-400 p-3.5 rounded-xl text-xl">
+                <div class="bg-rose-500/20 border border-rose-500/30 text-rose-400 p-3.5 rounded-2xl text-xl shadow-inner">
                     <i class="fa-solid fa-triangle-exclamation"></i>
                 </div>
             </div>
@@ -185,7 +192,7 @@
         <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="glass-card p-5 rounded-2xl flex flex-col justify-between">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2 uppercase tracking-wide">
                         <i class="fa-solid fa-chart-column text-blue-400"></i> Top 10 MO dengan Backlog Terbanyak
                     </h3>
                 </div>
@@ -195,7 +202,7 @@
             </div>
             <div class="glass-card p-5 rounded-2xl flex flex-col justify-between">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2 uppercase tracking-wide">
                         <i class="fa-solid fa-chart-pie text-indigo-400"></i> Sebaran Backlog per Cluster (Section)
                     </h3>
                 </div>
@@ -206,33 +213,37 @@
         </section>
 
         <!-- Data Table Section -->
-        <section class="glass-card rounded-2xl overflow-hidden">
-            <div class="p-4 sm:p-5 border-b border-white/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white/5">
+        <section class="glass-card rounded-2xl overflow-hidden shadow-2xl">
+            <div class="p-4 sm:p-5 border-b border-white/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-slate-900/40">
                 <div class="flex items-center gap-2">
-                    <div class="bg-blue-600/40 text-blue-300 p-2 rounded-lg text-sm border border-blue-500/30"><i class="fa-solid fa-table"></i></div>
-                    <h3 class="text-base font-bold text-white">Rincian List Backlog Unit</h3>
+                    <div class="bg-blue-600/30 text-blue-400 p-2 rounded-xl text-sm border border-blue-500/30"><i class="fa-solid fa-table"></i></div>
+                    <div>
+                        <h3 class="text-base font-bold text-white">Rincian List Backlog Unit</h3>
+                        <p class="text-[11px] text-slate-400" id="table-count-info">Menampilkan 0 data</p>
+                    </div>
                 </div>
-                <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
-                    <span id="table-count" class="text-xs bg-slate-800/80 text-blue-300 border border-blue-500/20 px-3 py-1 rounded-full font-semibold">Menampilkan 0 data</span>
-                    <button onclick="exportTableToCSV()" class="bg-emerald-600/40 hover:bg-emerald-600/60 border border-emerald-500/40 text-emerald-200 text-xs font-medium px-3.5 py-1.5 rounded-xl transition shadow-lg flex items-center gap-2">
-                        <i class="fa-solid fa-download"></i> Ekspor CSV
+                <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+                    <button onclick="exportTableToCSV()" class="bg-emerald-600/20 hover:bg-emerald-600/40 border border-emerald-500/30 text-emerald-300 text-xs font-semibold px-4 py-2 rounded-xl transition duration-200 flex items-center gap-2 shadow-inner">
+                        <i class="fa-solid fa-file-csv"></i> Ekspor CSV
                     </button>
                 </div>
             </div>
-            <div class="overflow-x-auto max-h-[520px] relative">
+
+            <!-- Table Container -->
+            <div class="overflow-x-auto min-h-[350px]">
                 <table class="min-w-full divide-y divide-white/10 text-xs text-left">
-                    <thead class="bg-slate-950/90 text-slate-300 sticky top-0 z-10 backdrop-blur-md">
+                    <thead class="bg-slate-950/80 text-slate-300 sticky top-0 z-10 backdrop-blur-md">
                         <tr>
-                            <th class="px-4 py-3.5 font-semibold tracking-wider">No Unit</th>
-                            <th class="px-4 py-3.5 font-semibold tracking-wider">Cluster (Section)</th>
-                            <th class="px-4 py-3.5 font-semibold tracking-wider">No MO</th>
-                            <th class="px-4 py-3.5 font-semibold tracking-wider">Status MO (Desc)</th>
-                            <th class="px-4 py-3.5 font-semibold tracking-wider">Part Number</th>
-                            <th class="px-4 py-3.5 font-semibold tracking-wider">Description Part</th>
-                            <th class="px-3 py-3.5 font-semibold tracking-wider text-center">Stock</th>
-                            <th class="px-4 py-3.5 font-semibold tracking-wider text-right">Amount Price</th>
-                            <th class="px-4 py-3.5 font-semibold tracking-wider text-center">Status Part (Kolom W)</th>
-                            <th class="px-4 py-3.5 font-semibold tracking-wider text-center">Status MO (Kolom X)</th>
+                            <th class="px-4 py-3.5 font-bold tracking-wider">No Unit</th>
+                            <th class="px-4 py-3.5 font-bold tracking-wider">Cluster (Section)</th>
+                            <th class="px-4 py-3.5 font-bold tracking-wider">No MO</th>
+                            <th class="px-4 py-3.5 font-bold tracking-wider">Status MO (Desc)</th>
+                            <th class="px-4 py-3.5 font-bold tracking-wider">Part Number</th>
+                            <th class="px-4 py-3.5 font-bold tracking-wider">Description Part</th>
+                            <th class="px-3 py-3.5 font-bold tracking-wider text-center">Stock</th>
+                            <th class="px-4 py-3.5 font-bold tracking-wider text-right">Amount Price</th>
+                            <th class="px-4 py-3.5 font-bold tracking-wider text-center">Status Part (W)</th>
+                            <th class="px-4 py-3.5 font-bold tracking-wider text-center">Status MO (X)</th>
                         </tr>
                     </thead>
                     <tbody id="table-body" class="divide-y divide-white/5 bg-transparent">
@@ -240,11 +251,27 @@
                     </tbody>
                 </table>
             </div>
+
+            <!-- Pagination Footer -->
+            <div class="p-4 border-t border-white/10 bg-slate-900/40 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="text-xs text-slate-400 font-medium" id="pagination-info">
+                    Halaman 1 dari 1
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button id="btn-prev" onclick="changePage(-1)" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-white/10 transition disabled:opacity-40 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-chevron-left mr-1"></i> Prev
+                    </button>
+                    <div id="page-numbers" class="flex space-x-1"></div>
+                    <button id="btn-next" onclick="changePage(1)" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-white/10 transition disabled:opacity-40 disabled:cursor-not-allowed">
+                        Next <i class="fa-solid fa-chevron-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
         </section>
 
     </main>
 
-    <footer class="glass-header mt-12 py-4 text-center text-xs text-slate-400">
+    <footer class="glass-header mt-12 py-4 text-center text-xs text-slate-500 font-medium">
         <p>Dashboard Monitoring Backlog Unit MONRES 2026 &copy; All Rights Reserved.</p>
     </footer>
 
@@ -255,10 +282,15 @@
         const GOOGLE_SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(SHEET_NAME)}`;
 
         let rawData = [];
+        let filteredDataCache = [];
         let barChartInstance = null;
         let pieChartInstance = null;
 
-        // Ambil data Kolom W (Indeks ke-22 pada Spreadsheet)
+        // Pagination State
+        let currentPage = 1;
+        const pageSize = 50;
+        let searchTimeout = null;
+
         function getColumnWValue(row) {
             if (!row) return '';
             const values = Object.values(row);
@@ -268,7 +300,6 @@
             return getValue(row, 'Status Part') || getValue(row, 'Stat. Desc') || '';
         }
 
-        // Ambil data Kolom X (Indeks ke-23 pada Spreadsheet)
         function getColumnXValue(row) {
             if (!row) return '';
             const values = Object.values(row);
@@ -288,15 +319,13 @@
         function fetchSheetData() {
             const statusBadge = document.getElementById('data-status');
             statusBadge.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Memuat Data...';
-            statusBadge.className = 'text-xs bg-amber-500/80 text-amber-950 px-3 py-1.5 rounded-full font-bold shadow-lg backdrop-blur-md animate-pulse';
+            statusBadge.className = 'text-xs bg-amber-500/80 text-amber-950 px-3.5 py-2 rounded-xl font-bold shadow-lg backdrop-blur-md animate-pulse';
 
             Papa.parse(GOOGLE_SHEET_CSV_URL, {
                 download: true,
                 header: true,
                 skipEmptyLines: true,
-                transformHeader: function(h) {
-                    return h.trim();
-                },
+                transformHeader: function(h) { return h.trim(); },
                 complete: function(results) {
                     if (results.data && results.data.length > 0) {
                         rawData = results.data.filter(row => getValue(row, 'No Unit') || getValue(row, 'MO'));
@@ -309,16 +338,15 @@
                     }
 
                     statusBadge.innerHTML = '<i class="fa-solid fa-circle-check mr-1"></i> Data Terhubung';
-                    statusBadge.className = 'text-xs bg-emerald-500/80 text-emerald-950 px-3 py-1.5 rounded-full font-bold shadow-lg backdrop-blur-md';
+                    statusBadge.className = 'text-xs bg-emerald-500/80 text-emerald-950 px-3.5 py-2 rounded-xl font-bold shadow-lg backdrop-blur-md';
                     
                     populateFilterOptions();
                     updateDashboard();
                 },
                 error: function(err) {
-                    console.warn("PapaParse error:", err);
                     showAlert("Gagal tersambung ke Google Sheet.");
                     statusBadge.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1"></i> Gagal Koneksi';
-                    statusBadge.className = 'text-xs bg-rose-600/80 text-white px-3 py-1.5 rounded-full font-bold shadow-lg backdrop-blur-md';
+                    statusBadge.className = 'text-xs bg-rose-600/80 text-white px-3.5 py-2 rounded-xl font-bold shadow-lg backdrop-blur-md';
                 }
             });
         }
@@ -355,35 +383,41 @@
                 if (status) statusSet.add(status);
             });
 
-            const unitSelect = document.getElementById('filter-unit');
-            unitSelect.innerHTML = '<option value="ALL" class="bg-slate-900 text-white">Semua No Unit</option>';
-            Array.from(unitSet).sort().forEach(val => {
-                unitSelect.innerHTML += `<option value="${val}" class="bg-slate-900 text-white">${val}</option>`;
-            });
+            const buildOptions = (id, set, label) => {
+                const el = document.getElementById(id);
+                el.innerHTML = `<option value="ALL" class="bg-slate-900 text-white">Semua ${label}</option>`;
+                Array.from(set).sort().forEach(val => {
+                    el.innerHTML += `<option value="${val}" class="bg-slate-900 text-white">${val}</option>`;
+                });
+            };
 
-            const sectionSelect = document.getElementById('filter-section');
-            sectionSelect.innerHTML = '<option value="ALL" class="bg-slate-900 text-white">Semua Cluster (Section)</option>';
-            Array.from(sectionSet).sort().forEach(val => {
-                sectionSelect.innerHTML += `<option value="${val}" class="bg-slate-900 text-white">${val}</option>`;
-            });
+            buildOptions('filter-unit', unitSet, 'No Unit');
+            buildOptions('filter-section', sectionSet, 'Cluster (Section)');
+            buildOptions('filter-status', statusSet, 'Status Part');
 
-            const statusSelect = document.getElementById('filter-status');
-            statusSelect.innerHTML = '<option value="ALL" class="bg-slate-900 text-white">Semua Status Part</option>';
-            Array.from(statusSet).sort().forEach(val => {
-                statusSelect.innerHTML += `<option value="${val}" class="bg-slate-900 text-white">${val}</option>`;
-            });
+            document.getElementById('filter-unit').onchange = onFilterChange;
+            document.getElementById('filter-section').onchange = onFilterChange;
+            document.getElementById('filter-status').onchange = onFilterChange;
+            
+            // Debounced Search Input
+            document.getElementById('filter-search').oninput = function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    onFilterChange();
+                }, 300);
+            };
+        }
 
-            document.getElementById('filter-unit').onchange = updateDashboard;
-            document.getElementById('filter-section').onchange = updateDashboard;
-            document.getElementById('filter-status').onchange = updateDashboard;
-            document.getElementById('filter-search').oninput = updateDashboard;
+        function onFilterChange() {
+            currentPage = 1;
+            updateDashboard();
         }
 
         function getFilteredData() {
             const selectedUnit = document.getElementById('filter-unit').value;
             const selectedSection = document.getElementById('filter-section').value;
             const selectedStatus = document.getElementById('filter-status').value;
-            const searchQuery = document.getElementById('filter-search').value.toLowerCase();
+            const searchQuery = document.getElementById('filter-search').value.toLowerCase().trim();
 
             return rawData.filter(row => {
                 const rowUnit = getValue(row, 'No Unit').trim();
@@ -394,15 +428,18 @@
                 const matchSection = selectedSection === 'ALL' || rowSection === selectedSection;
                 const matchStatus = selectedStatus === 'ALL' || rowStatus === selectedStatus;
                 
-                const mo = getValue(row, 'MO').toLowerCase();
-                const partNo = getValue(row, 'Part Number').toLowerCase();
-                const desc = getValue(row, 'Description').toLowerCase();
-                const moDesc = getValue(row, 'Maint. Order Desc.').toLowerCase();
-                
-                const matchSearch = mo.includes(searchQuery) || 
-                                    partNo.includes(searchQuery) || 
-                                    desc.includes(searchQuery) ||
-                                    moDesc.includes(searchQuery);
+                let matchSearch = true;
+                if (searchQuery) {
+                    const mo = getValue(row, 'MO').toLowerCase();
+                    const partNo = getValue(row, 'Part Number').toLowerCase();
+                    const desc = getValue(row, 'Description').toLowerCase();
+                    const moDesc = getValue(row, 'Maint. Order Desc.').toLowerCase();
+
+                    matchSearch = mo.includes(searchQuery) || 
+                                  partNo.includes(searchQuery) || 
+                                  desc.includes(searchQuery) ||
+                                  moDesc.includes(searchQuery);
+                }
 
                 return matchUnit && matchSection && matchStatus && matchSearch;
             });
@@ -416,13 +453,13 @@
         }
 
         function updateDashboard() {
-            const data = getFilteredData();
+            filteredDataCache = getFilteredData();
 
             let totalAmount = 0;
             let stockOutCount = 0;
             const moSet = new Set();
 
-            data.forEach(row => {
+            filteredDataCache.forEach(row => {
                 const amount = cleanNumber(getValue(row, 'Amount Price'));
                 const stock = cleanNumber(getValue(row, 'Stock On Hand'));
                 const mo = getValue(row, 'MO').trim();
@@ -432,13 +469,13 @@
                 if (mo) moSet.add(mo);
             });
 
-            document.getElementById('kpi-total').innerText = data.length.toLocaleString('id-ID');
+            document.getElementById('kpi-total').innerText = filteredDataCache.length.toLocaleString('id-ID');
             document.getElementById('kpi-mo').innerText = moSet.size.toLocaleString('id-ID');
             document.getElementById('kpi-cost').innerText = 'Rp ' + totalAmount.toLocaleString('id-ID', {maximumFractionDigits: 0});
             document.getElementById('kpi-stockout').innerText = stockOutCount.toLocaleString('id-ID');
 
-            renderCharts(data);
-            renderTable(data);
+            renderCharts(filteredDataCache);
+            renderTable();
         }
 
         function renderCharts(data) {
@@ -472,7 +509,7 @@
                         label: 'Jumlah Part Backlog',
                         data: sortedMO.map(item => item[1]),
                         backgroundColor: '#3b82f6',
-                        borderRadius: 8
+                        borderRadius: 6
                     }]
                 },
                 options: {
@@ -502,47 +539,55 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
+                        legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11 } } }
                     }
                 }
             });
         }
 
-        function renderTable(data) {
+        function renderTable() {
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
             
-            document.getElementById('table-count').innerText = `Menampilkan ${data.length} data`;
+            const total = filteredDataCache.length;
+            document.getElementById('table-count-info').innerText = `Menampilkan ${total.toLocaleString('id-ID')} data backlog`;
 
-            if (data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="10" class="text-center py-8 text-slate-400"><i class="fa-solid fa-folder-open text-3xl mb-2"></i><p>Tidak ada data backlog yang sesuai dengan filter.</p></td></tr>`;
+            if (total === 0) {
+                tbody.innerHTML = `<tr><td colspan="10" class="text-center py-12 text-slate-400"><i class="fa-solid fa-folder-open text-4xl mb-3 text-slate-600 block"></i> Tidak ada data backlog yang sesuai dengan filter.</td></tr>`;
+                updatePaginationControls(0);
                 return;
             }
 
-            data.forEach(row => { 
+            const totalPages = Math.ceil(total / pageSize);
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            const startIndex = (currentPage - 1) * pageSize;
+            const endIndex = Math.min(startIndex + pageSize, total);
+            const pageData = filteredDataCache.slice(startIndex, endIndex);
+
+            pageData.forEach(row => { 
                 const tr = document.createElement('tr');
-                tr.className = 'hover:bg-white/5 transition border-b border-white/5';
+                tr.className = 'hover:bg-white/5 transition duration-150 border-b border-white/5';
                 
-                // Status Part (Kolom W)
                 const statusPart = getColumnWValue(row) || '-';
-                let partBadgeClass = 'bg-slate-700/50 text-slate-300 border border-slate-600/30';
+                let partBadgeClass = 'bg-slate-800 text-slate-300 border border-slate-700';
                 const partUpper = statusPart.toUpperCase();
                 if (partUpper.includes('COMPLETED') || partUpper.includes('CLOSED') || partUpper.includes('DELIVERED')) {
-                    partBadgeClass = 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+                    partBadgeClass = 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30';
                 } else if (partUpper.includes('PROGRESS') || partUpper.includes('PARTIAL') || partUpper.includes('PROCESS')) {
-                    partBadgeClass = 'bg-amber-500/20 text-amber-300 border border-amber-500/30';
+                    partBadgeClass = 'bg-amber-500/15 text-amber-400 border border-amber-500/30';
                 } else if (partUpper.includes('OUTSTANDING') || partUpper.includes('OPEN') || partUpper.includes('CANCEL')) {
-                    partBadgeClass = 'bg-rose-500/20 text-rose-300 border border-rose-500/30';
+                    partBadgeClass = 'bg-rose-500/15 text-rose-400 border border-rose-500/30';
                 }
 
-                // Status MO (Kolom X)
                 const statusMO = getColumnXValue(row) || '-';
-                let moBadgeClass = 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30';
+                let moBadgeClass = 'bg-indigo-500/15 text-indigo-400 border border-indigo-500/30';
                 const moUpper = statusMO.toUpperCase();
                 if (moUpper.includes('COMPLETED') || moUpper.includes('CLOSED') || moUpper.includes('TECO')) {
-                    moBadgeClass = 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+                    moBadgeClass = 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30';
                 } else if (moUpper.includes('OUTSTANDING') || moUpper.includes('OPEN') || moUpper.includes('REL')) {
-                    moBadgeClass = 'bg-rose-500/20 text-rose-300 border border-rose-500/30';
+                    moBadgeClass = 'bg-rose-500/15 text-rose-400 border border-rose-500/30';
                 }
 
                 const stock = cleanNumber(getValue(row, 'Stock On Hand'));
@@ -552,24 +597,55 @@
                     <td class="px-4 py-3 font-bold text-blue-400">${getValue(row, 'No Unit') || '-'}</td>
                     <td class="px-4 py-3 font-medium text-slate-300">${getValue(row, 'Section') || '-'}</td>
                     <td class="px-4 py-3 font-mono font-semibold text-slate-200">${getValue(row, 'MO') || '-'}</td>
-                    <td class="px-4 py-3 text-slate-400">${getValue(row, 'Maint. Order Desc.') || '-'}</td>
+                    <td class="px-4 py-3 text-slate-400 max-w-[200px] truncate" title="${getValue(row, 'Maint. Order Desc.')}">${getValue(row, 'Maint. Order Desc.') || '-'}</td>
                     <td class="px-4 py-3 font-mono text-slate-300">${getValue(row, 'Part Number') || '-'}</td>
-                    <td class="px-4 py-3 font-medium text-slate-200">${getValue(row, 'Description') || '-'}</td>
+                    <td class="px-4 py-3 font-medium text-slate-200 max-w-[220px] truncate" title="${getValue(row, 'Description')}">${getValue(row, 'Description') || '-'}</td>
                     <td class="px-3 py-3 text-center font-bold ${stock === 0 ? 'text-rose-400 bg-rose-500/10 rounded-lg' : 'text-slate-300'}">${getValue(row, 'Stock On Hand') || '0'}</td>
                     <td class="px-4 py-3 text-right font-medium text-slate-200">Rp ${amount.toLocaleString('id-ID')}</td>
-                    <td class="px-4 py-3 text-center"><span class="px-3 py-1 text-[11px] font-bold rounded-full backdrop-blur-md ${partBadgeClass}">${statusPart}</span></td>
-                    <td class="px-4 py-3 text-center"><span class="px-3 py-1 text-[11px] font-bold rounded-full backdrop-blur-md ${moBadgeClass}">${statusMO}</span></td>
+                    <td class="px-4 py-3 text-center"><span class="px-2.5 py-1 text-[10px] font-bold rounded-full backdrop-blur-md ${partBadgeClass}">${statusPart}</span></td>
+                    <td class="px-4 py-3 text-center"><span class="px-2.5 py-1 text-[10px] font-bold rounded-full backdrop-blur-md ${moBadgeClass}">${statusMO}</span></td>
                 `;
                 tbody.appendChild(tr);
             });
+
+            updatePaginationControls(totalPages);
+        }
+
+        function updatePaginationControls(totalPages) {
+            const info = document.getElementById('pagination-info');
+            const btnPrev = document.getElementById('btn-prev');
+            const btnNext = document.getElementById('btn-next');
+            const pageNumbers = document.getElementById('page-numbers');
+
+            if (totalPages === 0) {
+                info.innerText = 'Menampilkan 0 data';
+                btnPrev.disabled = true;
+                btnNext.disabled = true;
+                pageNumbers.innerHTML = '';
+                return;
+            }
+
+            const startItem = (currentPage - 1) * pageSize + 1;
+            const endItem = Math.min(currentPage * pageSize, filteredDataCache.length);
+
+            info.innerText = `Menampilkan ${startItem}-${endItem} dari ${filteredDataCache.length} data (Hal ${currentPage}/${totalPages})`;
+            
+            btnPrev.disabled = currentPage === 1;
+            btnNext.disabled = currentPage === totalPages;
+
+            pageNumbers.innerHTML = `<span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600/30 text-blue-300 border border-blue-500/30">${currentPage}</span>`;
+        }
+
+        function changePage(direction) {
+            currentPage += direction;
+            renderTable();
         }
 
         function exportTableToCSV() {
-            const data = getFilteredData();
-            if (data.length === 0) return;
+            if (filteredDataCache.length === 0) return;
 
             let csvContent = "No Unit,Section,MO,Maint. Order Desc,Part Number,Description,Stock On Hand,Amount Price,Status Part,Status MO\n";
-            data.forEach(row => {
+            filteredDataCache.forEach(row => {
                 const line = [
                     `"${getValue(row, 'No Unit')}"`,
                     `"${getValue(row, 'Section')}"`,
