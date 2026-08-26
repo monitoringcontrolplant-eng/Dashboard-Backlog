@@ -232,6 +232,7 @@
                             <th class="px-3 py-3.5 font-semibold tracking-wider text-center">Stock</th>
                             <th class="px-4 py-3.5 font-semibold tracking-wider text-right">Amount Price</th>
                             <th class="px-4 py-3.5 font-semibold tracking-wider text-center">Status Part (Kolom W)</th>
+                            <th class="px-4 py-3.5 font-semibold tracking-wider text-center">Status MO (Kolom X)</th>
                         </tr>
                     </thead>
                     <tbody id="table-body" class="divide-y divide-white/5 bg-transparent">
@@ -257,7 +258,7 @@
         let barChartInstance = null;
         let pieChartInstance = null;
 
-        // Ambil data langsung dari Kolom W (Indeks 22)
+        // Ambil data Kolom W (Indeks ke-22 pada Spreadsheet)
         function getColumnWValue(row) {
             if (!row) return '';
             const values = Object.values(row);
@@ -265,6 +266,16 @@
                 return values[22].toString().trim();
             }
             return getValue(row, 'Status Part') || getValue(row, 'Stat. Desc') || '';
+        }
+
+        // Ambil data Kolom X (Indeks ke-23 pada Spreadsheet)
+        function getColumnXValue(row) {
+            if (!row) return '';
+            const values = Object.values(row);
+            if (values.length >= 24 && values[23] !== undefined && values[23] !== null) {
+                return values[23].toString().trim();
+            }
+            return getValue(row, 'Status MO') || '';
         }
 
         function getValue(row, keyName) {
@@ -449,7 +460,6 @@
             if (barChartInstance) barChartInstance.destroy();
             if (pieChartInstance) pieChartInstance.destroy();
 
-            // Set global font color for Chart.js in dark mode
             Chart.defaults.color = '#94a3b8';
             Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.08)';
 
@@ -505,7 +515,7 @@
             document.getElementById('table-count').innerText = `Menampilkan ${data.length} data`;
 
             if (data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-8 text-slate-400"><i class="fa-solid fa-folder-open text-3xl mb-2"></i><p>Tidak ada data backlog yang sesuai dengan filter.</p></td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="10" class="text-center py-8 text-slate-400"><i class="fa-solid fa-folder-open text-3xl mb-2"></i><p>Tidak ada data backlog yang sesuai dengan filter.</p></td></tr>`;
                 return;
             }
 
@@ -513,16 +523,26 @@
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-white/5 transition border-b border-white/5';
                 
-                const status = getColumnWValue(row) || '-';
-                let statusBadgeClass = 'bg-slate-700/50 text-slate-300 border border-slate-600/30';
-                
-                const statusUpper = status.toUpperCase();
-                if (statusUpper.includes('COMPLETED') || statusUpper.includes('CLOSED') || statusUpper.includes('DELIVERED')) {
-                    statusBadgeClass = 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
-                } else if (statusUpper.includes('PROGRESS') || statusUpper.includes('PARTIAL') || statusUpper.includes('PROCESS')) {
-                    statusBadgeClass = 'bg-amber-500/20 text-amber-300 border border-amber-500/30';
-                } else if (statusUpper.includes('OUTSTANDING') || statusUpper.includes('OPEN') || statusUpper.includes('CANCEL')) {
-                    statusBadgeClass = 'bg-rose-500/20 text-rose-300 border border-rose-500/30';
+                // Status Part (Kolom W)
+                const statusPart = getColumnWValue(row) || '-';
+                let partBadgeClass = 'bg-slate-700/50 text-slate-300 border border-slate-600/30';
+                const partUpper = statusPart.toUpperCase();
+                if (partUpper.includes('COMPLETED') || partUpper.includes('CLOSED') || partUpper.includes('DELIVERED')) {
+                    partBadgeClass = 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+                } else if (partUpper.includes('PROGRESS') || partUpper.includes('PARTIAL') || partUpper.includes('PROCESS')) {
+                    partBadgeClass = 'bg-amber-500/20 text-amber-300 border border-amber-500/30';
+                } else if (partUpper.includes('OUTSTANDING') || partUpper.includes('OPEN') || partUpper.includes('CANCEL')) {
+                    partBadgeClass = 'bg-rose-500/20 text-rose-300 border border-rose-500/30';
+                }
+
+                // Status MO (Kolom X)
+                const statusMO = getColumnXValue(row) || '-';
+                let moBadgeClass = 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30';
+                const moUpper = statusMO.toUpperCase();
+                if (moUpper.includes('COMPLETED') || moUpper.includes('CLOSED') || moUpper.includes('TECO')) {
+                    moBadgeClass = 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+                } else if (moUpper.includes('OUTSTANDING') || moUpper.includes('OPEN') || moUpper.includes('REL')) {
+                    moBadgeClass = 'bg-rose-500/20 text-rose-300 border border-rose-500/30';
                 }
 
                 const stock = cleanNumber(getValue(row, 'Stock On Hand'));
@@ -537,7 +557,8 @@
                     <td class="px-4 py-3 font-medium text-slate-200">${getValue(row, 'Description') || '-'}</td>
                     <td class="px-3 py-3 text-center font-bold ${stock === 0 ? 'text-rose-400 bg-rose-500/10 rounded-lg' : 'text-slate-300'}">${getValue(row, 'Stock On Hand') || '0'}</td>
                     <td class="px-4 py-3 text-right font-medium text-slate-200">Rp ${amount.toLocaleString('id-ID')}</td>
-                    <td class="px-4 py-3 text-center"><span class="px-3 py-1 text-[11px] font-bold rounded-full backdrop-blur-md ${statusBadgeClass}">${status}</span></td>
+                    <td class="px-4 py-3 text-center"><span class="px-3 py-1 text-[11px] font-bold rounded-full backdrop-blur-md ${partBadgeClass}">${statusPart}</span></td>
+                    <td class="px-4 py-3 text-center"><span class="px-3 py-1 text-[11px] font-bold rounded-full backdrop-blur-md ${moBadgeClass}">${statusMO}</span></td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -547,7 +568,7 @@
             const data = getFilteredData();
             if (data.length === 0) return;
 
-            let csvContent = "No Unit,Section,MO,Maint. Order Desc,Part Number,Description,Stock On Hand,Amount Price,Status Part\n";
+            let csvContent = "No Unit,Section,MO,Maint. Order Desc,Part Number,Description,Stock On Hand,Amount Price,Status Part,Status MO\n";
             data.forEach(row => {
                 const line = [
                     `"${getValue(row, 'No Unit')}"`,
@@ -558,7 +579,8 @@
                     `"${getValue(row, 'Description')}"`,
                     `"${getValue(row, 'Stock On Hand')}"`,
                     `"${getValue(row, 'Amount Price')}"`,
-                    `"${getColumnWValue(row)}"`
+                    `"${getColumnWValue(row)}"`,
+                    `"${getColumnXValue(row)}"`
                 ].join(",");
                 csvContent += line + "\n";
             });
