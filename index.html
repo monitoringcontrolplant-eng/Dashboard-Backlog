@@ -14,11 +14,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #0b1120;
+            background-color: #0f172a;
         }
 
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -35,31 +37,47 @@
         }
 
         .main-bg {
-            background: #eef2f6;
+            background: #f8fafc;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .metric-card {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .metric-card:hover {
+            transform: translateY(-2px);
         }
     </style>
 </head>
 <body class="text-slate-800 antialiased min-h-screen flex flex-col justify-between">
 
     <!-- Top Header Bar -->
-    <header class="bg-[#0f172a] border-b border-slate-800 text-white px-4 py-2.5 flex justify-between items-center z-20">
-        <div class="flex items-center space-x-3">
-            <div class="bg-white/10 p-1 rounded-lg">
-                <img src="BSS_logo.jpg" alt="Logo" class="h-6 w-auto" onerror="this.style.display='none'">
+    <header class="bg-[#0f172a] border-b border-slate-800/80 text-white px-6 py-3 flex justify-between items-center z-20 shadow-md">
+        <div class="flex items-center space-x-3.5">
+            <div class="bg-blue-600/20 p-2 rounded-xl border border-blue-500/30 flex items-center justify-center">
+                <img src="BSS_logo.jpg" alt="Logo" class="h-5 w-auto" onerror="this.style.display='none'">
+                <i class="fa-solid fa-layer-group text-blue-400 text-sm" onerror="this.style.display='inline'"></i>
             </div>
-            <span class="font-bold text-sm tracking-wide">BACKLOG MANAGEMENT</span>
+            <div>
+                <span class="font-extrabold text-sm tracking-wide text-white block">BACKLOG MANAGEMENT</span>
+                <span class="text-[10px] text-slate-400 font-medium">Monitoring Control Plant & Maintenance</span>
+            </div>
         </div>
         <div class="flex items-center space-x-4">
-            <button onclick="refreshData()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-3 py-1.5 rounded-full transition flex items-center gap-1.5">
-                <i class="fa-solid fa-rotate text-blue-400"></i> Refresh
+            <button onclick="refreshData()" class="text-xs bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3.5 py-1.5 rounded-xl transition flex items-center gap-2 shadow-sm font-medium">
+                <i class="fa-solid fa-rotate text-indigo-400"></i> Refresh
             </button>
-            <div class="flex items-center space-x-2 border-l border-slate-700 pl-4">
-                <div class="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold text-white">
+            <div class="flex items-center space-x-3 border-l border-slate-800 pl-4">
+                <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-500 flex items-center justify-center text-xs font-bold text-white shadow-md">
                     M
                 </div>
                 <div class="text-xs hidden sm:block">
-                    <p class="font-bold leading-none">User</p>
-                    <p class="text-[10px] text-slate-400 leading-tight">Maintenance Planner</p>
+                    <p class="font-bold leading-none text-slate-200">User</p>
+                    <p class="text-[10px] text-slate-400 leading-tight mt-0.5">Maintenance Planner</p>
                 </div>
             </div>
         </div>
@@ -68,41 +86,38 @@
     <div class="flex flex-1 overflow-hidden">
         
         <!-- Sidebar Navigation -->
-        <aside class="w-64 bg-[#0f172a] text-slate-300 p-4 hidden md:flex flex-col justify-between border-r border-slate-800 shrink-0">
-            <div class="space-y-4">
+        <aside class="w-64 bg-[#0f172a] text-slate-300 p-4 hidden md:flex flex-col justify-between border-r border-slate-800/80 shrink-0">
+            <div class="space-y-5">
                 <div class="relative">
-                    <input type="text" id="filter-search" placeholder="Search Command..." class="w-full bg-[#1e293b] border border-slate-700 text-xs text-white rounded-xl py-2 pl-3 pr-8 focus:outline-none focus:border-blue-500">
-                    <i class="fa-solid fa-magnifying-glass absolute right-3 top-2.5 text-slate-400 text-xs"></i>
+                    <input type="text" id="filter-search" placeholder="Cari Part / MO / Desc..." class="w-full bg-slate-900/90 border border-slate-800 text-xs text-white placeholder-slate-500 rounded-xl py-2.5 pl-3.5 pr-9 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition">
+                    <i class="fa-solid fa-magnifying-glass absolute right-3 top-3 text-slate-500 text-xs"></i>
                 </div>
 
-                <nav class="space-y-1 text-xs">
-                    <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl bg-blue-600 text-white font-semibold shadow-md">
-                        <span class="flex items-center gap-2.5"><i class="fa-solid fa-house"></i> Home</span>
-                    </a>
-                    <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition font-medium">
-                        <span class="flex items-center gap-2.5"><i class="fa-solid fa-chart-line"></i> Realtime Dashboard</span>
+                <nav class="space-y-1.5 text-xs">
+                    <a href="#" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-semibold shadow-md shadow-indigo-900/20">
+                        <span class="flex items-center gap-2.5"><i class="fa-solid fa-chart-pie text-indigo-200"></i> Dashboard Executive</span>
                     </a>
                     
-                    <div class="pt-3 pb-1">
+                    <div class="pt-4 pb-1">
                         <p class="px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-500">Filter Controls</p>
                     </div>
 
-                    <div class="space-y-2 px-1">
+                    <div class="space-y-3 px-1">
                         <div>
-                            <label class="block text-[10px] text-slate-400 mb-1">No Unit</label>
-                            <select id="filter-unit" class="w-full bg-[#1e293b] border border-slate-700 text-xs text-white rounded-lg p-2 focus:outline-none">
+                            <label class="block text-[11px] font-medium text-slate-400 mb-1.5">No Unit</label>
+                            <select id="filter-unit" class="w-full bg-slate-900/90 border border-slate-800 text-xs text-slate-200 rounded-xl p-2.5 focus:outline-none focus:border-indigo-500 transition">
                                 <option value="ALL">Semua No Unit</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-[10px] text-slate-400 mb-1">Cluster (Section)</label>
-                            <select id="filter-section" class="w-full bg-[#1e293b] border border-slate-700 text-xs text-white rounded-lg p-2 focus:outline-none">
+                            <label class="block text-[11px] font-medium text-slate-400 mb-1.5">Cluster (Section)</label>
+                            <select id="filter-section" class="w-full bg-slate-900/90 border border-slate-800 text-xs text-slate-200 rounded-xl p-2.5 focus:outline-none focus:border-indigo-500 transition">
                                 <option value="ALL">Semua Cluster</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-[10px] text-slate-400 mb-1">Status Part (Kolom W)</label>
-                            <select id="filter-status" class="w-full bg-[#1e293b] border border-slate-700 text-xs text-white rounded-lg p-2 focus:outline-none">
+                            <label class="block text-[11px] font-medium text-slate-400 mb-1.5">Status Part</label>
+                            <select id="filter-status" class="w-full bg-slate-900/90 border border-slate-800 text-xs text-slate-200 rounded-xl p-2.5 focus:outline-none focus:border-indigo-500 transition">
                                 <option value="ALL">Semua Status Part</option>
                             </select>
                         </div>
@@ -110,100 +125,96 @@
                 </nav>
             </div>
 
-            <div class="bg-[#1e293b] p-3 rounded-xl border border-slate-800 text-center">
+            <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800/80 text-center">
                 <span id="data-status" class="text-[11px] font-bold text-amber-400">
-                    <i class="fa-solid fa-spinner fa-spin mr-1"></i> Memuat Data...
+                    <i class="fa-solid fa-spinner fa-spin mr-1.5"></i> Memuat Data...
                 </span>
             </div>
         </aside>
 
         <!-- Main Content Area -->
-        <main class="flex-1 main-bg p-4 sm:p-6 overflow-y-auto space-y-6">
+        <main class="flex-1 main-bg p-5 sm:p-7 overflow-y-auto space-y-6">
 
-            <div class="flex justify-between items-center">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                 <div>
-                    <h2 class="text-xl font-extrabold text-slate-800">Backlog Management</h2>
-                    <p class="text-xs text-slate-500">Monitoring Control Plant & Maintenance System</p>
+                    <h2 class="text-xl font-bold text-slate-900 tracking-tight">Executive Dashboard</h2>
+                    <p class="text-xs text-slate-500">Ringkasan Operasional & Evaluasi Valuation Backlog</p>
                 </div>
             </div>
 
-            <!-- Vibrant KPI Cards (4 Card Layout) -->
+            <!-- KPI Cards Section (Cleaner Minimalist Style) -->
             <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 
-                <!-- Card Available Parts (Hijau) -->
-                <div class="bg-emerald-500 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
+                <!-- Card Available Parts -->
+                <div class="metric-card bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col justify-between h-36">
                     <div class="flex justify-between items-center">
-                        <span class="text-xs font-bold uppercase tracking-wide opacity-90 flex items-center gap-1.5">
-                            <i class="fa-solid fa-boxes-packing"></i> Available Parts
-                        </span>
-                        <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-xs">
-                            <i class="fa-solid fa-check-double"></i>
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Available Parts</span>
+                        <div class="w-8 h-8 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 text-xs">
+                            <i class="fa-solid fa-circle-check"></i>
                         </div>
                     </div>
                     <div>
-                        <h3 id="exec-safe" class="text-3xl font-extrabold">0</h3>
-                        <p class="text-[10px] opacity-80 mt-1">Item part dengan stok tersedia</p>
+                        <h3 id="exec-safe" class="text-3xl font-extrabold text-slate-900 tracking-tight">0</h3>
+                        <p class="text-[11px] text-emerald-600 font-semibold mt-1 flex items-center gap-1">
+                            <i class="fa-solid fa-boxes-packing text-[10px]"></i> Stok tersedia di gudang
+                        </p>
                     </div>
                 </div>
 
-                <!-- Card Total Items (Hijau Teal) -->
-                <div class="bg-teal-600 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
+                <!-- Card Total Items -->
+                <div class="metric-card bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col justify-between h-36">
                     <div class="flex justify-between items-center">
-                        <span class="text-xs font-bold uppercase tracking-wide opacity-90 flex items-center gap-1.5">
-                            <i class="fa-solid fa-boxes-stacked"></i> Total Items
-                        </span>
-                        <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-xs">
-                            <i class="fa-solid fa-arrow-trend-up"></i>
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total Items</span>
+                        <div class="w-8 h-8 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 text-xs">
+                            <i class="fa-solid fa-cubes"></i>
                         </div>
                     </div>
                     <div>
-                        <h3 id="kpi-total" class="text-3xl font-extrabold">0</h3>
-                        <p class="text-[10px] opacity-80 mt-1">Total item terdeteksi</p>
+                        <h3 id="kpi-total" class="text-3xl font-extrabold text-slate-900 tracking-tight">0</h3>
+                        <p class="text-[11px] text-slate-500 font-medium mt-1">Total item backlog terdeteksi</p>
                     </div>
                 </div>
 
-                <!-- Card Total MO (Biru) -->
-                <div class="bg-blue-600 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
+                <!-- Card Total MO -->
+                <div class="metric-card bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col justify-between h-36">
                     <div class="flex justify-between items-center">
-                        <span class="text-xs font-bold uppercase tracking-wide opacity-90 flex items-center gap-1.5">
-                            <i class="fa-solid fa-file-invoice"></i> Total MO
-                        </span>
-                        <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-xs">
-                            <i class="fa-solid fa-list-check"></i>
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total MO</span>
+                        <div class="w-8 h-8 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 text-xs">
+                            <i class="fa-solid fa-file-signature"></i>
                         </div>
                     </div>
                     <div>
-                        <h3 id="kpi-mo" class="text-3xl font-extrabold">0</h3>
-                        <p class="text-[10px] opacity-80 mt-1">Maintenance Order aktif</p>
+                        <h3 id="kpi-mo" class="text-3xl font-extrabold text-slate-900 tracking-tight">0</h3>
+                        <p class="text-[11px] text-slate-500 font-medium mt-1">Maintenance Order aktif</p>
                     </div>
                 </div>
 
-                <!-- Card Out of Stock (Ungu) -->
-                <div class="bg-indigo-600 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
+                <!-- Card Out of Stock -->
+                <div class="metric-card bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col justify-between h-36">
                     <div class="flex justify-between items-center">
-                        <span class="text-xs font-bold uppercase tracking-wide opacity-90 flex items-center gap-1.5">
-                            <i class="fa-solid fa-triangle-exclamation"></i> Out of Stock
-                        </span>
-                        <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-xs">
-                            <i class="fa-solid fa-box-open"></i>
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Out of Stock</span>
+                        <div class="w-8 h-8 bg-rose-50 rounded-xl flex items-center justify-center text-rose-600 text-xs">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
                         </div>
                     </div>
                     <div>
-                        <h3 id="kpi-stockout" class="text-3xl font-extrabold">0</h3>
-                        <p class="text-[10px] opacity-80 mt-1">Tidak ada item di SOH</p>
+                        <h3 id="kpi-stockout" class="text-3xl font-extrabold text-slate-900 tracking-tight">0</h3>
+                        <p class="text-[11px] text-rose-600 font-semibold mt-1 flex items-center gap-1">
+                            <i class="fa-solid fa-circle-xmark text-[10px]"></i> Tidak ada stok (SOH 0)
+                        </p>
                     </div>
                 </div>
 
             </section>
 
-            <!-- Middle Section: Visual Charts & Total Biaya Backlog Widget -->
+            <!-- Middle Section: Visual Charts & Valuation Card -->
             <section class="grid grid-cols-1 lg:grid-cols-3 gap-5">
                 
                 <!-- Chart 1: Bar Chart -->
-                <div class="bg-indigo-700 text-white p-5 rounded-2xl shadow-lg flex flex-col justify-between">
-                    <div class="flex justify-between items-center mb-3">
-                        <h4 class="text-xs font-bold uppercase tracking-wider flex items-center gap-2">
-                            <i class="fa-solid fa-chart-column"></i> Top 10 MO Terbanyak
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col justify-between">
+                    <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-100">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-column text-indigo-600"></i> Top 10 MO Terbanyak
                         </h4>
                     </div>
                     <div class="relative h-60 w-full">
@@ -212,10 +223,10 @@
                 </div>
 
                 <!-- Chart 2: Doughnut Chart -->
-                <div class="bg-rose-600 text-white p-5 rounded-2xl shadow-lg flex flex-col justify-between">
-                    <div class="flex justify-between items-center mb-3">
-                        <h4 class="text-xs font-bold uppercase tracking-wider flex items-center gap-2">
-                            <i class="fa-solid fa-chart-pie"></i> Sebaran Cluster (Section)
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col justify-between">
+                    <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-100">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-pie text-indigo-600"></i> Sebaran Cluster (Section)
                         </h4>
                     </div>
                     <div class="relative h-60 w-full flex justify-center">
@@ -223,25 +234,29 @@
                     </div>
                 </div>
 
-                <!-- Single Large Card: Total Biaya Backlog -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col justify-between">
-                    <div class="flex justify-between items-center">
-                        <h4 class="text-xs font-extrabold text-slate-800 uppercase tracking-wide flex items-center gap-2">
-                            <i class="fa-solid fa-wallet text-cyan-600"></i> Executive Summary
+                <!-- High Highlight Executive Card: Total Biaya Backlog -->
+                <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 text-white p-6 rounded-2xl shadow-xl flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute -right-8 -bottom-8 w-40 h-40 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none"></div>
+                    
+                    <div class="flex justify-between items-center relative z-10">
+                        <h4 class="text-xs font-extrabold text-indigo-300 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-wallet text-indigo-400"></i> Valuation Summary
                         </h4>
-                        <span class="text-[10px] bg-cyan-100 text-cyan-800 px-2.5 py-1 rounded-full font-bold">Valuation</span>
+                        <span class="text-[10px] bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 px-3 py-1 rounded-full font-bold uppercase tracking-wide">
+                            Total Price
+                        </span>
                     </div>
 
-                    <div class="my-auto py-2">
-                        <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Total Biaya Backlog</p>
-                        <h3 id="exec-cost" class="text-2xl xl:text-3xl font-black text-cyan-700 tracking-tight leading-none break-all">
+                    <div class="my-auto py-4 relative z-10">
+                        <p class="text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">Total Biaya Backlog</p>
+                        <h3 id="exec-cost" class="text-3xl xl:text-4xl font-extrabold text-white tracking-tight leading-none break-all">
                             Rp 0
                         </h3>
                     </div>
 
-                    <div class="border-t border-slate-100 pt-3 flex justify-between items-center text-xs text-slate-500">
-                        <span>Data Synchronization</span>
-                        <span class="font-bold text-slate-700">ANDIK DKK</span>
+                    <div class="border-t border-slate-700/80 pt-3 flex justify-between items-center text-xs text-slate-400 relative z-10">
+                        <span class="text-[11px]">Data Synchronization</span>
+                        <span class="font-bold text-slate-200">MONRES 2026</span>
                     </div>
                 </div>
 
@@ -249,30 +264,30 @@
 
             <!-- Bottom Table Section -->
             <section class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
-                <div class="p-4 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-slate-50/50">
+                <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-slate-50/50">
                     <div>
-                        <h3 class="text-sm font-bold text-slate-800">Rincian List Backlog Unit</h3>
-                        <p class="text-[11px] text-slate-500" id="table-count-info">Menampilkan 0 data</p>
+                        <h3 class="text-sm font-bold text-slate-900">Rincian Detail Backlog Unit</h3>
+                        <p class="text-xs text-slate-500" id="table-count-info">Menampilkan 0 data backlog</p>
                     </div>
-                    <button onclick="exportTableToCSV()" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold px-4 py-2 rounded-xl transition flex items-center gap-2 shadow-sm">
-                        <i class="fa-solid fa-file-csv text-emerald-400"></i> Ekspor CSV
+                    <button onclick="exportTableToCSV()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center gap-2 shadow-sm shadow-indigo-200">
+                        <i class="fa-solid fa-file-csv text-indigo-200"></i> Ekspor CSV
                     </button>
                 </div>
 
                 <div class="overflow-x-auto min-h-[350px]">
                     <table class="min-w-full divide-y divide-slate-100 text-xs text-left">
-                        <thead class="bg-slate-100 text-slate-600 font-bold sticky top-0 z-10">
+                        <thead class="bg-slate-50 text-slate-500 font-bold tracking-wider uppercase text-[10px] sticky top-0 z-10 border-b border-slate-200">
                             <tr>
-                                <th class="px-4 py-3">No Unit</th>
-                                <th class="px-4 py-3">Cluster (Section)</th>
-                                <th class="px-4 py-3">No MO</th>
-                                <th class="px-4 py-3">Status MO (Desc)</th>
-                                <th class="px-4 py-3">Part Number</th>
-                                <th class="px-4 py-3">Description Part</th>
-                                <th class="px-3 py-3 text-center">Stock</th>
-                                <th class="px-4 py-3 text-right">Amount Price</th>
-                                <th class="px-4 py-3 text-center">Status Part (W)</th>
-                                <th class="px-4 py-3 text-center">Status MO (X)</th>
+                                <th class="px-4 py-3.5">No Unit</th>
+                                <th class="px-4 py-3.5">Cluster (Section)</th>
+                                <th class="px-4 py-3.5">No MO</th>
+                                <th class="px-4 py-3.5">Status MO (Desc)</th>
+                                <th class="px-4 py-3.5">Part Number</th>
+                                <th class="px-4 py-3.5">Description Part</th>
+                                <th class="px-3 py-3.5 text-center">Stock</th>
+                                <th class="px-4 py-3.5 text-right">Total Price</th>
+                                <th class="px-4 py-3.5 text-center">Status Part (W)</th>
+                                <th class="px-4 py-3.5 text-center">Status MO (X)</th>
                             </tr>
                         </thead>
                         <tbody id="table-body" class="divide-y divide-slate-100 bg-white">
@@ -285,11 +300,11 @@
                         Halaman 1 dari 1
                     </div>
                     <div class="flex items-center space-x-2">
-                        <button id="btn-prev" onclick="changePage(-1)" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition disabled:opacity-40">
+                        <button id="btn-prev" onclick="changePage(-1)" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition disabled:opacity-40 shadow-sm">
                             <i class="fa-solid fa-chevron-left mr-1"></i> Prev
                         </button>
                         <div id="page-numbers" class="flex space-x-1"></div>
-                        <button id="btn-next" onclick="changePage(1)" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition disabled:opacity-40">
+                        <button id="btn-next" onclick="changePage(1)" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition disabled:opacity-40 shadow-sm">
                             Next <i class="fa-solid fa-chevron-right ml-1"></i>
                         </button>
                     </div>
@@ -341,7 +356,7 @@
 
         function fetchSheetData() {
             const statusBadge = document.getElementById('data-status');
-            statusBadge.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Memuat Data...';
+            statusBadge.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> Memuat Data...';
             statusBadge.className = 'text-[11px] font-bold text-amber-400';
 
             Papa.parse(GOOGLE_SHEET_CSV_URL, {
@@ -354,14 +369,14 @@
                         rawData = results.data.filter(row => getValue(row, 'No Unit') || getValue(row, 'MO'));
                     }
 
-                    statusBadge.innerHTML = '<i class="fa-solid fa-circle-check mr-1"></i> Connected';
+                    statusBadge.innerHTML = '<i class="fa-solid fa-circle-check mr-1.5"></i> Connected';
                     statusBadge.className = 'text-[11px] font-bold text-emerald-400';
                     
                     populateFilterOptions();
                     updateDashboard();
                 },
                 error: function(err) {
-                    statusBadge.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1"></i> Error';
+                    statusBadge.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1.5"></i> Error';
                     statusBadge.className = 'text-[11px] font-bold text-rose-400';
                 }
             });
@@ -463,7 +478,8 @@
             const moSet = new Set();
 
             filteredDataCache.forEach(row => {
-                const amount = cleanNumber(getValue(row, 'Amount Price'));
+                // Diubah mengambil dari 'Total Price'
+                const amount = cleanNumber(getValue(row, 'Total Price')); 
                 const stock = cleanNumber(getValue(row, 'Stock On Hand'));
                 const mo = getValue(row, 'MO').trim();
 
@@ -484,7 +500,7 @@
             document.getElementById('kpi-mo').innerText = moSet.size.toLocaleString('id-ID');
             document.getElementById('kpi-stockout').innerText = stockOutCount.toLocaleString('id-ID');
 
-            // Update Total Biaya Backlog Single Card
+            // Update Total Biaya Backlog Executive Card
             const execCost = document.getElementById('exec-cost');
             if (execCost) execCost.innerText = formattedCost;
 
@@ -511,8 +527,8 @@
             if (barChartInstance) barChartInstance.destroy();
             if (pieChartInstance) pieChartInstance.destroy();
 
-            Chart.defaults.color = 'rgba(255, 255, 255, 0.8)';
-            Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
+            Chart.defaults.color = '#64748b';
+            Chart.defaults.font.family = 'Plus Jakarta Sans';
 
             const ctxBar = document.getElementById('barChart').getContext('2d');
             barChartInstance = new Chart(ctxBar, {
@@ -522,8 +538,9 @@
                     datasets: [{
                         label: 'Jumlah Part',
                         data: sortedMO.map(item => item[1]),
-                        backgroundColor: '#ffffff',
-                        borderRadius: 4
+                        backgroundColor: '#6366f1',
+                        hoverBackgroundColor: '#4f46e5',
+                        borderRadius: 6
                     }]
                 },
                 options: {
@@ -531,7 +548,7 @@
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        y: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
+                        y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
                         x: { grid: { display: false } }
                     }
                 }
@@ -544,15 +561,16 @@
                     labels: Object.keys(sectionCounts),
                     datasets: [{
                         data: Object.values(sectionCounts),
-                        backgroundColor: ['#ffffff', '#fde047', '#38bdf8', '#4ade80', '#c084fc', '#f472b6'],
-                        borderWidth: 0
+                        backgroundColor: ['#6366f1', '#06b6d4', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { position: 'bottom', labels: { boxWidth: 8, font: { size: 10 } } }
+                        legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11, weight: '600' } } }
                     }
                 }
             });
@@ -581,36 +599,37 @@
 
             pageData.forEach(row => { 
                 const tr = document.createElement('tr');
-                tr.className = 'hover:bg-slate-50 transition border-b border-slate-100';
+                tr.className = 'hover:bg-slate-50/80 transition border-b border-slate-100';
                 
                 const statusPart = getColumnWValue(row) || '-';
-                let partBadge = 'bg-slate-100 text-slate-700';
+                let partBadge = 'bg-slate-100 text-slate-600 border border-slate-200';
                 const partUpper = statusPart.toUpperCase();
                 if (partUpper.includes('COMPLETED') || partUpper.includes('CLOSED')) {
-                    partBadge = 'bg-emerald-100 text-emerald-800';
+                    partBadge = 'bg-emerald-50 text-emerald-700 border border-emerald-200';
                 } else if (partUpper.includes('PROGRESS') || partUpper.includes('PROCESS')) {
-                    partBadge = 'bg-amber-100 text-amber-800';
+                    partBadge = 'bg-amber-50 text-amber-700 border border-amber-200';
                 } else if (partUpper.includes('OUTSTANDING') || partUpper.includes('OPEN')) {
-                    partBadge = 'bg-rose-100 text-rose-800';
+                    partBadge = 'bg-rose-50 text-rose-700 border border-rose-200';
                 }
 
                 const statusMO = getColumnXValue(row) || '-';
-                let moBadge = 'bg-blue-100 text-blue-800';
+                let moBadge = 'bg-indigo-50 text-indigo-700 border border-indigo-200';
 
                 const stock = cleanNumber(getValue(row, 'Stock On Hand'));
-                const amount = cleanNumber(getValue(row, 'Amount Price'));
+                // Diubah mengambil dari 'Total Price'
+                const amount = cleanNumber(getValue(row, 'Total Price'));
 
                 tr.innerHTML = `
-                    <td class="px-4 py-3 font-bold text-blue-600">${getValue(row, 'No Unit') || '-'}</td>
+                    <td class="px-4 py-3 font-bold text-indigo-600">${getValue(row, 'No Unit') || '-'}</td>
                     <td class="px-4 py-3 font-medium text-slate-600">${getValue(row, 'Section') || '-'}</td>
                     <td class="px-4 py-3 font-mono font-semibold text-slate-700">${getValue(row, 'MO') || '-'}</td>
                     <td class="px-4 py-3 text-slate-500 max-w-[180px] truncate">${getValue(row, 'Maint. Order Desc.') || '-'}</td>
                     <td class="px-4 py-3 font-mono text-slate-600">${getValue(row, 'Part Number') || '-'}</td>
                     <td class="px-4 py-3 font-medium text-slate-800 max-w-[200px] truncate">${getValue(row, 'Description') || '-'}</td>
                     <td class="px-3 py-3 text-center font-bold ${stock === 0 ? 'text-rose-600 bg-rose-50 rounded-lg' : 'text-slate-700'}">${getValue(row, 'Stock On Hand') || '0'}</td>
-                    <td class="px-4 py-3 text-right font-semibold text-slate-700">Rp ${amount.toLocaleString('id-ID')}</td>
-                    <td class="px-4 py-3 text-center"><span class="px-2.5 py-0.5 text-[10px] font-bold rounded-full ${partBadge}">${statusPart}</span></td>
-                    <td class="px-4 py-3 text-center"><span class="px-2.5 py-0.5 text-[10px] font-bold rounded-full ${moBadge}">${statusMO}</span></td>
+                    <td class="px-4 py-3 text-right font-semibold text-slate-900">Rp ${amount.toLocaleString('id-ID')}</td>
+                    <td class="px-4 py-3 text-center"><span class="px-2.5 py-1 text-[10px] font-bold rounded-lg ${partBadge}">${statusPart}</span></td>
+                    <td class="px-4 py-3 text-center"><span class="px-2.5 py-1 text-[10px] font-bold rounded-lg ${moBadge}">${statusMO}</span></td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -640,7 +659,7 @@
             btnPrev.disabled = currentPage === 1;
             btnNext.disabled = currentPage === totalPages;
 
-            pageNumbers.innerHTML = `<span class="px-3 py-1 rounded-lg text-xs font-bold bg-blue-600 text-white">${currentPage}</span>`;
+            pageNumbers.innerHTML = `<span class="px-3 py-1 rounded-xl text-xs font-bold bg-indigo-600 text-white shadow-sm">${currentPage}</span>`;
         }
 
         function changePage(direction) {
@@ -651,7 +670,7 @@
         function exportTableToCSV() {
             if (filteredDataCache.length === 0) return;
 
-            let csvContent = "No Unit,Section,MO,Maint. Order Desc,Part Number,Description,Stock On Hand,Amount Price,Status Part,Status MO\n";
+            let csvContent = "No Unit,Section,MO,Maint. Order Desc,Part Number,Description,Stock On Hand,Total Price,Status Part,Status MO\n";
             filteredDataCache.forEach(row => {
                 const line = [
                     `"${getValue(row, 'No Unit')}"`,
@@ -661,7 +680,7 @@
                     `"${getValue(row, 'Part Number')}"`,
                     `"${getValue(row, 'Description')}"`,
                     `"${getValue(row, 'Stock On Hand')}"`,
-                    `"${getValue(row, 'Amount Price')}"`,
+                    `"${getValue(row, 'Total Price')}"`, // Diubah dari 'Amount Price' ke 'Total Price'
                     `"${getColumnWValue(row)}"`,
                     `"${getColumnXValue(row)}"`
                 ].join(",");
