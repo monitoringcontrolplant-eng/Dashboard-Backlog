@@ -127,11 +127,11 @@
                 </div>
             </div>
 
-            <!-- Vibrant KPI Cards -->
-            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            <!-- Vibrant KPI Cards (4 Card Layout) -->
+            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 
-                <!-- Card Available Parts (Hijau Muda) -->
-                <div class="bg-emerald-600 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
+                <!-- Card Available Parts (Hijau) -->
+                <div class="bg-emerald-500 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
                     <div class="flex justify-between items-center">
                         <span class="text-xs font-bold uppercase tracking-wide opacity-90 flex items-center gap-1.5">
                             <i class="fa-solid fa-boxes-packing"></i> Available Parts
@@ -178,22 +178,6 @@
                     </div>
                 </div>
 
-                <!-- Card Valuation (Cyan) -->
-                <div class="bg-cyan-600 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
-                    <div class="flex justify-between items-center">
-                        <span class="text-xs font-bold uppercase tracking-wide opacity-90 flex items-center gap-1.5">
-                            <i class="fa-solid fa-rupiah-sign"></i> Valuation Amount
-                        </span>
-                        <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-xs">
-                            <i class="fa-solid fa-bolt"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 id="kpi-cost" class="text-2xl font-extrabold truncate">Rp 0</h3>
-                        <p class="text-[10px] opacity-80 mt-1">Estimasi total biaya backlog</p>
-                    </div>
-                </div>
-
                 <!-- Card Out of Stock (Ungu) -->
                 <div class="bg-indigo-600 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
                     <div class="flex justify-between items-center">
@@ -212,7 +196,7 @@
 
             </section>
 
-            <!-- Middle Section: Visual Charts & Priority Grid -->
+            <!-- Middle Section: Visual Charts & Executive Summary -->
             <section class="grid grid-cols-1 lg:grid-cols-3 gap-5">
                 
                 <!-- Chart 1: Bar Chart -->
@@ -239,7 +223,7 @@
                     </div>
                 </div>
 
-                <!-- Executive Summary Widgets -->
+                <!-- Executive Summary Widgets (Diperbarui) -->
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col justify-between">
                     <div class="flex justify-between items-center mb-2">
                         <h4 class="text-xs font-extrabold text-slate-800 uppercase tracking-wide flex items-center gap-1.5">
@@ -249,15 +233,21 @@
                     </div>
 
                     <div class="grid grid-cols-2 gap-3 my-auto">
-                        <div class="bg-rose-50 border border-rose-100 p-3 rounded-xl">
-                            <p class="text-[10px] font-bold text-rose-500 uppercase">Critical Out Stock</p>
-                            <h5 id="exec-critical" class="text-lg font-extrabold text-rose-700 mt-1">0</h5>
-                            <span class="text-[9px] bg-rose-200 text-rose-800 px-1.5 py-0.5 rounded font-bold">Action Needed</span>
+                        <div class="bg-rose-50 border border-rose-100 p-3 rounded-xl flex flex-col justify-between">
+                            <div>
+                                <p class="text-[10px] font-bold text-rose-500 uppercase">Critical Out Stock</p>
+                                <h5 id="exec-critical" class="text-lg font-extrabold text-rose-700 mt-1">0</h5>
+                            </div>
+                            <span class="text-[9px] bg-rose-200 text-rose-800 px-1.5 py-0.5 rounded font-bold w-fit mt-2">Action Needed</span>
                         </div>
-                        <div class="bg-emerald-50 border border-emerald-100 p-3 rounded-xl">
-                            <p class="text-[10px] font-bold text-emerald-600 uppercase">Available Parts</p>
-                            <h5 id="exec-safe-summary" class="text-lg font-extrabold text-emerald-700 mt-1">0</h5>
-                            <span class="text-[9px] bg-emerald-200 text-emerald-800 px-1.5 py-0.5 rounded font-bold">Ready</span>
+                        
+                        <!-- Pengganti Available Parts: Total Biaya Backlog -->
+                        <div class="bg-cyan-50 border border-cyan-100 p-3 rounded-xl flex flex-col justify-between">
+                            <div>
+                                <p class="text-[10px] font-bold text-cyan-600 uppercase">Total Biaya Backlog</p>
+                                <h5 id="exec-cost" class="text-sm font-extrabold text-cyan-800 mt-1 truncate">Rp 0</h5>
+                            </div>
+                            <span class="text-[9px] bg-cyan-200 text-cyan-900 px-1.5 py-0.5 rounded font-bold w-fit mt-2">Valuation</span>
                         </div>
                     </div>
 
@@ -498,19 +488,21 @@
                 if (mo) moSet.add(mo);
             });
 
-            // Update KPI Top Cards
+            // Format Rupiah Singkat / Penuh
+            const formattedCost = 'Rp ' + totalAmount.toLocaleString('id-ID', {maximumFractionDigits: 0});
+
+            // Update Top KPI Cards
             document.getElementById('exec-safe').innerText = availableCount.toLocaleString('id-ID');
             document.getElementById('kpi-total').innerText = filteredDataCache.length.toLocaleString('id-ID');
             document.getElementById('kpi-mo').innerText = moSet.size.toLocaleString('id-ID');
-            document.getElementById('kpi-cost').innerText = 'Rp ' + totalAmount.toLocaleString('id-ID', {maximumFractionDigits: 0});
             document.getElementById('kpi-stockout').innerText = stockOutCount.toLocaleString('id-ID');
 
-            // Update Widget Summary
+            // Update Executive Summary Widget
             const execCritical = document.getElementById('exec-critical');
             if (execCritical) execCritical.innerText = stockOutCount.toLocaleString('id-ID');
-            
-            const execSafeSummary = document.getElementById('exec-safe-summary');
-            if (execSafeSummary) execSafeSummary.innerText = availableCount.toLocaleString('id-ID');
+
+            const execCost = document.getElementById('exec-cost');
+            if (execCost) execCost.innerText = formattedCost;
 
             renderCharts(filteredDataCache);
             renderTable();
@@ -696,7 +688,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.setAttribute('href', url);
-            a.setAttribute('download', 'backlog_monres_2026.csv');
+            a.setAttribute('download', 'backlog_monres_2026.xls');
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
