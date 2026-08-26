@@ -196,7 +196,7 @@
 
             </section>
 
-            <!-- Middle Section: Visual Charts & Executive Summary -->
+            <!-- Middle Section: Visual Charts & Total Biaya Backlog Widget -->
             <section class="grid grid-cols-1 lg:grid-cols-3 gap-5">
                 
                 <!-- Chart 1: Bar Chart -->
@@ -223,32 +223,20 @@
                     </div>
                 </div>
 
-                <!-- Executive Summary Widgets (Diperbarui) -->
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col justify-between">
-                    <div class="flex justify-between items-center mb-2">
-                        <h4 class="text-xs font-extrabold text-slate-800 uppercase tracking-wide flex items-center gap-1.5">
-                            <i class="fa-solid fa-clipboard-check text-blue-600"></i> Executive Summary
+                <!-- Single Large Card: Total Biaya Backlog -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col justify-between">
+                    <div class="flex justify-between items-center">
+                        <h4 class="text-xs font-extrabold text-slate-800 uppercase tracking-wide flex items-center gap-2">
+                            <i class="fa-solid fa-wallet text-cyan-600"></i> Executive Summary
                         </h4>
-                        <span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-semibold">Active</span>
+                        <span class="text-[10px] bg-cyan-100 text-cyan-800 px-2.5 py-1 rounded-full font-bold">Valuation</span>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3 my-auto">
-                        <div class="bg-rose-50 border border-rose-100 p-3 rounded-xl flex flex-col justify-between">
-                            <div>
-                                <p class="text-[10px] font-bold text-rose-500 uppercase">Critical Out Stock</p>
-                                <h5 id="exec-critical" class="text-lg font-extrabold text-rose-700 mt-1">0</h5>
-                            </div>
-                            <span class="text-[9px] bg-rose-200 text-rose-800 px-1.5 py-0.5 rounded font-bold w-fit mt-2">Action Needed</span>
-                        </div>
-                        
-                        <!-- Pengganti Available Parts: Total Biaya Backlog -->
-                        <div class="bg-cyan-50 border border-cyan-100 p-3 rounded-xl flex flex-col justify-between">
-                            <div>
-                                <p class="text-[10px] font-bold text-cyan-600 uppercase">Total Biaya Backlog</p>
-                                <h5 id="exec-cost" class="text-sm font-extrabold text-cyan-800 mt-1 truncate">Rp 0</h5>
-                            </div>
-                            <span class="text-[9px] bg-cyan-200 text-cyan-900 px-1.5 py-0.5 rounded font-bold w-fit mt-2">Valuation</span>
-                        </div>
+                    <div class="my-auto py-2">
+                        <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Total Biaya Backlog</p>
+                        <h3 id="exec-cost" class="text-2xl xl:text-3xl font-black text-cyan-700 tracking-tight leading-none break-all">
+                            Rp 0
+                        </h3>
                     </div>
 
                     <div class="border-t border-slate-100 pt-3 flex justify-between items-center text-xs text-slate-500">
@@ -488,7 +476,6 @@
                 if (mo) moSet.add(mo);
             });
 
-            // Format Rupiah Singkat / Penuh
             const formattedCost = 'Rp ' + totalAmount.toLocaleString('id-ID', {maximumFractionDigits: 0});
 
             // Update Top KPI Cards
@@ -497,10 +484,7 @@
             document.getElementById('kpi-mo').innerText = moSet.size.toLocaleString('id-ID');
             document.getElementById('kpi-stockout').innerText = stockOutCount.toLocaleString('id-ID');
 
-            // Update Executive Summary Widget
-            const execCritical = document.getElementById('exec-critical');
-            if (execCritical) execCritical.innerText = stockOutCount.toLocaleString('id-ID');
-
+            // Update Total Biaya Backlog Single Card
             const execCost = document.getElementById('exec-cost');
             if (execCost) execCost.innerText = formattedCost;
 
@@ -688,7 +672,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.setAttribute('href', url);
-            a.setAttribute('download', 'backlog_monres_2026.xls');
+            a.setAttribute('download', 'backlog_monres_2026.csv');
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
