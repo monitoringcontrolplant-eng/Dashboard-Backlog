@@ -3,843 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Backlog Unit & Cluster - MONRES 2026</title>
+    <title>Login - Backlog Management System</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- PapaParse CDN for CSV parsing -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-    <!-- FontAwesome for Icons -->
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #0b0f19;
             color: #f1f5f9;
         }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+        .bg-login-gradient {
+            background: linear-gradient(135deg, #0b0f19 0%, #111827 50%, #1e1b4b 100%);
         }
-        ::-webkit-scrollbar-track {
-            background: #0b0f19;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #1e293b;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #334155;
-        }
-
-        .main-bg {
-            background: #0b0f19;
-        }
-
-        .dark-card {
-            background: #111827;
-            border: 1px solid #1f2937;
-        }
-
-        .metric-card {
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .metric-card:hover {
-            transform: translateY(-2px);
-            border-color: #374151;
+        .glow-effect {
+            box-shadow: 0 0 50px -12px rgba(99, 102, 241, 0.25);
         }
     </style>
 </head>
-<body class="antialiased min-h-screen flex flex-col justify-between">
+<body class="min-h-screen bg-login-gradient flex items-center justify-center p-4 sm:p-6 lg:p-8">
 
-    <!-- Modal Login -->
-    <div id="login-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md">
-        <div class="bg-[#111827] border border-slate-800 p-8 rounded-2xl w-full max-w-md shadow-2xl">
-            <div class="text-center mb-6">
-                <img src="BSS_logo.jpg" alt="BSS Logo" class="h-10 mx-auto mb-3" onerror="this.style.display='none'">
-                <h3 class="text-xl font-bold text-white">Backlog Management</h3>
-                <p class="text-xs text-slate-400 mt-1">Silakan masuk untuk mengakses dashboard</p>
-            </div>
-            <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">Username / Email</label>
-                    <input type="text" id="login-username" required placeholder="admin" class="w-full bg-[#1f2937] border border-slate-700 text-xs text-white rounded-xl p-3 focus:outline-none focus:border-indigo-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">Password</label>
-                    <input type="password" id="login-password" required placeholder="••••••••" class="w-full bg-[#1f2937] border border-slate-700 text-xs text-white rounded-xl p-3 focus:outline-none focus:border-indigo-500">
-                </div>
-                <div id="login-error" class="text-xs text-rose-500 hidden text-center">Username atau password salah!</div>
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-3 rounded-xl transition shadow-lg shadow-indigo-600/30">
-                    Masuk ke Dashboard
-                </button>
-            </form>
-            <div class="mt-4 text-center">
-                <p class="text-[10px] text-slate-500">Default Login: admin / admin123</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal User Management (Tambah Akses User) -->
-    <div id="user-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/80 backdrop-blur-md">
-        <div class="bg-[#111827] border border-slate-800 p-6 rounded-2xl w-full max-w-lg shadow-2xl space-y-5">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-user-plus text-indigo-400"></i> Manajemen Akses Pengguna
-                </h3>
-                <button onclick="toggleUserModal(false)" class="text-slate-400 hover:text-white text-sm"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-
-            <!-- Form Tambah User Baru -->
-            <form id="add-user-form" onsubmit="handleAddUser(event)" class="space-y-3 bg-[#1f2937]/50 p-4 rounded-xl border border-slate-800">
-                <p class="text-xs font-semibold text-indigo-300 mb-2">Beri Akses Pengguna Baru</p>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-[10px] text-slate-400 mb-1">Nama / Username</label>
-                        <input type="text" id="new-username" required placeholder="Nama User" class="w-full bg-[#111827] border border-slate-700 text-xs text-white rounded-lg p-2 focus:outline-none focus:border-indigo-500">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] text-slate-400 mb-1">Role / Jabatan</label>
-                        <input type="text" id="new-role" required placeholder="Planner / Supervisor" class="w-full bg-[#111827] border border-slate-700 text-xs text-white rounded-lg p-2 focus:outline-none focus:border-indigo-500">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-[10px] text-slate-400 mb-1">Password</label>
-                    <input type="password" id="new-password" required placeholder="Password Akses" class="w-full bg-[#111827] border border-slate-700 text-xs text-white rounded-lg p-2 focus:outline-none focus:border-indigo-500">
-                </div>
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2 rounded-lg transition">
-                    + Tambahkan Pengguna
-                </button>
-            </form>
-
-            <!-- Daftar User Terdaftar -->
-            <div>
-                <p class="text-xs font-semibold text-slate-300 mb-2">Daftar Pengguna Memiliki Akses</p>
-                <div class="max-h-40 overflow-y-auto space-y-1.5 pr-1" id="user-list">
-                    <!-- User list item JS rendered -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Top Header Bar -->
-    <header class="bg-[#111827] border-b border-slate-800/80 text-white px-6 py-3 flex justify-between items-center z-20 shadow-md">
-        <div class="flex items-center space-x-3.5">
-            <img src="BSS_logo.jpg" alt="Logo" class="h-6 w-auto" onerror="this.style.display='none'">
-            <div>
-                <span class="font-extrabold text-sm tracking-wide text-white block">BACKLOG MANAGEMENT</span>
-                <span class="text-[10px] text-slate-400 font-medium">Monitoring Control Plant & Maintenance</span>
-            </div>
-        </div>
-        <div class="flex items-center space-x-3">
-            <button onclick="toggleUserModal(true)" class="text-xs bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 px-3.5 py-1.5 rounded-xl transition flex items-center gap-2 shadow-sm font-medium">
-                <i class="fa-solid fa-user-gear"></i> Kelola Akses
-            </button>
-            <button onclick="refreshData()" class="text-xs bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3.5 py-1.5 rounded-xl transition flex items-center gap-2 shadow-sm font-medium">
-                <i class="fa-solid fa-rotate text-indigo-400"></i> Refresh
-            </button>
-            <div class="flex items-center space-x-3 border-l border-slate-800 pl-4">
-                <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-500 flex items-center justify-center text-xs font-bold text-white shadow-md" id="user-avatar">
-                    A
-                </div>
-                <div class="text-xs hidden sm:block">
-                    <p class="font-bold leading-none text-slate-200" id="current-user-name">Admin</p>
-                    <p class="text-[10px] text-slate-400 leading-tight mt-0.5" id="current-user-role">Maintenance Administrator</p>
-                </div>
-                <button onclick="handleLogout()" class="text-xs text-rose-400 hover:text-rose-300 ml-2" title="Logout">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <div class="flex flex-1 overflow-hidden">
+    <!-- Container Utama Split Screen -->
+    <div class="w-full max-w-5xl bg-[#111827] border border-slate-800/80 rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 glow-effect min-h-[600px]">
         
-        <!-- Sidebar Navigation -->
-        <aside class="w-64 bg-[#111827] text-slate-300 p-4 hidden md:flex flex-col justify-between border-r border-slate-800/80 shrink-0">
-            <div class="space-y-5">
-                <div class="relative">
-                    <input type="text" id="filter-search" placeholder="Cari Part / MO / Desc..." class="w-full bg-[#1f2937] border border-slate-800 text-xs text-white placeholder-slate-500 rounded-xl py-2.5 pl-3.5 pr-9 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition">
-                    <i class="fa-solid fa-magnifying-glass absolute right-3 top-3 text-slate-500 text-xs"></i>
-                </div>
-
-                <nav class="space-y-1.5 text-xs">
-                    <a href="#" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-semibold shadow-md shadow-indigo-900/20">
-                        <span class="flex items-center gap-2.5"><i class="fa-solid fa-chart-pie text-indigo-200"></i> Dashboard Executive</span>
-                    </a>
-                    
-                    <div class="pt-4 pb-1">
-                        <p class="px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-500">Filter Controls</p>
-                    </div>
-
-                    <div class="space-y-3 px-1">
-                        <div>
-                            <label class="block text-[11px] font-medium text-slate-400 mb-1.5">No Unit</label>
-                            <select id="filter-unit" class="w-full bg-[#1f2937] border border-slate-800 text-xs text-slate-200 rounded-xl p-2.5 focus:outline-none focus:border-indigo-500 transition">
-                                <option value="ALL">Semua No Unit</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-medium text-slate-400 mb-1.5">Cluster (Section)</label>
-                            <select id="filter-section" class="w-full bg-[#1f2937] border border-slate-800 text-xs text-slate-200 rounded-xl p-2.5 focus:outline-none focus:border-indigo-500 transition">
-                                <option value="ALL">Semua Cluster</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-medium text-slate-400 mb-1.5">Status Part</label>
-                            <select id="filter-status" class="w-full bg-[#1f2937] border border-slate-800 text-xs text-slate-200 rounded-xl p-2.5 focus:outline-none focus:border-indigo-500 transition">
-                                <option value="ALL">Semua Status Part</option>
-                            </select>
-                        </div>
-                    </div>
-                </nav>
-            </div>
-
-            <div class="bg-[#1f2937]/60 p-3 rounded-xl border border-slate-800/80 text-center">
-                <span id="data-status" class="text-[11px] font-bold text-amber-400">
-                    <i class="fa-solid fa-spinner fa-spin mr-1.5"></i> Memuat Data...
-                </span>
-            </div>
-        </aside>
-
-        <!-- Main Content Area -->
-        <main class="flex-1 main-bg p-5 sm:p-7 overflow-y-auto space-y-6">
-
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                <div>
-                    <h2 class="text-xl font-bold text-white tracking-tight">Executive Dashboard</h2>
-                    <p class="text-xs text-slate-400">Ringkasan Operasional & Evaluasi Valuation Backlog</p>
-                </div>
-            </div>
-
-            <!-- KPI Cards Section (Dark Theme) -->
-            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                
-                <!-- Card Available Parts -->
-                <div class="metric-card dark-card p-5 rounded-2xl shadow-sm flex flex-col justify-between h-36">
-                    <div class="flex justify-between items-center">
-                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Available Parts</span>
-                        <div class="w-8 h-8 bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-400 text-xs">
-                            <i class="fa-solid fa-circle-check"></i>
-                        </div>
-                    </div>
+        <!-- KOLOM KIRI: Form Login -->
+        <div class="lg:col-span-5 p-8 sm:p-10 flex flex-col justify-between bg-[#111827]">
+            
+            <!-- Header Brand -->
+            <div>
+                <div class="flex items-center gap-3 mb-8">
+                    <img src="BSS_logo.jpg" alt="BSS Logo" class="h-8 w-auto" onerror="this.style.display='none'">
                     <div>
-                        <h3 id="exec-safe" class="text-3xl font-extrabold text-white tracking-tight">0</h3>
-                        <p class="text-[11px] text-emerald-400 font-semibold mt-1 flex items-center gap-1">
-                            <i class="fa-solid fa-boxes-packing text-[10px]"></i> Stok tersedia di gudang
-                        </p>
+                        <h1 class="font-extrabold text-sm tracking-wider text-white uppercase">BACKLOG SYSTEM</h1>
+                        <p class="text-[10px] text-indigo-400 font-bold tracking-widest uppercase">MONRES 2026</p>
                     </div>
                 </div>
 
-                <!-- Card Total Items -->
-                <div class="metric-card dark-card p-5 rounded-2xl shadow-sm flex flex-col justify-between h-36">
-                    <div class="flex justify-between items-center">
-                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total Items</span>
-                        <div class="w-8 h-8 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-400 text-xs">
-                            <i class="fa-solid fa-cubes"></i>
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-white tracking-tight">Selamat Datang</h2>
+                    <p class="text-xs text-slate-400 mt-1">Silakan masuk untuk mengakses portal Backlog Management.</p>
+                </div>
+
+                <!-- Form Login -->
+                <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">Username / ID Pengguna</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500 text-xs">
+                                <i class="fa-solid fa-user"></i>
+                            </span>
+                            <input type="text" id="username" required placeholder="Masukkan username" 
+                                class="w-full bg-[#1f2937] border border-slate-700/80 text-xs text-white placeholder-slate-500 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition">
                         </div>
                     </div>
-                    <div>
-                        <h3 id="kpi-total" class="text-3xl font-extrabold text-white tracking-tight">0</h3>
-                        <p class="text-[11px] text-slate-400 font-medium mt-1">Total item backlog terdeteksi</p>
-                    </div>
-                </div>
 
-                <!-- Card Total MO -->
-                <div class="metric-card dark-card p-5 rounded-2xl shadow-sm flex flex-col justify-between h-36">
-                    <div class="flex justify-between items-center">
-                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total MO</span>
-                        <div class="w-8 h-8 bg-indigo-500/10 rounded-xl flex items-center justify-center text-indigo-400 text-xs">
-                            <i class="fa-solid fa-file-signature"></i>
+                    <div>
+                        <div class="flex justify-between items-center mb-1.5">
+                            <label class="block text-xs font-semibold text-slate-300">Password</label>
+                            <a href="#" class="text-[11px] text-indigo-400 hover:text-indigo-300 font-medium">Lupa Password?</a>
+                        </div>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500 text-xs">
+                                <i class="fa-solid fa-lock"></i>
+                            </span>
+                            <input type="password" id="password" required placeholder="••••••••" 
+                                class="w-full bg-[#1f2937] border border-slate-700/80 text-xs text-white placeholder-slate-500 rounded-xl py-3 pl-10 pr-10 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition">
+                            <button type="button" onclick="togglePasswordVisibility()" class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-500 hover:text-slate-300 text-xs">
+                                <i id="eyeIcon" class="fa-solid fa-eye"></i>
+                            </button>
                         </div>
                     </div>
-                    <div>
-                        <h3 id="kpi-mo" class="text-3xl font-extrabold text-white tracking-tight">0</h3>
-                        <p class="text-[11px] text-slate-400 font-medium mt-1">Maintenance Order aktif</p>
-                    </div>
-                </div>
 
-                <!-- Card Out of Stock -->
-                <div class="metric-card dark-card p-5 rounded-2xl shadow-sm flex flex-col justify-between h-36">
-                    <div class="flex justify-between items-center">
-                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Out of Stock</span>
-                        <div class="w-8 h-8 bg-rose-500/10 rounded-xl flex items-center justify-center text-rose-400 text-xs">
-                            <i class="fa-solid fa-triangle-exclamation"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 id="kpi-stockout" class="text-3xl font-extrabold text-white tracking-tight">0</h3>
-                        <p class="text-[11px] text-rose-400 font-semibold mt-1 flex items-center gap-1">
-                            <i class="fa-solid fa-circle-xmark text-[10px]"></i> Tidak ada stok (SOH 0)
-                        </p>
-                    </div>
-                </div>
-
-            </section>
-
-            <!-- Middle Section: Visual Charts & Valuation Card -->
-            <section class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-                
-                <!-- Chart 1: Bar Chart -->
-                <div class="dark-card p-5 rounded-2xl shadow-sm flex flex-col justify-between">
-                    <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
-                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-                            <i class="fa-solid fa-chart-column text-indigo-400"></i> Top 10 MO Terbanyak
-                        </h4>
-                    </div>
-                    <div class="relative h-60 w-full">
-                        <canvas id="barChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Chart 2: Doughnut Chart -->
-                <div class="dark-card p-5 rounded-2xl shadow-sm flex flex-col justify-between">
-                    <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
-                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-                            <i class="fa-solid fa-chart-pie text-indigo-400"></i> Sebaran Cluster (Section)
-                        </h4>
-                    </div>
-                    <div class="relative h-60 w-full flex justify-center">
-                        <canvas id="pieChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- High Highlight Executive Card: Total Biaya Backlog -->
-                <div class="bg-gradient-to-br from-[#111827] via-[#1a2234] to-[#1e1b4b] text-white p-6 rounded-2xl border border-indigo-500/30 shadow-xl flex flex-col justify-between relative overflow-hidden">
-                    <div class="absolute -right-8 -bottom-8 w-40 h-40 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none"></div>
-                    
-                    <div class="flex justify-between items-center relative z-10">
-                        <h4 class="text-xs font-extrabold text-indigo-300 uppercase tracking-wider flex items-center gap-2">
-                            <i class="fa-solid fa-wallet text-indigo-400"></i> Valuation Summary
-                        </h4>
-                        <span class="text-[10px] bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 px-3 py-1 rounded-full font-bold uppercase tracking-wide">
-                            Total Price
-                        </span>
+                    <div class="flex items-center justify-between pt-1">
+                        <label class="flex items-center cursor-pointer">
+                            <input type="checkbox" class="w-3.5 h-3.5 text-indigo-600 bg-[#1f2937] border-slate-700 rounded focus:ring-0 focus:ring-offset-0">
+                            <span class="ml-2 text-xs text-slate-400 font-medium">Ingat saya</span>
+                        </label>
                     </div>
 
-                    <div class="my-auto py-4 relative z-10">
-                        <p class="text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">Total Biaya Backlog</p>
-                        <h3 id="exec-cost" class="text-3xl xl:text-4xl font-extrabold text-white tracking-tight leading-none break-all">
-                            Rp 0
-                        </h3>
-                    </div>
-
-                    <div class="border-t border-slate-800 pt-3 flex justify-between items-center text-xs text-slate-400 relative z-10">
-                        <span class="text-[11px]">Data Synchronization</span>
-                        <span class="font-bold text-slate-200">MONRES 2026</span>
-                    </div>
-                </div>
-
-            </section>
-
-            <!-- Bottom Table Section -->
-            <section class="dark-card rounded-2xl shadow-sm overflow-hidden">
-                <div class="p-5 border-b border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-[#111827]">
-                    <div>
-                        <h3 class="text-sm font-bold text-white">Rincian Detail Backlog Unit</h3>
-                        <p class="text-xs text-slate-400" id="table-count-info">Menampilkan 0 data backlog</p>
-                    </div>
-                    <button onclick="exportTableToCSV()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center gap-2 shadow-sm shadow-indigo-600/30">
-                        <i class="fa-solid fa-file-csv text-indigo-200"></i> Ekspor CSV
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs py-3.5 rounded-xl transition duration-200 shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 mt-2">
+                        <span>Masuk ke Dashboard</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
                     </button>
+                </form>
+            </div>
+
+            <!-- Footer Login -->
+            <div class="mt-8 pt-4 border-t border-slate-800/80 text-center lg:text-left">
+                <p class="text-[11px] text-slate-500">Need access? Hubungi Administrator Plant & Maintenance.</p>
+            </div>
+        </div>
+
+        <!-- KOLOM KANAN: Visual Hero & Informasi Sistem -->
+        <div class="lg:col-span-7 bg-gradient-to-br from-[#1e1b4b] via-[#0f172a] to-[#0b0f19] p-8 sm:p-12 flex flex-col justify-between relative overflow-hidden border-t lg:border-t-0 lg:border-l border-slate-800/80">
+            
+            <!-- Decorative Glow & Grid Overlay -->
+            <div class="absolute -right-16 -top-16 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -left-16 -bottom-16 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <!-- Top Tag -->
+            <div class="relative z-10 flex justify-between items-center">
+                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[11px] font-semibold tracking-wide">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Control Plant System
+                </span>
+                <span class="text-xs text-slate-500 font-mono">v2.0.26</span>
+            </div>
+
+            <!-- Middle Text & Dynamic Highlights -->
+            <div class="my-auto py-8 relative z-10 space-y-6">
+                <div>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight leading-snug">
+                        Monitoring & Evaluation <br> Backlog Unit & Cluster
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-2 max-w-md leading-relaxed">
+                        Kelola data sparepart backlog, pemantauan status Maintenance Order (MO), serta evaluasi biaya operasional secara *real-time* dan terintegrasi.
+                    </p>
                 </div>
 
-                <div class="overflow-x-auto min-h-[350px]">
-                    <table class="min-w-full divide-y divide-slate-800 text-xs text-left">
-                        <thead class="bg-[#1f2937] text-slate-400 font-bold tracking-wider uppercase text-[10px] sticky top-0 z-10 border-b border-slate-800">
-                            <tr>
-                                <th class="px-4 py-3.5">No Unit</th>
-                                <th class="px-4 py-3.5">Cluster (Section)</th>
-                                <th class="px-4 py-3.5">No MO</th>
-                                <th class="px-4 py-3.5">Status MO (Desc)</th>
-                                <th class="px-4 py-3.5">Part Number</th>
-                                <th class="px-4 py-3.5">Description Part</th>
-                                <th class="px-3 py-3.5 text-center">Stock</th>
-                                <th class="px-4 py-3.5 text-right">Total Price</th>
-                                <th class="px-4 py-3.5 text-center">Status Part (W)</th>
-                                <th class="px-4 py-3.5 text-center">Status MO (X)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table-body" class="divide-y divide-slate-800/60 bg-[#111827]">
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="p-4 border-t border-slate-800 bg-[#111827] flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div class="text-xs text-slate-400 font-medium" id="pagination-info">
-                        Halaman 1 dari 1
+                <!-- Feature Mini Cards -->
+                <div class="grid grid-cols-3 gap-3 pt-2">
+                    <div class="bg-[#111827]/80 backdrop-blur-md p-3.5 rounded-2xl border border-slate-800">
+                        <div class="text-indigo-400 text-xs mb-1"><i class="fa-solid fa-boxes-packing"></i></div>
+                        <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Available</p>
+                        <p class="text-sm font-extrabold text-white mt-0.5">Live Stock</p>
                     </div>
-                    <div class="flex items-center space-x-2">
-                        <button id="btn-prev" onclick="changePage(-1)" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#1f2937] border border-slate-700 text-slate-300 hover:bg-slate-800 transition disabled:opacity-40 shadow-sm">
-                            <i class="fa-solid fa-chevron-left mr-1"></i> Prev
-                        </button>
-                        <div id="page-numbers" class="flex space-x-1"></div>
-                        <button id="btn-next" onclick="changePage(1)" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#1f2937] border border-slate-700 text-slate-300 hover:bg-slate-800 transition disabled:opacity-40 shadow-sm">
-                            Next <i class="fa-solid fa-chevron-right ml-1"></i>
-                        </button>
+                    <div class="bg-[#111827]/80 backdrop-blur-md p-3.5 rounded-2xl border border-slate-800">
+                        <div class="text-emerald-400 text-xs mb-1"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                        <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Valuation</p>
+                        <p class="text-sm font-extrabold text-white mt-0.5">Real-time Cost</p>
+                    </div>
+                    <div class="bg-[#111827]/80 backdrop-blur-md p-3.5 rounded-2xl border border-slate-800">
+                        <div class="text-amber-400 text-xs mb-1"><i class="fa-solid fa-chart-line"></i></div>
+                        <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Analytics</p>
+                        <p class="text-sm font-extrabold text-white mt-0.5">Executive View</p>
                     </div>
                 </div>
-            </section>
+            </div>
 
-        </main>
+            <!-- Footer Quote / Disclaimer -->
+            <div class="relative z-10 border-t border-slate-800/80 pt-4 flex justify-between items-center text-[11px] text-slate-500">
+                <span>© 2026 MONRES. All rights reserved.</span>
+                <span class="font-medium text-slate-400">BSS Engineering</span>
+            </div>
+        </div>
+
     </div>
 
+    <!-- Script Sederhana Interaction -->
     <script>
-        const SHEET_ID = '1ZR7lEwe9XAWxrmGa7SiXokkAD1rCsX0VRFtnNhmQ2Ok';
-        const SHEET_NAME = 'Monres';
-        const GOOGLE_SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(SHEET_NAME)}`;
-
-        let rawData = [];
-        let filteredDataCache = [];
-        let barChartInstance = null;
-        let pieChartInstance = null;
-
-        let currentPage = 1;
-        const pageSize = 50;
-        let searchTimeout = null;
-
-        // User Access Storage
-        let allowedUsers = JSON.parse(localStorage.getItem('backlog_users')) || [
-            { username: 'admin', password: 'admin123', role: 'Maintenance Administrator' }
-        ];
+        function togglePasswordVisibility() {
+            const pwdInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            if (pwdInput.type === 'password') {
+                pwdInput.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                pwdInput.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        }
 
         function handleLogin(e) {
             e.preventDefault();
-            const u = document.getElementById('login-username').value.trim();
-            const p = document.getElementById('login-password').value.trim();
-            const err = document.getElementById('login-error');
-
-            const found = allowedUsers.find(user => user.username === u && user.password === p);
-
-            if (found) {
-                err.classList.add('hidden');
-                document.getElementById('login-modal').classList.add('hidden');
-                document.getElementById('current-user-name').innerText = found.username;
-                document.getElementById('current-user-role').innerText = found.role;
-                document.getElementById('user-avatar').innerText = found.username.charAt(0).toUpperCase();
-                fetchSheetData();
-            } else {
-                err.classList.remove('hidden');
-            }
-        }
-
-        function handleLogout() {
-            document.getElementById('login-modal').classList.remove('hidden');
-        }
-
-        function toggleUserModal(show) {
-            const modal = document.getElementById('user-modal');
-            if (show) {
-                modal.classList.remove('hidden');
-                renderUserList();
-            } else {
-                modal.classList.add('hidden');
-            }
-        }
-
-        function handleAddUser(e) {
-            e.preventDefault();
-            const username = document.getElementById('new-username').value.trim();
-            const role = document.getElementById('new-role').value.trim();
-            const password = document.getElementById('new-password').value.trim();
-
-            if (username && password) {
-                allowedUsers.push({ username, password, role });
-                localStorage.setItem('backlog_users', JSON.stringify(allowedUsers));
-                document.getElementById('add-user-form').reset();
-                renderUserList();
-            }
-        }
-
-        function renderUserList() {
-            const listContainer = document.getElementById('user-list');
-            listContainer.innerHTML = '';
-            allowedUsers.forEach((u, index) => {
-                listContainer.innerHTML += `
-                    <div class="flex justify-between items-center bg-[#1f2937] p-2.5 rounded-lg border border-slate-800 text-xs">
-                        <div>
-                            <p class="font-bold text-white">${u.username}</p>
-                            <p class="text-[10px] text-slate-400">${u.role}</p>
-                        </div>
-                        ${index !== 0 ? `<button onclick="deleteUser(${index})" class="text-rose-400 hover:text-rose-300 text-xs"><i class="fa-solid fa-trash"></i></button>` : `<span class="text-[10px] text-indigo-400 font-semibold">Owner</span>`}
-                    </div>
-                `;
-            });
-        }
-
-        function deleteUser(index) {
-            allowedUsers.splice(index, 1);
-            localStorage.setItem('backlog_users', JSON.stringify(allowedUsers));
-            renderUserList();
-        }
-
-        function getColumnWValue(row) {
-            if (!row) return '';
-            const values = Object.values(row);
-            if (values.length >= 23 && values[22] !== undefined && values[22] !== null) {
-                return values[22].toString().trim();
-            }
-            return getValue(row, 'Status Part') || getValue(row, 'Stat. Desc') || '';
-        }
-
-        function getColumnXValue(row) {
-            if (!row) return '';
-            const values = Object.values(row);
-            if (values.length >= 24 && values[23] !== undefined && values[23] !== null) {
-                return values[23].toString().trim();
-            }
-            return getValue(row, 'Status MO') || '';
-        }
-
-        function getValue(row, keyName) {
-            if (!row) return '';
-            const keys = Object.keys(row);
-            let foundKey = keys.find(k => k.toLowerCase().trim() === keyName.toLowerCase().trim());
-            return foundKey ? row[foundKey] : '';
-        }
-
-        function fetchSheetData() {
-            const statusBadge = document.getElementById('data-status');
-            statusBadge.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> Memuat Data...';
-            statusBadge.className = 'text-[11px] font-bold text-amber-400';
-
-            Papa.parse(GOOGLE_SHEET_CSV_URL, {
-                download: true,
-                header: true,
-                skipEmptyLines: true,
-                transformHeader: function(h) { return h.trim(); },
-                complete: function(results) {
-                    if (results.data && results.data.length > 0) {
-                        rawData = results.data.filter(row => getValue(row, 'No Unit') || getValue(row, 'MO'));
-                    }
-
-                    statusBadge.innerHTML = '<i class="fa-solid fa-circle-check mr-1.5"></i> Connected';
-                    statusBadge.className = 'text-[11px] font-bold text-emerald-400';
-                    
-                    populateFilterOptions();
-                    updateDashboard();
-                },
-                error: function(err) {
-                    statusBadge.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1.5"></i> Error';
-                    statusBadge.className = 'text-[11px] font-bold text-rose-400';
-                }
-            });
-        }
-
-        function refreshData() {
-            fetchSheetData();
-        }
-
-        function populateFilterOptions() {
-            const unitSet = new Set();
-            const sectionSet = new Set();
-            const statusSet = new Set();
-
-            rawData.forEach(row => {
-                const unit = getValue(row, 'No Unit').trim();
-                const section = getValue(row, 'Section').trim();
-                const status = getColumnWValue(row);
-
-                if (unit) unitSet.add(unit);
-                if (section) sectionSet.add(section);
-                if (status) statusSet.add(status);
-            });
-
-            const buildOptions = (id, set, label) => {
-                const el = document.getElementById(id);
-                el.innerHTML = `<option value="ALL">Semua ${label}</option>`;
-                Array.from(set).sort().forEach(val => {
-                    el.innerHTML += `<option value="${val}">${val}</option>`;
-                });
-            };
-
-            buildOptions('filter-unit', unitSet, 'No Unit');
-            buildOptions('filter-section', sectionSet, 'Cluster');
-            buildOptions('filter-status', statusSet, 'Status Part');
-
-            document.getElementById('filter-unit').onchange = onFilterChange;
-            document.getElementById('filter-section').onchange = onFilterChange;
-            document.getElementById('filter-status').onchange = onFilterChange;
-            
-            document.getElementById('filter-search').oninput = function() {
-                clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(() => {
-                    onFilterChange();
-                }, 300);
-            };
-        }
-
-        function onFilterChange() {
-            currentPage = 1;
-            updateDashboard();
-        }
-
-        function getFilteredData() {
-            const selectedUnit = document.getElementById('filter-unit').value;
-            const selectedSection = document.getElementById('filter-section').value;
-            const selectedStatus = document.getElementById('filter-status').value;
-            const searchQuery = document.getElementById('filter-search').value.toLowerCase().trim();
-
-            return rawData.filter(row => {
-                const rowUnit = getValue(row, 'No Unit').trim();
-                const rowSection = getValue(row, 'Section').trim();
-                const rowStatus = getColumnWValue(row);
-                
-                const matchUnit = selectedUnit === 'ALL' || rowUnit === selectedUnit;
-                const matchSection = selectedSection === 'ALL' || rowSection === selectedSection;
-                const matchStatus = selectedStatus === 'ALL' || rowStatus === selectedStatus;
-                
-                let matchSearch = true;
-                if (searchQuery) {
-                    const mo = getValue(row, 'MO').toLowerCase();
-                    const partNo = getValue(row, 'Part Number').toLowerCase();
-                    const desc = getValue(row, 'Description').toLowerCase();
-                    const moDesc = getValue(row, 'Maint. Order Desc.').toLowerCase();
-
-                    matchSearch = mo.includes(searchQuery) || 
-                                  partNo.includes(searchQuery) || 
-                                  desc.includes(searchQuery) ||
-                                  moDesc.includes(searchQuery);
-                }
-
-                return matchUnit && matchSection && matchStatus && matchSearch;
-            });
-        }
-
-        function cleanNumber(val) {
-            if (!val) return 0;
-            let str = val.toString().trim();
-            str = str.replace(/[^0-9,-]/g, '').replace(',', '.');
-            return parseFloat(str) || 0;
-        }
-
-        function updateDashboard() {
-            filteredDataCache = getFilteredData();
-
-            let totalAmount = 0;
-            let stockOutCount = 0;
-            let availableCount = 0;
-            const moSet = new Set();
-
-            filteredDataCache.forEach(row => {
-                const amount = cleanNumber(getValue(row, 'Total Price')); 
-                const stock = cleanNumber(getValue(row, 'Stock On Hand'));
-                const mo = getValue(row, 'MO').trim();
-
-                totalAmount += amount;
-                if (stock > 0) {
-                    availableCount++;
-                } else {
-                    stockOutCount++;
-                }
-                if (mo) moSet.add(mo);
-            });
-
-            const formattedCost = 'Rp ' + totalAmount.toLocaleString('id-ID', {maximumFractionDigits: 0});
-
-            document.getElementById('exec-safe').innerText = availableCount.toLocaleString('id-ID');
-            document.getElementById('kpi-total').innerText = filteredDataCache.length.toLocaleString('id-ID');
-            document.getElementById('kpi-mo').innerText = moSet.size.toLocaleString('id-ID');
-            document.getElementById('kpi-stockout').innerText = stockOutCount.toLocaleString('id-ID');
-
-            const execCost = document.getElementById('exec-cost');
-            if (execCost) execCost.innerText = formattedCost;
-
-            renderCharts(filteredDataCache);
-            renderTable();
-        }
-
-        function renderCharts(data) {
-            const moCounts = {};
-            const sectionCounts = {};
-
-            data.forEach(row => {
-                const mo = getValue(row, 'MO').trim() || 'N/A';
-                moCounts[mo] = (moCounts[mo] || 0) + 1;
-
-                const sec = getValue(row, 'Section').trim() || 'Unassigned';
-                sectionCounts[sec] = (sectionCounts[sec] || 0) + 1;
-            });
-
-            const sortedMO = Object.entries(moCounts)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 10);
-
-            if (barChartInstance) barChartInstance.destroy();
-            if (pieChartInstance) pieChartInstance.destroy();
-
-            Chart.defaults.color = '#94a3b8';
-            Chart.defaults.font.family = 'Plus Jakarta Sans';
-
-            const ctxBar = document.getElementById('barChart').getContext('2d');
-            barChartInstance = new Chart(ctxBar, {
-                type: 'bar',
-                data: {
-                    labels: sortedMO.map(item => item[0]),
-                    datasets: [{
-                        label: 'Jumlah Part',
-                        data: sortedMO.map(item => item[1]),
-                        backgroundColor: '#6366f1',
-                        hoverBackgroundColor: '#818cf8',
-                        borderRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        y: { beginAtZero: true, grid: { color: '#1f2937' } },
-                        x: { grid: { display: false } }
-                    }
-                }
-            });
-
-            const ctxPie = document.getElementById('pieChart').getContext('2d');
-            pieChartInstance = new Chart(ctxPie, {
-                type: 'doughnut',
-                data: {
-                    labels: Object.keys(sectionCounts),
-                    datasets: [{
-                        data: Object.values(sectionCounts),
-                        backgroundColor: ['#6366f1', '#06b6d4', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6'],
-                        borderWidth: 2,
-                        borderColor: '#111827'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11, weight: '600' } } }
-                    }
-                }
-            });
-        }
-
-        function renderTable() {
-            const tbody = document.getElementById('table-body');
-            tbody.innerHTML = '';
-            
-            const total = filteredDataCache.length;
-            document.getElementById('table-count-info').innerText = `Menampilkan ${total.toLocaleString('id-ID')} data backlog`;
-
-            if (total === 0) {
-                tbody.innerHTML = `<tr><td colspan="10" class="text-center py-12 text-slate-500">Tidak ada data backlog.</td></tr>`;
-                updatePaginationControls(0);
-                return;
-            }
-
-            const totalPages = Math.ceil(total / pageSize);
-            if (currentPage > totalPages) currentPage = totalPages;
-            if (currentPage < 1) currentPage = 1;
-
-            const startIndex = (currentPage - 1) * pageSize;
-            const endIndex = Math.min(startIndex + pageSize, total);
-            const pageData = filteredDataCache.slice(startIndex, endIndex);
-
-            pageData.forEach(row => { 
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-slate-800/50 transition border-b border-slate-800/60';
-                
-                const statusPart = getColumnWValue(row) || '-';
-                let partBadge = 'bg-slate-800 text-slate-300 border border-slate-700';
-                const partUpper = statusPart.toUpperCase();
-                if (partUpper.includes('COMPLETED') || partUpper.includes('CLOSED')) {
-                    partBadge = 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
-                } else if (partUpper.includes('PROGRESS') || partUpper.includes('PROCESS')) {
-                    partBadge = 'bg-amber-500/10 text-amber-400 border border-amber-500/20';
-                } else if (partUpper.includes('OUTSTANDING') || partUpper.includes('OPEN')) {
-                    partBadge = 'bg-rose-500/10 text-rose-400 border border-rose-500/20';
-                }
-
-                const statusMO = getColumnXValue(row) || '-';
-                let moBadge = 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20';
-
-                const stock = cleanNumber(getValue(row, 'Stock On Hand'));
-                const amount = cleanNumber(getValue(row, 'Total Price'));
-
-                tr.innerHTML = `
-                    <td class="px-4 py-3 font-bold text-indigo-400">${getValue(row, 'No Unit') || '-'}</td>
-                    <td class="px-4 py-3 font-medium text-slate-300">${getValue(row, 'Section') || '-'}</td>
-                    <td class="px-4 py-3 font-mono font-semibold text-slate-200">${getValue(row, 'MO') || '-'}</td>
-                    <td class="px-4 py-3 text-slate-400 max-w-[180px] truncate">${getValue(row, 'Maint. Order Desc.') || '-'}</td>
-                    <td class="px-4 py-3 font-mono text-slate-300">${getValue(row, 'Part Number') || '-'}</td>
-                    <td class="px-4 py-3 font-medium text-slate-200 max-w-[200px] truncate">${getValue(row, 'Description') || '-'}</td>
-                    <td class="px-3 py-3 text-center font-bold ${stock === 0 ? 'text-rose-400 bg-rose-500/10 rounded-lg' : 'text-slate-300'}">${getValue(row, 'Stock On Hand') || '0'}</td>
-                    <td class="px-4 py-3 text-right font-semibold text-white">Rp ${amount.toLocaleString('id-ID')}</td>
-                    <td class="px-4 py-3 text-center"><span class="px-2.5 py-1 text-[10px] font-bold rounded-lg ${partBadge}">${statusPart}</span></td>
-                    <td class="px-4 py-3 text-center"><span class="px-2.5 py-1 text-[10px] font-bold rounded-lg ${moBadge}">${statusMO}</span></td>
-                `;
-                tbody.appendChild(tr);
-            });
-
-            updatePaginationControls(totalPages);
-        }
-
-        function updatePaginationControls(totalPages) {
-            const info = document.getElementById('pagination-info');
-            const btnPrev = document.getElementById('btn-prev');
-            const btnNext = document.getElementById('btn-next');
-            const pageNumbers = document.getElementById('page-numbers');
-
-            if (totalPages === 0) {
-                info.innerText = 'Menampilkan 0 data';
-                btnPrev.disabled = true;
-                btnNext.disabled = true;
-                pageNumbers.innerHTML = '';
-                return;
-            }
-
-            const startItem = (currentPage - 1) * pageSize + 1;
-            const endItem = Math.min(currentPage * pageSize, filteredDataCache.length);
-
-            info.innerText = `Menampilkan ${startItem}-${endItem} dari ${filteredDataCache.length} data (Halaman ${currentPage}/${totalPages})`;
-            
-            btnPrev.disabled = currentPage === 1;
-            btnNext.disabled = currentPage === totalPages;
-
-            pageNumbers.innerHTML = `<span class="px-3 py-1 rounded-xl text-xs font-bold bg-indigo-600 text-white shadow-sm">${currentPage}</span>`;
-        }
-
-        function changePage(direction) {
-            currentPage += direction;
-            renderTable();
-        }
-
-        function exportTableToCSV() {
-            if (filteredDataCache.length === 0) return;
-
-            let csvContent = "No Unit,Section,MO,Maint. Order Desc,Part Number,Description,Stock On Hand,Total Price,Status Part,Status MO\n";
-            filteredDataCache.forEach(row => {
-                const line = [
-                    `"${getValue(row, 'No Unit')}"`,
-                    `"${getValue(row, 'Section')}"`,
-                    `"${getValue(row, 'MO')}"`,
-                    `"${getValue(row, 'Maint. Order Desc.')}"`,
-                    `"${getValue(row, 'Part Number')}"`,
-                    `"${getValue(row, 'Description')}"`,
-                    `"${getValue(row, 'Stock On Hand')}"`,
-                    `"${getValue(row, 'Total Price')}"`,
-                    `"${getColumnWValue(row)}"`,
-                    `"${getColumnXValue(row)}"`
-                ].join(",");
-                csvContent += line + "\n";
-            });
-
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.setAttribute('href', url);
-            a.setAttribute('download', 'backlog_monres_2026.csv');
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            // Arahkan ke dashboard setelah login
+            window.location.href = '#'; 
         }
     </script>
 </body>
