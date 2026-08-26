@@ -133,131 +133,90 @@
                 </div>
             </div>
 
-            <!-- Top Vibrant KPI Cards (Persis Style Gambar) -->
-            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                
-                <!-- Card 1: Hijau -->
-                <div class="bg-emerald-500 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
-                    <div class="flex justify-between items-center">
-                        <span class="text-xs font-bold uppercase tracking-wide opacity-90 flex items-center gap-1.5">
-                            <i class="fa-solid fa-boxes-stacked"></i> Total Items Backlog
-                        </span>
-                        <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-xs">
-                            <i class="fa-solid fa-arrow-trend-up"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 id="kpi-total" class="text-3xl font-extrabold">0</h3>
-                        <p class="text-[10px] opacity-80 mt-1">Total item terdeteksi dalam backlog</p>
-                    </div>
-                </div>
+            <!-- Top Vibrant KPI Cards (5 Kartu Berjejer) -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+    
+    <!-- 1. Available Parts (Paling Kiri) -->
+    <div class="bg-emerald-500 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
+        <div class="flex justify-between items-center">
+            <span class="text-xs font-bold uppercase tracking-wide opacity-90 flex items-center gap-1.5">
+                <i class="fa-solid fa-boxes-packing"></i> Available Parts
+            </span>
+            <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-xs">
+                <i class="fa-solid fa-check-double"></i>
+            </div>
+        </div>
+        <div>
+            <h3 id="exec-safe" class="text-3xl font-extrabold">0</h3>
+            <p class="text-[10px] opacity-80 mt-1">Item part dengan stok tersedia</p>
+        </div>
+    </div>
 
-                <!-- Card 2: Biru -->
-                <div class="bg-blue-500 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
-                    <div class="flex justify-between items-center">
-                        <span class="text-xs font-bold uppercase tracking-wide opacity-90 flex items-center gap-1.5">
-                            <i class="fa-solid fa-file-invoice"></i> Total MO (Maint. Order)
-                        </span>
-                        <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-xs">
-                            <i class="fa-solid fa-check"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 id="kpi-mo" class="text-3xl font-extrabold">0</h3>
-                        <p class="text-[10px] opacity-80 mt-1">Maintenance Order unik aktif</p>
-                    </div>
-                </div>
+    <!-- 2. Total Items Backlog -->
+    <div class="bg-teal-600 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
+        <div class="flex justify-between items-center">
+            <span class="text-xs font-bold uppercase tracking-wide opacity-90 flex items-center gap-1.5">
+                <i class="fa-solid fa-boxes-stacked"></i> Total Items Backlog
+            </span>
+            <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-xs">
+                <i class="fa-solid fa-arrow-trend-up"></i>
+            </div>
+        </div>
+        <div>
+            <h3 id="kpi-total" class="text-3xl font-extrabold">0</h3>
+            <p class="text-[10px] opacity-80 mt-1">Total item terdeteksi dalam backlog</p>
+        </div>
+    </div>
 
-                <!-- Card 3: Cyan/Turquoise -->
-                <div class="bg-cyan-600 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
-                    <div class="flex justify-between items-center">
-                        <span class="text-xs font-bold uppercase tracking-wide opacity-90 flex items-center gap-1.5">
-                            <i class="fa-solid fa-rupiah-sign"></i> Valuation Amount
-                        </span>
-                        <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-xs">
-                            <i class="fa-solid fa-bolt"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 id="kpi-cost" class="text-2xl font-extrabold truncate">Rp 0</h3>
-                        <p class="text-[10px] opacity-80 mt-1">Estimasi total biaya backlog</p>
-                    </div>
-                </div>
+    <!-- 3. Total MO (Maint. Order) -->
+    <div class="bg-blue-500 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
+        <div class="flex justify-between items-center">
+            <span class="text-xs font-bold uppercase tracking-wide opacity-90 flex items-center gap-1.5">
+                <i class="fa-solid fa-file-invoice"></i> Total MO (Maint. Order)
+            </span>
+            <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-xs">
+                <i class="fa-solid fa-list-check"></i>
+            </div>
+        </div>
+        <div>
+            <h3 id="kpi-mo" class="text-3xl font-extrabold">0</h3>
+            <p class="text-[10px] opacity-80 mt-1">Maintenance Order unik aktif</p>
+        </div>
+    </div>
 
-                <!-- Card 4: Ungu -->
-                <div class="bg-indigo-600 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
-                    <div class="flex justify-between items-center">
-                        <span class="text-xs font-bold uppercase tracking-wide opacity-90 flex items-center gap-1.5">
-                            <i class="fa-solid fa-triangle-exclamation"></i> Out of Stock
-                        </span>
-                        <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-xs">
-                            <i class="fa-solid fa-box-open"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 id="kpi-stockout" class="text-3xl font-extrabold">0</h3>
-                        <p class="text-[10px] opacity-80 mt-1">Tidak ada item di SOH</p>
-                    </div>
-                </div>
+    <!-- 4. Valuation Amount -->
+    <div class="bg-cyan-600 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
+        <div class="flex justify-between items-center">
+            <span class="text-xs font-bold uppercase tracking-wide opacity-90 flex items-center gap-1.5">
+                <i class="fa-solid fa-rupiah-sign"></i> Valuation Amount
+            </span>
+            <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-xs">
+                <i class="fa-solid fa-bolt"></i>
+            </div>
+        </div>
+        <div>
+            <h3 id="kpi-cost" class="text-2xl font-extrabold truncate">Rp 0</h3>
+            <p class="text-[10px] opacity-80 mt-1">Estimasi total biaya backlog</p>
+        </div>
+    </div>
 
-            </section>
+    <!-- 5. Out of Stock -->
+    <div class="bg-indigo-600 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
+        <div class="flex justify-between items-center">
+            <span class="text-xs font-bold uppercase tracking-wide opacity-90 flex items-center gap-1.5">
+                <i class="fa-solid fa-triangle-exclamation"></i> Out of Stock
+            </span>
+            <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-xs">
+                <i class="fa-solid fa-box-open"></i>
+            </div>
+        </div>
+        <div>
+            <h3 id="kpi-stockout" class="text-3xl font-extrabold">0</h3>
+            <p class="text-[10px] opacity-80 mt-1">Tidak ada item di SOH</p>
+        </div>
+    </div>
 
-            <!-- Middle Section: Visual Charts & Priority Grid -->
-            <section class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-                
-                <!-- Chart 1: Bar Chart (Ungu Kartu) -->
-                <div class="bg-indigo-700 text-white p-5 rounded-2xl shadow-lg flex flex-col justify-between">
-                    <div class="flex justify-between items-center mb-3">
-                        <h4 class="text-xs font-bold uppercase tracking-wider flex items-center gap-2">
-                            <i class="fa-solid fa-chart-column"></i> Top 10 MO Terbanyak
-                        </h4>
-                    </div>
-                    <div class="relative h-60 w-full">
-                        <canvas id="barChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Chart 2: Doughnut Chart (Merah Kartu) -->
-                <div class="bg-rose-600 text-white p-5 rounded-2xl shadow-lg flex flex-col justify-between">
-                    <div class="flex justify-between items-center mb-3">
-                        <h4 class="text-xs font-bold uppercase tracking-wider flex items-center gap-2">
-                            <i class="fa-solid fa-chart-pie"></i> Sebaran Cluster (Section)
-                        </h4>
-                    </div>
-                    <div class="relative h-60 w-full flex justify-center">
-                        <canvas id="pieChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Executive Summary Widgets (Kartu Putih Mini - Sesuai Kanan Gambar) -->
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col justify-between">
-                    <div class="flex justify-between items-center mb-2">
-                        <h4 class="text-xs font-extrabold text-slate-800 uppercase tracking-wide flex items-center gap-1.5">
-                            <i class="fa-solid fa-clipboard-check text-blue-600"></i> Executive Summary
-                        </h4>
-                        <span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-semibold">Active</span>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3 my-auto">
-                        <div class="bg-rose-50 border border-rose-100 p-3 rounded-xl">
-                            <p class="text-[10px] font-bold text-rose-500 uppercase">Critical Out Stock</p>
-                            <h5 id="exec-critical" class="text-lg font-extrabold text-rose-700 mt-1">0</h5>
-                            <span class="text-[9px] bg-rose-200 text-rose-800 px-1.5 py-0.5 rounded font-bold">Action Needed</span>
-                        </div>
-                        <div class="bg-emerald-50 border border-emerald-100 p-3 rounded-xl">
-                            <p class="text-[10px] font-bold text-emerald-600 uppercase">Available Parts</p>
-                            <h5 id="exec-safe" class="text-lg font-extrabold text-emerald-700 mt-1">0</h5>
-                            <span class="text-[9px] bg-emerald-200 text-emerald-800 px-1.5 py-0.5 rounded font-bold">Ready</span>
-                        </div>
-                    </div>
-
-                    <div class="border-t border-slate-100 pt-3 flex justify-between items-center text-xs text-slate-500">
-                        <span>Data Synchronization</span>
-                        <span class="font-bold text-slate-700">ANDIK DKK</span>
-                    </div>
-                </div>
-
-            </section>
+</section>
 
             <!-- Bottom Table Section (Tampilan Putih Clean) -->
             <section class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
