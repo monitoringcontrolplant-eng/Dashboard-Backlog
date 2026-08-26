@@ -19,7 +19,6 @@
             background-color: #0b1120;
         }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -42,11 +41,11 @@
 </head>
 <body class="text-slate-800 antialiased min-h-screen flex flex-col justify-between">
 
-    <!-- Top Header Bar (Persis gambar) -->
+    <!-- Top Header Bar -->
     <header class="bg-[#0f172a] border-b border-slate-800 text-white px-4 py-2.5 flex justify-between items-center z-20">
         <div class="flex items-center space-x-3">
             <div class="bg-white/10 p-1 rounded-lg">
-                <img src="BSS_logo.jpg" alt="Logo" class="h-6 w-auto">
+                <img src="BSS_logo.jpg" alt="Logo" class="h-6 w-auto" onerror="this.style.display='none'">
             </div>
             <span class="font-bold text-sm tracking-wide">BACKLOG MANAGEMENT</span>
         </div>
@@ -68,16 +67,14 @@
 
     <div class="flex flex-1 overflow-hidden">
         
-        <!-- Sidebar Navigation (Kiri, Tema Dark Navy) -->
+        <!-- Sidebar Navigation -->
         <aside class="w-64 bg-[#0f172a] text-slate-300 p-4 hidden md:flex flex-col justify-between border-r border-slate-800 shrink-0">
             <div class="space-y-4">
-                <!-- Search box Sidebar -->
                 <div class="relative">
                     <input type="text" id="filter-search" placeholder="Search Command..." class="w-full bg-[#1e293b] border border-slate-700 text-xs text-white rounded-xl py-2 pl-3 pr-8 focus:outline-none focus:border-blue-500">
                     <i class="fa-solid fa-magnifying-glass absolute right-3 top-2.5 text-slate-400 text-xs"></i>
                 </div>
 
-                <!-- Menu Items -->
                 <nav class="space-y-1 text-xs">
                     <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl bg-blue-600 text-white font-semibold shadow-md">
                         <span class="flex items-center gap-2.5"><i class="fa-solid fa-house"></i> Home</span>
@@ -90,7 +87,6 @@
                         <p class="px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-500">Filter Controls</p>
                     </div>
 
-                    <!-- Dropdown Filters Inside Sidebar -->
                     <div class="space-y-2 px-1">
                         <div>
                             <label class="block text-[10px] text-slate-400 mb-1">No Unit</label>
@@ -114,7 +110,6 @@
                 </nav>
             </div>
 
-            <!-- Status Koneksi -->
             <div class="bg-[#1e293b] p-3 rounded-xl border border-slate-800 text-center">
                 <span id="data-status" class="text-[11px] font-bold text-amber-400">
                     <i class="fa-solid fa-spinner fa-spin mr-1"></i> Memuat Data...
@@ -122,10 +117,9 @@
             </div>
         </aside>
 
-        <!-- Main Content Area (Kanan, Latar Terang Berwarna Elegan) -->
+        <!-- Main Content Area -->
         <main class="flex-1 main-bg p-4 sm:p-6 overflow-y-auto space-y-6">
 
-            <!-- Banner / Title -->
             <div class="flex justify-between items-center">
                 <div>
                     <h2 class="text-xl font-extrabold text-slate-800">Backlog Management</h2>
@@ -133,92 +127,149 @@
                 </div>
             </div>
 
-            <!-- Top Vibrant KPI Cards (5 Kartu Berjejer) -->
-<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-    
-    <!-- 1. Available Parts (Paling Kiri) -->
-    <div class="bg-emerald-500 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
-        <div class="flex justify-between items-center">
-            <span class="text-xs font-bold uppercase tracking-wide opacity-90 flex items-center gap-1.5">
-                <i class="fa-solid fa-boxes-packing"></i> Available Parts
-            </span>
-            <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-xs">
-                <i class="fa-solid fa-check-double"></i>
-            </div>
-        </div>
-        <div>
-            <h3 id="exec-safe" class="text-3xl font-extrabold">0</h3>
-            <p class="text-[10px] opacity-80 mt-1">Item part dengan stok tersedia</p>
-        </div>
-    </div>
+            <!-- Vibrant KPI Cards -->
+            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                
+                <!-- Card Available Parts (Hijau Muda) -->
+                <div class="bg-emerald-600 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold uppercase tracking-wide opacity-90 flex items-center gap-1.5">
+                            <i class="fa-solid fa-boxes-packing"></i> Available Parts
+                        </span>
+                        <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-check-double"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 id="exec-safe" class="text-3xl font-extrabold">0</h3>
+                        <p class="text-[10px] opacity-80 mt-1">Item part dengan stok tersedia</p>
+                    </div>
+                </div>
 
-    <!-- 2. Total Items Backlog -->
-    <div class="bg-teal-600 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
-        <div class="flex justify-between items-center">
-            <span class="text-xs font-bold uppercase tracking-wide opacity-90 flex items-center gap-1.5">
-                <i class="fa-solid fa-boxes-stacked"></i> Total Items Backlog
-            </span>
-            <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-xs">
-                <i class="fa-solid fa-arrow-trend-up"></i>
-            </div>
-        </div>
-        <div>
-            <h3 id="kpi-total" class="text-3xl font-extrabold">0</h3>
-            <p class="text-[10px] opacity-80 mt-1">Total item terdeteksi dalam backlog</p>
-        </div>
-    </div>
+                <!-- Card Total Items (Hijau Teal) -->
+                <div class="bg-teal-600 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold uppercase tracking-wide opacity-90 flex items-center gap-1.5">
+                            <i class="fa-solid fa-boxes-stacked"></i> Total Items
+                        </span>
+                        <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-arrow-trend-up"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 id="kpi-total" class="text-3xl font-extrabold">0</h3>
+                        <p class="text-[10px] opacity-80 mt-1">Total item terdeteksi</p>
+                    </div>
+                </div>
 
-    <!-- 3. Total MO (Maint. Order) -->
-    <div class="bg-blue-500 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
-        <div class="flex justify-between items-center">
-            <span class="text-xs font-bold uppercase tracking-wide opacity-90 flex items-center gap-1.5">
-                <i class="fa-solid fa-file-invoice"></i> Total MO (Maint. Order)
-            </span>
-            <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-xs">
-                <i class="fa-solid fa-list-check"></i>
-            </div>
-        </div>
-        <div>
-            <h3 id="kpi-mo" class="text-3xl font-extrabold">0</h3>
-            <p class="text-[10px] opacity-80 mt-1">Maintenance Order unik aktif</p>
-        </div>
-    </div>
+                <!-- Card Total MO (Biru) -->
+                <div class="bg-blue-600 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold uppercase tracking-wide opacity-90 flex items-center gap-1.5">
+                            <i class="fa-solid fa-file-invoice"></i> Total MO
+                        </span>
+                        <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-list-check"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 id="kpi-mo" class="text-3xl font-extrabold">0</h3>
+                        <p class="text-[10px] opacity-80 mt-1">Maintenance Order aktif</p>
+                    </div>
+                </div>
 
-    <!-- 4. Valuation Amount -->
-    <div class="bg-cyan-600 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
-        <div class="flex justify-between items-center">
-            <span class="text-xs font-bold uppercase tracking-wide opacity-90 flex items-center gap-1.5">
-                <i class="fa-solid fa-rupiah-sign"></i> Valuation Amount
-            </span>
-            <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-xs">
-                <i class="fa-solid fa-bolt"></i>
-            </div>
-        </div>
-        <div>
-            <h3 id="kpi-cost" class="text-2xl font-extrabold truncate">Rp 0</h3>
-            <p class="text-[10px] opacity-80 mt-1">Estimasi total biaya backlog</p>
-        </div>
-    </div>
+                <!-- Card Valuation (Cyan) -->
+                <div class="bg-cyan-600 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold uppercase tracking-wide opacity-90 flex items-center gap-1.5">
+                            <i class="fa-solid fa-rupiah-sign"></i> Valuation Amount
+                        </span>
+                        <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-bolt"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 id="kpi-cost" class="text-2xl font-extrabold truncate">Rp 0</h3>
+                        <p class="text-[10px] opacity-80 mt-1">Estimasi total biaya backlog</p>
+                    </div>
+                </div>
 
-    <!-- 5. Out of Stock -->
-    <div class="bg-indigo-600 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
-        <div class="flex justify-between items-center">
-            <span class="text-xs font-bold uppercase tracking-wide opacity-90 flex items-center gap-1.5">
-                <i class="fa-solid fa-triangle-exclamation"></i> Out of Stock
-            </span>
-            <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-xs">
-                <i class="fa-solid fa-box-open"></i>
-            </div>
-        </div>
-        <div>
-            <h3 id="kpi-stockout" class="text-3xl font-extrabold">0</h3>
-            <p class="text-[10px] opacity-80 mt-1">Tidak ada item di SOH</p>
-        </div>
-    </div>
+                <!-- Card Out of Stock (Ungu) -->
+                <div class="bg-indigo-600 text-white p-4 rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden h-36">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold uppercase tracking-wide opacity-90 flex items-center gap-1.5">
+                            <i class="fa-solid fa-triangle-exclamation"></i> Out of Stock
+                        </span>
+                        <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-box-open"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 id="kpi-stockout" class="text-3xl font-extrabold">0</h3>
+                        <p class="text-[10px] opacity-80 mt-1">Tidak ada item di SOH</p>
+                    </div>
+                </div>
 
-</section>
+            </section>
 
-            <!-- Bottom Table Section (Tampilan Putih Clean) -->
+            <!-- Middle Section: Visual Charts & Priority Grid -->
+            <section class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                
+                <!-- Chart 1: Bar Chart -->
+                <div class="bg-indigo-700 text-white p-5 rounded-2xl shadow-lg flex flex-col justify-between">
+                    <div class="flex justify-between items-center mb-3">
+                        <h4 class="text-xs font-bold uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-chart-column"></i> Top 10 MO Terbanyak
+                        </h4>
+                    </div>
+                    <div class="relative h-60 w-full">
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Chart 2: Doughnut Chart -->
+                <div class="bg-rose-600 text-white p-5 rounded-2xl shadow-lg flex flex-col justify-between">
+                    <div class="flex justify-between items-center mb-3">
+                        <h4 class="text-xs font-bold uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-chart-pie"></i> Sebaran Cluster (Section)
+                        </h4>
+                    </div>
+                    <div class="relative h-60 w-full flex justify-center">
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Executive Summary Widgets -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col justify-between">
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="text-xs font-extrabold text-slate-800 uppercase tracking-wide flex items-center gap-1.5">
+                            <i class="fa-solid fa-clipboard-check text-blue-600"></i> Executive Summary
+                        </h4>
+                        <span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-semibold">Active</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 my-auto">
+                        <div class="bg-rose-50 border border-rose-100 p-3 rounded-xl">
+                            <p class="text-[10px] font-bold text-rose-500 uppercase">Critical Out Stock</p>
+                            <h5 id="exec-critical" class="text-lg font-extrabold text-rose-700 mt-1">0</h5>
+                            <span class="text-[9px] bg-rose-200 text-rose-800 px-1.5 py-0.5 rounded font-bold">Action Needed</span>
+                        </div>
+                        <div class="bg-emerald-50 border border-emerald-100 p-3 rounded-xl">
+                            <p class="text-[10px] font-bold text-emerald-600 uppercase">Available Parts</p>
+                            <h5 id="exec-safe-summary" class="text-lg font-extrabold text-emerald-700 mt-1">0</h5>
+                            <span class="text-[9px] bg-emerald-200 text-emerald-800 px-1.5 py-0.5 rounded font-bold">Ready</span>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-100 pt-3 flex justify-between items-center text-xs text-slate-500">
+                        <span>Data Synchronization</span>
+                        <span class="font-bold text-slate-700">ANDIK DKK</span>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Bottom Table Section -->
             <section class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
                 <div class="p-4 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-slate-50/50">
                     <div>
@@ -247,12 +298,10 @@
                             </tr>
                         </thead>
                         <tbody id="table-body" class="divide-y divide-slate-100 bg-white">
-                            <!-- Dynamic Rows -->
                         </tbody>
                     </table>
                 </div>
 
-                <!-- Pagination Footer -->
                 <div class="p-4 border-t border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div class="text-xs text-slate-500 font-medium" id="pagination-info">
                         Halaman 1 dari 1
@@ -441,21 +490,27 @@
                 const mo = getValue(row, 'MO').trim();
 
                 totalAmount += amount;
-                if (stock === 0) {
-                    stockOutCount++;
-                } else {
+                if (stock > 0) {
                     availableCount++;
+                } else {
+                    stockOutCount++;
                 }
                 if (mo) moSet.add(mo);
             });
 
+            // Update KPI Top Cards
+            document.getElementById('exec-safe').innerText = availableCount.toLocaleString('id-ID');
             document.getElementById('kpi-total').innerText = filteredDataCache.length.toLocaleString('id-ID');
             document.getElementById('kpi-mo').innerText = moSet.size.toLocaleString('id-ID');
             document.getElementById('kpi-cost').innerText = 'Rp ' + totalAmount.toLocaleString('id-ID', {maximumFractionDigits: 0});
             document.getElementById('kpi-stockout').innerText = stockOutCount.toLocaleString('id-ID');
 
-            document.getElementById('exec-critical').innerText = stockOutCount.toLocaleString('id-ID');
-            document.getElementById('exec-safe').innerText = availableCount.toLocaleString('id-ID');
+            // Update Widget Summary
+            const execCritical = document.getElementById('exec-critical');
+            if (execCritical) execCritical.innerText = stockOutCount.toLocaleString('id-ID');
+            
+            const execSafeSummary = document.getElementById('exec-safe-summary');
+            if (execSafeSummary) execSafeSummary.innerText = availableCount.toLocaleString('id-ID');
 
             renderCharts(filteredDataCache);
             renderTable();
