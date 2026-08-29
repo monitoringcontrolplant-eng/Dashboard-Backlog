@@ -81,24 +81,6 @@
                             <span class="text-sm font-extrabold text-white tracking-wide">PT. BINA SARANA SUKSES</span>
                         </div>
                     </div>
-
-                    <!-- WIDGET MUSIK YOUTUBE WITH VOLUME CONTROL -->
-                    <div class="flex items-center bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20 space-x-3 shadow-sm">
-                        <i id="musicNoteIcon" class="fa-solid fa-music font-bold text-amber-300 text-sm animate-bounce"></i>
-                        <span class="text-xs font-semibold text-white hidden md:inline">Slank - I Miss U</span>
-                        
-                        <!-- Tombol Play/Pause -->
-                        <button id="musicToggleBtn" onclick="toggleMusic()" class="bg-indigo-600 text-white text-xs px-3 py-1 rounded-full font-medium hover:bg-indigo-700 transition flex items-center space-x-1">
-                            <i id="musicIcon" class="fa-solid fa-pause"></i>
-                            <span id="musicText">Pause</span>
-                        </button>
-
-                        <!-- Slider Volume -->
-                        <div class="flex items-center space-x-1 pl-1 border-l border-white/20">
-                            <i id="volumeIcon" class="fa-solid fa-volume-high text-xs text-white"></i>
-                            <input type="range" id="volumeSlider" min="0" max="100" value="50" oninput="changeVolume(this.value)" class="w-16 h-1 bg-white/30 rounded-lg appearance-none cursor-pointer accent-amber-300">
-                        </div>
-                    </div>
                 </div>
 
                 <div class="space-y-4 pt-8 relative z-10">
@@ -518,92 +500,8 @@
         </main>
     </div>
 
-    <!-- ELEMENT CONTAINER YOUTUBE (HIDDEN) -->
-    <div id="youtubePlayer" class="hidden"></div>
-
     <!-- SCRIPT LOGIC & DASHBOARD INTERACTION -->
     <script>
-        let ytPlayer;
-        let isPlaying = false;
-
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-        function onYouTubeIframeAPIReady() {
-            ytPlayer = new YT.Player('youtubePlayer', {
-                height: '0',
-                width: '0',
-                videoId: '-ufbjCSvnqg',
-                playerVars: {
-                    'autoplay': 1,
-                    'loop': 1,
-                    'playlist': '-ufbjCSvnqg'
-                },
-                events: {
-                    'onReady': onPlayerReady
-                }
-            });
-        }
-
-        function onPlayerReady(event) {
-            ytPlayer.setVolume(50);
-            document.addEventListener('click', function startPlayOnInteraction() {
-                if (!isPlaying && ytPlayer) {
-                    ytPlayer.playVideo();
-                    isPlaying = true;
-                    updateMusicUI(true);
-                }
-            }, { once: true });
-        }
-
-        function toggleMusic() {
-            if (!ytPlayer) return;
-            if (isPlaying) {
-                ytPlayer.pauseVideo();
-                isPlaying = false;
-                updateMusicUI(false);
-            } else {
-                ytPlayer.playVideo();
-                isPlaying = true;
-                updateMusicUI(true);
-            }
-        }
-
-        function changeVolume(val) {
-            if (ytPlayer && ytPlayer.setVolume) {
-                ytPlayer.setVolume(val);
-                const volIcon = document.getElementById('volumeIcon');
-                if (val == 0) {
-                    volIcon.className = "fa-solid fa-volume-xmark text-xs text-white";
-                } else if (val < 50) {
-                    volIcon.className = "fa-solid fa-volume-low text-xs text-white";
-                } else {
-                    volIcon.className = "fa-solid fa-volume-high text-xs text-white";
-                }
-            }
-        }
-
-        function updateMusicUI(playing) {
-            const musicBtn = document.getElementById('musicToggleBtn');
-            const musicIcon = document.getElementById('musicIcon');
-            const musicText = document.getElementById('musicText');
-            const musicNoteIcon = document.getElementById('musicNoteIcon');
-
-            if (playing) {
-                musicIcon.className = "fa-solid fa-pause";
-                musicText.innerText = "Pause";
-                musicBtn.className = "bg-indigo-600 text-white text-xs px-3 py-1 rounded-full font-medium hover:bg-indigo-700 transition flex items-center space-x-1";
-                musicNoteIcon.classList.add('animate-bounce');
-            } else {
-                musicIcon.className = "fa-solid fa-play";
-                musicText.innerText = "Play";
-                musicBtn.className = "bg-slate-500 text-white text-xs px-3 py-1 rounded-full font-medium hover:bg-slate-600 transition flex items-center space-x-1";
-                musicNoteIcon.classList.remove('animate-bounce');
-            }
-        }
-
         const SHEET_ID = '1ZR7lEwe9XAWxrmGa7SiXokkAD1rCsX0VRFtnNhmQ2Ok';
         const SHEET_NAME = 'Monres';
         const GOOGLE_SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(SHEET_NAME)}`;
