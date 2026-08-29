@@ -61,6 +61,14 @@
         .glow-gold {
             filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.4));
         }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .animate-spin-custom {
+            animation: spin 1s linear infinite;
+        }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col justify-between">
@@ -236,8 +244,8 @@
             <button onclick="toggleUserModal(true)" class="text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-600 border border-indigo-200 px-3.5 py-1.5 rounded-xl transition flex items-center gap-2 shadow-sm font-semibold">
                 <i class="fa-solid fa-user-gear"></i> Kelola Akses
             </button>
-            <button onclick="refreshData()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 px-3.5 py-1.5 rounded-xl transition flex items-center gap-2 shadow-sm font-semibold">
-                <i class="fa-solid fa-rotate text-indigo-600"></i> Refresh
+            <button onclick="refreshData(this)" id="refresh-btn" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 px-3.5 py-1.5 rounded-xl transition flex items-center gap-2 shadow-sm font-semibold">
+                <i class="fa-solid fa-rotate text-indigo-600" id="refresh-icon"></i> Refresh
             </button>
             <div class="flex items-center space-x-3 border-l border-slate-200 pl-4">
                 <div class="w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center text-xs font-bold text-white shadow-md shadow-indigo-600/30" id="user-avatar">
@@ -322,9 +330,8 @@
                 </div>
             </div>
 
-            <!-- KPI Cards Section (Dibuat 6 Kolom agar Card MO Ready, Not Ready, dan Close tampil berdampingan) -->
+            <!-- KPI Cards Section -->
             <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
-                <!-- 1. Total MO Unik -->
                 <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 cursor-pointer" onclick="resetMOFilter()">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Total Unique MO</span>
@@ -338,7 +345,6 @@
                     </div>
                 </div>
 
-                <!-- 2. MO Ready Eksekusi -->
                 <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 border-l-4 border-l-emerald-500 cursor-pointer hover:bg-emerald-50/30 transition" onclick="filterByReadiness('READY')" title="Klik untuk filter Ready Eksekusi">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700">MO Ready</span>
@@ -352,7 +358,6 @@
                     </div>
                 </div>
 
-                <!-- 3. MO Not Ready -->
                 <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 border-l-4 border-l-amber-500 cursor-pointer hover:bg-amber-50/30 transition" onclick="filterByReadiness('NOT_READY')" title="Klik untuk filter Not Ready">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-amber-700">MO Not Ready</span>
@@ -366,7 +371,6 @@
                     </div>
                 </div>
 
-                <!-- 4. MO Close -->
                 <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 border-l-4 border-l-blue-500 cursor-pointer hover:bg-blue-50/30 transition" onclick="filterByReadiness('CLOSE')" title="Klik untuk filter Close">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-blue-700">MO Close</span>
@@ -380,7 +384,6 @@
                     </div>
                 </div>
 
-                <!-- 5. Available Parts -->
                 <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Available Parts</span>
@@ -394,7 +397,6 @@
                     </div>
                 </div>
 
-                <!-- 6. Out of Stock -->
                 <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Out of Stock</span>
@@ -428,7 +430,7 @@
                             <i class="fa-solid fa-chart-pie text-indigo-600"></i> Sebaran Cluster (Section)
                         </h4>
                     </div>
-                    <div class="relative h-60 w-full flex justify-center">
+                    <div class="relative h-60 w-full flex justify-center items-center">
                         <canvas id="pieChart"></canvas>
                     </div>
                 </div>
@@ -489,8 +491,8 @@
                                 <th class="px-3 py-3.5 text-center">Qty Res</th>
                                 <th class="px-3 py-3.5 text-center">Stock</th>
                                 <th class="px-4 py-3.5 text-right">Total Price</th>
-                                <th class="px-4 py-3.5 text-center">Status Part (W)</th>
-                                <th class="px-4 py-3.5 text-center">Status MO (X)</th>
+                                <th class="px-4 py-3.5 text-center">STATUS PART</th>
+                                <th class="px-4 py-3.5 text-center">STATUS MO</th>
                             </tr>
                         </thead>
                         <tbody id="table-body" class="divide-y divide-slate-100 bg-white text-slate-700">
@@ -673,8 +675,16 @@
             });
         }
 
+        // Revisi 1: Tombol Refresh dengan animasi putar & simulasi tarik data
         function refreshData() {
+            const icon = document.getElementById('refresh-icon');
+            icon.classList.add('animate-spin-custom');
+            
             fetchSheetData();
+
+            setTimeout(() => {
+                icon.classList.remove('animate-spin-custom');
+            }, 1200);
         }
 
         function populateFilterOptions() {
@@ -847,6 +857,31 @@
             renderTable();
         }
 
+        // Plugin kustom Chart.js untuk menampilkan persentase langsung di tengah donut chart
+        const centerPercentagePlugin = {
+            id: 'centerPercentagePlugin',
+            afterDraw(chart) {
+                if (chart.config.type === 'doughnut') {
+                    const ctx = chart.ctx;
+                    const width = chart.width;
+                    const height = chart.height;
+                    
+                    ctx.restore();
+                    const fontSize = (height / 110).toFixed(2);
+                    ctx.font = `bold ${fontSize}rem Plus Jakarta Sans`;
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = '#1e293b';
+
+                    const text = "100%";
+                    const textX = Math.round((width - ctx.measureText(text).width) / 2);
+                    const textY = height / 2;
+
+                    ctx.fillText(text, textX, textY);
+                    ctx.save();
+                }
+            }
+        };
+
         function renderCharts(data) {
             const moCounts = {};
             const sectionCounts = {};
@@ -893,13 +928,21 @@
                 }
             });
 
+            // Menghitung total data untuk persentase chart sebaran cluster
+            const totalSectionValues = Object.values(sectionCounts).reduce((a, b) => a + b, 0);
+            const sectionLabels = Object.keys(sectionCounts);
+            const sectionValuesRaw = Object.values(sectionCounts);
+            const sectionPercentages = totalSectionValues > 0 ? sectionValuesRaw.map(v => Math.round((v / totalSectionValues) * 100)) : sectionValuesRaw;
+
+            // Revisi 3: Donut Chart dengan persentase di chart & total item asli saat hover
             const ctxPie = document.getElementById('pieChart').getContext('2d');
             pieChartInstance = new Chart(ctxPie, {
                 type: 'doughnut',
                 data: {
-                    labels: Object.keys(sectionCounts),
+                    labels: sectionLabels,
                     datasets: [{
-                        data: Object.values(sectionCounts),
+                        data: sectionPercentages, // Menampilkan persentase
+                        actualTotals: sectionValuesRaw, // Simpan angka asli untuk tooltip
                         backgroundColor: ['#4f46e5', '#0891b2', '#059669', '#d97706', '#db2777', '#7c3aed'],
                         borderWidth: 2,
                         borderColor: '#ffffff'
@@ -909,9 +952,21 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11, weight: '600' } } }
-                    }
-                }
+                        legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11, weight: '600' } } },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const percentage = context.raw || 0;
+                                    const totalVal = context.dataset.actualTotals[context.dataIndex];
+                                    return ` ${label}: ${percentage}% (${totalVal.toLocaleString('id-ID')} Item)`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '65%'
+                },
+                plugins: [centerPercentagePlugin]
             });
         }
 
