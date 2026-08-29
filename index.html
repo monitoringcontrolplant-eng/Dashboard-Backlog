@@ -17,7 +17,7 @@
 <body class="p-6">
 
     <!-- HEADER / NAVBAR -->
-    <header class="flex justify-between items-center mb-6 bg-white p-4 rounded-xl shadow-sm">
+    <header class="flex flex-wrap justify-between items-center mb-6 bg-white p-4 rounded-xl shadow-sm gap-4">
         <div class="flex items-center space-x-3">
             <span class="text-red-600 font-extrabold text-2xl tracking-wider">BSS</span>
             <div>
@@ -26,15 +26,23 @@
             </div>
         </div>
 
-        <div class="flex items-center space-x-4">
-            <!-- WIDGET MUSIK -->
-            <div class="flex items-center bg-indigo-50 px-3 py-1.5 rounded-full border border-indigo-100 space-x-2">
-                <i class="fa-solid font-bold text-indigo-600 text-sm fa-music animate-bounce"></i>
-                <span class="text-xs font-semibold text-indigo-700 hidden sm:inline">Backsound Musik</span>
+        <div class="flex items-center space-x-3">
+            <!-- WIDGET MUSIK YOUTUBE WITH VOLUME CONTROL -->
+            <div class="flex items-center bg-indigo-50 px-3 py-1.5 rounded-full border border-indigo-100 space-x-3 shadow-sm">
+                <i id="musicNoteIcon" class="fa-solid fa-music font-bold text-indigo-600 text-sm animate-bounce"></i>
+                <span class="text-xs font-semibold text-indigo-700 hidden md:inline">Slank - I Miss U</span>
+                
+                <!-- Tombol Play/Pause -->
                 <button id="musicToggleBtn" onclick="toggleMusic()" class="bg-indigo-600 text-white text-xs px-3 py-1 rounded-full font-medium hover:bg-indigo-700 transition flex items-center space-x-1">
                     <i id="musicIcon" class="fa-solid fa-pause"></i>
                     <span id="musicText">Pause</span>
                 </button>
+
+                <!-- Slider Volume -->
+                <div class="flex items-center space-x-1 pl-1 border-l border-indigo-200">
+                    <i id="volumeIcon" class="fa-solid fa-volume-high text-xs text-indigo-600"></i>
+                    <input type="range" id="volumeSlider" min="0" max="100" value="50" oninput="changeVolume(this.value)" class="w-16 h-1 bg-indigo-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+                </div>
             </div>
 
             <!-- Tombol Kelola Akses & Refresh -->
@@ -48,7 +56,7 @@
             <!-- Profile Admin -->
             <div class="flex items-center space-x-2 pl-2 border-l border-gray-200">
                 <div class="w-9 h-9 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">A</div>
-                <div>
+                <div class="hidden sm:block">
                     <div class="text-sm font-bold text-gray-800 leading-none">admin</div>
                     <div class="text-xs text-gray-500">Maintenance Administrator</div>
                 </div>
@@ -112,7 +120,6 @@
 
             <!-- METRIC CARDS -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <!-- Total Unique MO -->
                 <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-start">
                     <div>
                         <div class="text-xs font-bold text-gray-400 uppercase">Total Unique MO</div>
@@ -122,7 +129,6 @@
                     <div class="p-2 bg-blue-50 text-blue-600 rounded-lg"><i class="fa-solid fa-list-check"></i></div>
                 </div>
 
-                <!-- MO Ready Eksekusi -->
                 <div class="bg-white p-4 rounded-xl shadow-sm border border-emerald-200 bg-emerald-50/20 flex justify-between items-start">
                     <div>
                         <div class="text-xs font-bold text-emerald-800 uppercase">MO Ready Eksekusi</div>
@@ -132,7 +138,6 @@
                     <div class="p-2 bg-emerald-100 text-emerald-600 rounded-full"><i class="fa-solid fa-check"></i></div>
                 </div>
 
-                <!-- Available Parts -->
                 <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-start">
                     <div>
                         <div class="text-xs font-bold text-gray-400 uppercase">Available Parts</div>
@@ -142,7 +147,6 @@
                     <div class="p-2 bg-emerald-50 text-emerald-600 rounded-lg"><i class="fa-solid fa-box-open"></i></div>
                 </div>
 
-                <!-- Out of Stock -->
                 <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-start">
                     <div>
                         <div class="text-xs font-bold text-gray-400 uppercase">Out of Stock</div>
@@ -155,7 +159,6 @@
 
             <!-- CHARTS & VALUATION SUMMARY -->
             <div class="grid grid-cols-12 gap-4">
-                <!-- Chart Top MO -->
                 <div class="col-span-12 md:col-span-4 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
                     <h4 class="text-xs font-bold text-gray-500 uppercase mb-4"><i class="fa-solid fa-chart-column mr-1"></i> Top 10 MO Terbanyak</h4>
                     <div class="h-40 bg-indigo-50/50 rounded-lg flex items-end justify-around p-2 border-b border-indigo-200">
@@ -167,7 +170,6 @@
                     </div>
                 </div>
 
-                <!-- Chart Sebaran Cluster -->
                 <div class="col-span-12 md:col-span-4 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
                     <h4 class="text-xs font-bold text-gray-500 uppercase mb-4"><i class="fa-solid fa-chart-pie mr-1"></i> Sebaran Cluster (Section)</h4>
                     <div class="h-40 flex items-center justify-center">
@@ -175,7 +177,6 @@
                     </div>
                 </div>
 
-                <!-- Valuation Summary Card -->
                 <div class="col-span-12 md:col-span-4 bg-indigo-600 text-white p-6 rounded-2xl shadow-lg flex flex-col justify-between">
                     <div>
                         <div class="flex justify-between items-center text-xs font-semibold mb-6">
@@ -194,57 +195,97 @@
         </main>
     </div>
 
-    <!-- AUDIO ELEMENT BACKROUND MUSIC -->
-    <!-- Ganti src dengan file MP3 lokal Anda atau URL musik online -->
-    <audio id="bgMusic" loop preload="auto">
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-        Browser Anda tidak mendukung elemen audio.
-    </audio>
+    <!-- ELEMENT CONTAINER YOUTUBE (HIDDEN) -->
+    <div id="youtubePlayer" class="hidden"></div>
 
-    <!-- SCRIPT OTO-PLAY & CONTROL -->
+    <!-- SCRIPT YOUTUBE IFRAME API & AUDIO CONTROL -->
     <script>
-        const music = document.getElementById('bgMusic');
-        const musicBtn = document.getElementById('musicToggleBtn');
-        const musicIcon = document.getElementById('musicIcon');
-        const musicText = document.getElementById('musicText');
+        let ytPlayer;
+        let isPlaying = false;
 
-        // Fungsi Auto-Play saat ada interaksi pertama dari pengguna
-        function enableAutoPlay() {
-            music.play().then(() => {
-                updateButtonState(true);
-            }).catch(error => {
-                console.log("Auto-play diblokir browser, menunggu klik manual:", error);
-                updateButtonState(false);
+        // Memuat YouTube IFrame API secara terpisah
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        function onYouTubeIframeAPIReady() {
+            ytPlayer = new YT.Player('youtubePlayer', {
+                height: '0',
+                width: '0',
+                videoId: '-ufbjCSvnqg', // ID Lagu Slank - I Miss U But I Hate U
+                playerVars: {
+                    'autoplay': 1,
+                    'loop': 1,
+                    'playlist': '-ufbjCSvnqg' // ID sama agar looping berulang
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
             });
-            // Hapus listener setelah interaksi pertama
-            document.removeEventListener('click', enableAutoPlay);
         }
 
-        // Jalankan autoplay saat pengguna mengklik halaman pertama kali
-        document.addEventListener('click', enableAutoPlay);
+        function onPlayerReady(event) {
+            // Set default volume ke 50%
+            ytPlayer.setVolume(50);
 
-        // Toggle Manual Tombol Musik (Play / Pause)
+            // Karena kebijakan autoplay browser, musik diputar otomatis saat ada interaksi pertama dari pengguna
+            document.addEventListener('click', function startPlayOnInteraction() {
+                if (!isPlaying) {
+                    ytPlayer.playVideo();
+                    isPlaying = true;
+                    updateUI(true);
+                }
+            }, { once: true });
+        }
+
+        // Toggle Play / Pause
         function toggleMusic() {
-            if (music.paused) {
-                music.play();
-                updateButtonState(true);
+            if (!ytPlayer) return;
+
+            if (isPlaying) {
+                ytPlayer.pauseVideo();
+                isPlaying = false;
+                updateUI(false);
             } else {
-                music.paused();
-                music.pause();
-                updateButtonState(false);
+                ytPlayer.playVideo();
+                isPlaying = true;
+                updateUI(true);
             }
         }
 
-        // Update tampilan ikon dan teks tombol
-        function updateButtonState(isPlaying) {
-            if (isPlaying) {
+        // Mengatur Volume lewat Slider
+        function changeVolume(val) {
+            if (ytPlayer && ytPlayer.setVolume) {
+                ytPlayer.setVolume(val);
+                const volIcon = document.getElementById('volumeIcon');
+                if (val == 0) {
+                    volIcon.className = "fa-solid fa-volume-xmark text-xs text-indigo-400";
+                } else if (val < 50) {
+                    volIcon.className = "fa-solid fa-volume-low text-xs text-indigo-600";
+                } else {
+                    volIcon.className = "fa-solid fa-volume-high text-xs text-indigo-600";
+                }
+            }
+        }
+
+        // Update Tampilan Tombol & Ikon
+        function updateUI(playing) {
+            const musicBtn = document.getElementById('musicToggleBtn');
+            const musicIcon = document.getElementById('musicIcon');
+            const musicText = document.getElementById('musicText');
+            const musicNoteIcon = document.getElementById('musicNoteIcon');
+
+            if (playing) {
                 musicIcon.className = "fa-solid fa-pause";
                 musicText.innerText = "Pause";
-                musicBtn.classList.replace("bg-gray-500", "bg-indigo-600");
+                musicBtn.className = "bg-indigo-600 text-white text-xs px-3 py-1 rounded-full font-medium hover:bg-indigo-700 transition flex items-center space-x-1";
+                musicNoteIcon.classList.add('animate-bounce');
             } else {
                 musicIcon.className = "fa-solid fa-play";
                 musicText.innerText = "Play";
-                musicBtn.classList.replace("bg-indigo-600", "bg-gray-500");
+                musicBtn.className = "bg-slate-500 text-white text-xs px-3 py-1 rounded-full font-medium hover:bg-slate-600 transition flex items-center space-x-1";
+                musicNoteIcon.classList.remove('animate-bounce');
             }
         }
     </script>
