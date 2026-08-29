@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id" class="dark">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Backlog Unit & Cluster - Backlog Management</title>
+    <title>Executive Dashboard Backlog Unit & Cluster - Backlog Management</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js CDN -->
@@ -17,8 +17,8 @@
     <style>
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #0b1329;
-            color: #f1f5f9;
+            background-color: #f1f5f9;
+            color: #1e293b;
         }
 
         ::-webkit-scrollbar {
@@ -26,100 +26,88 @@
             height: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(15, 23, 42, 0.4);
+            background: #e2e8f0;
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(99, 102, 241, 0.4);
+            background: #cbd5e1;
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(99, 102, 241, 0.7);
+            background: #94a3b8;
         }
 
         .main-bg {
-            background: radial-gradient(circle at top right, #1e1b4b 0%, #0b1329 50%, #030712 100%);
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
         }
 
         .light-card {
-            background: rgba(30, 41, 59, 0.65);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
-        }
-
-        .metric-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
         .metric-card:hover {
             transform: translateY(-3px);
-            border-color: rgba(129, 140, 248, 0.5);
-            box-shadow: 0 15px 35px -5px rgba(99, 102, 241, 0.25);
+            border-color: #6366f1;
+            box-shadow: 0 20px 30px -10px rgba(99, 102, 241, 0.15);
         }
 
-        .glow-indigo {
-            box-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
-        }
-        .glow-gold {
-            filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.5));
-        }
-
-        /* Styling Sidebar */
+        /* Styling Sidebar Terang & Sangat Jelas */
         .futuristic-sidebar {
-            background: rgba(15, 23, 42, 0.92);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 20px 0 50px rgba(0, 0, 0, 0.6);
+            background: #ffffff;
+            border-right: 1px solid #e2e8f0;
+            box-shadow: 25px 0 50px rgba(0, 0, 0, 0.1);
             transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .glass-profile {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
         }
 
         .glass-search, .glass-select {
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #f1f5f9;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            color: #1e293b;
         }
         .glass-search:focus, .glass-select:focus {
-            border-color: #818cf8;
-            box-shadow: 0 0 15px rgba(99, 102, 241, 0.25);
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
             outline: none;
         }
 
         .menu-pill {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: transparent;
+            border: 1px solid transparent;
             transition: all 0.2s ease;
         }
         .menu-pill:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.15);
+            background: #f1f5f9;
+            border-color: #e2e8f0;
             transform: translateX(4px);
         }
         .menu-pill.active {
-            background: linear-gradient(90deg, rgba(99, 102, 241, 0.4) 0%, rgba(79, 70, 229, 0.15) 100%);
-            border: 1px solid rgba(129, 140, 248, 0.5);
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+            background: linear-gradient(90deg, #e0e7ff 0%, #eff6ff 100%);
+            border: 1px solid #c7d2fe;
+            color: #4f46e5;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.08);
         }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col justify-between">
 
     <!-- Modal Login Full Screen -->
-    <div id="login-modal" class="fixed inset-0 z-50 flex bg-[#070b19] text-slate-100 overflow-y-auto">
+    <div id="login-modal" class="fixed inset-0 z-50 flex bg-slate-900 text-slate-100 overflow-y-auto">
         <div class="min-h-screen w-full flex flex-col lg:flex-row">
             
-            <div class="lg:w-7/12 p-6 sm:p-12 lg:p-16 flex flex-col justify-between bg-gradient-to-br from-indigo-950 via-[#0b1329] to-slate-950 relative overflow-hidden text-white border-r border-white/10">
-                <div class="absolute -top-24 -left-24 w-96 h-96 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none"></div>
-                <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="lg:w-7/12 p-6 sm:p-12 lg:p-16 flex flex-col justify-between bg-gradient-to-br from-indigo-900 via-slate-900 to-slate-950 relative overflow-hidden text-white border-r border-slate-800">
+                <div class="absolute -top-24 -left-24 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
 
                 <div class="flex items-center justify-between relative z-10">
-                    <div class="flex items-center space-x-3 bg-white/5 backdrop-blur-md px-4 py-2.5 rounded-2xl w-fit border border-white/10 shadow-lg">
-                        <img src="BSS_logo.jpg" alt="BSS Logo" class="h-8 sm:h-9 w-auto glow-gold" onerror="this.src='https://via.placeholder.com/120x40?text=BSS+LOGO'">
+                    <div class="flex items-center space-x-3 bg-white/10 backdrop-blur-md px-4 py-2.5 rounded-2xl w-fit border border-white/20 shadow-lg">
+                        <img src="BSS_logo.jpg" alt="BSS Logo" class="h-8 sm:h-9 w-auto filter brightness-200" onerror="this.src='https://via.placeholder.com/120x40?text=BSS+LOGO'">
                         <div>
                             <span class="text-[9px] font-bold tracking-widest uppercase text-amber-400 block">2026</span>
                             <span class="text-xs sm:text-sm font-extrabold text-white tracking-wide">PT. BINA SARANA SUKSES</span>
@@ -129,36 +117,36 @@
 
                 <div class="space-y-4 py-8 relative z-10">
                     <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white leading-snug">
-                        Manage backlog items, unit availability, parts & maintenance reports in one platform.
+                        Executive Backlog Management & Unit Availability Platform.
                     </h1>
                     <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                        <strong class="text-amber-400 font-bold">Backlog Management</strong> membantu tim maintenance memantau status Maintenance Order (MO), ketersediaan stok spare part, valuasi total biaya backlog, serta analisis performa unit secara real-time.
+                        <strong class="text-amber-400 font-bold">MONRES Executive</strong> menyajikan kontrol penuh atas Maintenance Order (MO), ketersediaan suku cadang, valuasi biaya backlog secara real-time untuk efisiensi operasional maksimal.
                     </p>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 relative z-10">
-                    <div class="bg-white/5 border border-white/10 p-3.5 rounded-2xl backdrop-blur-md">
-                        <div class="w-8 h-8 rounded-xl bg-indigo-500/20 text-indigo-300 flex items-center justify-center mb-2.5 text-xs">
+                    <div class="bg-white/10 border border-white/15 p-3.5 rounded-2xl backdrop-blur-md">
+                        <div class="w-8 h-8 rounded-xl bg-indigo-500/30 text-indigo-200 flex items-center justify-center mb-2.5 text-xs">
                             <i class="fa-solid fa-truck-monster"></i>
                         </div>
-                        <h4 class="text-xs font-bold text-white mb-1">Unit & Cluster Control</h4>
-                        <p class="text-[10px] text-slate-400 leading-snug">Pantau backlog berdasarkan No Unit dan sebaran Cluster.</p>
+                        <h4 class="text-xs font-bold text-white mb-1">Unit Control</h4>
+                        <p class="text-[10px] text-slate-300 leading-snug">Pantau status backlog per unit & cluster.</p>
                     </div>
 
-                    <div class="bg-white/5 border border-white/10 p-3.5 rounded-2xl backdrop-blur-md">
-                        <div class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center mb-2.5 text-xs">
+                    <div class="bg-white/10 border border-white/15 p-3.5 rounded-2xl backdrop-blur-md">
+                        <div class="w-8 h-8 rounded-xl bg-emerald-500/30 text-emerald-200 flex items-center justify-center mb-2.5 text-xs">
                             <i class="fa-solid fa-boxes-stacked"></i>
                         </div>
-                        <h4 class="text-xs font-bold text-white mb-1">Part Stock Monitoring</h4>
-                        <p class="text-[10px] text-slate-400 leading-snug">Identifikasi ketersediaan spare part dan peringatan Stock Out.</p>
+                        <h4 class="text-xs font-bold text-white mb-1">Parts & Stock</h4>
+                        <p class="text-[10px] text-slate-300 leading-snug">Deteksi cepat stok material dan stock out.</p>
                     </div>
 
-                    <div class="bg-white/5 border border-white/10 p-3.5 rounded-2xl backdrop-blur-md">
-                        <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center mb-2.5 text-xs">
+                    <div class="bg-white/10 border border-white/15 p-3.5 rounded-2xl backdrop-blur-md">
+                        <div class="w-8 h-8 rounded-xl bg-amber-500/30 text-amber-200 flex items-center justify-center mb-2.5 text-xs">
                             <i class="fa-solid fa-file-invoice-dollar"></i>
                         </div>
-                        <h4 class="text-xs font-bold text-white mb-1">Valuation & MO Workflow</h4>
-                        <p class="text-[10px] text-slate-400 leading-snug">Kalkulasi otomatis total biaya backlog dan tracking status MO.</p>
+                        <h4 class="text-xs font-bold text-white mb-1">Valuation</h4>
+                        <p class="text-[10px] text-slate-300 leading-snug">Kalkulasi total nilai biaya operasional.</p>
                     </div>
                 </div>
 
@@ -167,60 +155,60 @@
                 </div>
             </div>
 
-            <!-- Login Form Section -->
-            <div class="lg:w-5/12 p-6 sm:p-12 flex items-center justify-center bg-[#0b1329]">
-                <div class="w-full max-w-sm space-y-6">
+            <!-- Login Form Section (Clean White Box) -->
+            <div class="lg:w-5/12 p-6 sm:p-12 flex items-center justify-center bg-slate-50 text-slate-800">
+                <div class="w-full max-w-sm space-y-6 bg-white p-8 rounded-3xl shadow-xl border border-slate-200">
                     
                     <div class="text-center space-y-2">
                         <div class="flex justify-center mb-2">
-                            <div class="p-3 bg-slate-900/80 rounded-2xl shadow-xl border border-slate-700 glow-indigo">
+                            <div class="p-3 bg-indigo-50 rounded-2xl shadow-sm border border-indigo-100">
                                 <img src="BSS_logo.jpg" alt="BSS Logo" class="h-10 sm:h-12 w-auto mx-auto object-contain" onerror="this.src='https://via.placeholder.com/150x50?text=BSS+LOGO'">
                             </div>
                         </div>
-                        <h2 class="text-2xl font-extrabold text-white tracking-tight">WELCOME BACK</h2>
-                        <p class="text-xs text-slate-400">Sign in to access your Backlog Management dashboard.</p>
+                        <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">EXECUTIVE LOGIN</h2>
+                        <p class="text-xs text-slate-500">Sign in to access dashboard monitoring.</p>
                     </div>
 
                     <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
                         <div>
-                            <label class="block text-[11px] font-bold text-slate-300 mb-1.5 uppercase tracking-wider">USER ID / USERNAME</label>
+                            <label class="block text-[11px] font-bold text-slate-700 mb-1.5 uppercase tracking-wider">USER ID / USERNAME</label>
                             <div class="relative">
-                                <input type="text" id="login-username" required placeholder="Enter your User ID" class="w-full bg-slate-900/90 border border-slate-700 text-xs text-white rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition">
+                                <input type="text" id="login-username" required placeholder="Enter your User ID" class="w-full bg-slate-50 border border-slate-300 text-xs text-slate-900 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20 transition">
                                 <i class="fa-solid fa-user absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
                             </div>
                         </div>
 
                         <div>
-                            <label class="block text-[11px] font-bold text-slate-300 mb-1.5 uppercase tracking-wider">PASSWORD</label>
+                            <label class="block text-[11px] font-bold text-slate-700 mb-1.5 uppercase tracking-wider">PASSWORD</label>
                             <div class="relative">
-                                <input type="password" id="login-password" required placeholder="Enter your password" class="w-full bg-slate-900/90 border border-slate-700 text-xs text-white rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition">
+                                <input type="password" id="login-password" required placeholder="Enter your password" class="w-full bg-slate-50 border border-slate-300 text-xs text-slate-900 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20 transition">
                                 <i class="fa-solid fa-key absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
                             </div>
                         </div>
 
-                        <div id="login-error" class="text-xs text-rose-300 hidden text-center bg-rose-950/60 border border-rose-900 py-2.5 rounded-xl font-medium">
+                        <div id="login-error" class="text-xs text-rose-600 hidden text-center bg-rose-50 border border-rose-200 py-2.5 rounded-xl font-medium">
                             <i class="fa-solid fa-circle-exclamation mr-1"></i> Username atau password salah!
                         </div>
 
                         <div class="grid grid-cols-2 gap-3 pt-2">
-                            <button type="button" onclick="alert('Silakan hubungi Administrator Sistem untuk reset password.')" class="w-full bg-slate-800 hover:bg-slate-700 text-rose-300 border border-slate-700 font-bold text-xs py-3 rounded-xl transition flex items-center justify-center gap-1.5">
+                            <button type="button" onclick="alert('Silakan hubungi Administrator Sistem untuk reset password.')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 font-bold text-xs py-3 rounded-xl transition flex items-center justify-center gap-1.5">
                                 <i class="fa-solid fa-circle-question"></i> Forgot
                             </button>
-                            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs py-3 rounded-xl transition shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-1.5">
+                            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-3 rounded-xl transition shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-1.5">
                                 <i class="fa-solid fa-right-to-bracket"></i> Login
                             </button>
                         </div>
                     </form>
 
-                    <div class="bg-slate-900/50 border border-slate-800 p-3.5 rounded-xl text-[11px] text-slate-400 space-y-1">
-                        <p class="font-bold text-slate-300 flex items-center gap-1.5">
-                            <i class="fa-solid fa-shield-halved text-indigo-400"></i> Authorized users only
+                    <div class="bg-indigo-50/50 border border-indigo-100 p-3.5 rounded-xl text-[11px] text-slate-600 space-y-1">
+                        <p class="font-bold text-indigo-900 flex items-center gap-1.5">
+                            <i class="fa-solid fa-shield-halved text-indigo-600"></i> Secure Access
                         </p>
-                        <p class="leading-relaxed">All activity may be monitored to protect operational data.</p>
+                        <p class="leading-relaxed">Authorized management & planner personnel only.</p>
                     </div>
 
-                    <div class="text-center text-[11px] text-slate-400">
-                        Default Login: <code class="text-indigo-300 bg-slate-900 border border-slate-700 px-2 py-0.5 rounded-md font-semibold">admin</code> / <code class="text-indigo-300 bg-slate-900 border border-slate-700 px-2 py-0.5 rounded-md font-semibold">admin123</code>
+                    <div class="text-center text-[11px] text-slate-500">
+                        Default Login: <code class="text-indigo-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md font-semibold">admin</code> / <code class="text-indigo-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md font-semibold">admin123</code>
                     </div>
 
                 </div>
@@ -230,73 +218,73 @@
     </div>
 
     <!-- Modal User Management -->
-    <div id="user-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4">
-        <div class="bg-slate-900 border border-slate-700 p-5 sm:p-6 rounded-2xl w-full max-w-lg shadow-2xl space-y-4 text-slate-100">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                <h3 class="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-user-plus text-indigo-400"></i> Manajemen Akses Pengguna
+    <div id="user-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
+        <div class="bg-white border border-slate-200 p-5 sm:p-6 rounded-2xl w-full max-w-lg shadow-2xl space-y-4 text-slate-800">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fa-solid fa-user-plus text-indigo-600"></i> Manajemen Akses Pengguna
                 </h3>
-                <button onclick="toggleUserModal(false)" class="text-slate-400 hover:text-white text-sm"><i class="fa-solid fa-xmark"></i></button>
+                <button onclick="toggleUserModal(false)" class="text-slate-400 hover:text-slate-700 text-sm"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
-            <form id="add-user-form" onsubmit="handleAddUser(event)" class="space-y-3 bg-slate-950 p-3.5 sm:p-4 rounded-xl border border-slate-800">
-                <p class="text-xs font-bold text-indigo-400 mb-1">Beri Akses Pengguna Baru</p>
+            <form id="add-user-form" onsubmit="handleAddUser(event)" class="space-y-3 bg-slate-50 p-3.5 sm:p-4 rounded-xl border border-slate-200">
+                <p class="text-xs font-bold text-indigo-600 mb-1">Beri Akses Pengguna Baru</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-[10px] font-semibold text-slate-400 mb-1">Nama / Username</label>
-                        <input type="text" id="new-username" required placeholder="Nama User" class="w-full bg-slate-900 border border-slate-700 text-xs text-white rounded-lg p-2.5 focus:outline-none focus:border-indigo-500">
+                        <label class="block text-[10px] font-semibold text-slate-600 mb-1">Nama / Username</label>
+                        <input type="text" id="new-username" required placeholder="Nama User" class="w-full bg-white border border-slate-300 text-xs text-slate-900 rounded-lg p-2.5 focus:outline-none focus:border-indigo-600">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-semibold text-slate-400 mb-1">Role / Jabatan</label>
-                        <input type="text" id="new-role" required placeholder="Planner / Supervisor" class="w-full bg-slate-900 border border-slate-700 text-xs text-white rounded-lg p-2.5 focus:outline-none focus:border-indigo-500">
+                        <label class="block text-[10px] font-semibold text-slate-600 mb-1">Role / Jabatan</label>
+                        <input type="text" id="new-role" required placeholder="Planner / Supervisor" class="w-full bg-white border border-slate-300 text-xs text-slate-900 rounded-lg p-2.5 focus:outline-none focus:border-indigo-600">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-1">Password</label>
-                    <input type="password" id="new-password" required placeholder="Password Akses" class="w-full bg-slate-900 border border-slate-700 text-xs text-white rounded-lg p-2.5 focus:outline-none focus:border-indigo-500">
+                    <label class="block text-[10px] font-semibold text-slate-600 mb-1">Password</label>
+                    <input type="password" id="new-password" required placeholder="Password Akses" class="w-full bg-white border border-slate-300 text-xs text-slate-900 rounded-lg p-2.5 focus:outline-none focus:border-indigo-600">
                 </div>
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold py-2.5 rounded-lg transition shadow-md shadow-indigo-600/20">
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 rounded-lg transition shadow-md shadow-indigo-600/20">
                     + Tambahkan Pengguna
                 </button>
             </form>
 
             <div>
-                <p class="text-xs font-bold text-slate-300 mb-2">Daftar Pengguna Aktif</p>
+                <p class="text-xs font-bold text-slate-700 mb-2">Daftar Pengguna Aktif</p>
                 <div class="max-h-40 overflow-y-auto space-y-1.5 pr-1" id="user-list"></div>
             </div>
         </div>
     </div>
 
-    <!-- Top Header Bar -->
-    <header class="light-card border-b border-white/10 px-4 sm:px-6 py-3 flex justify-between items-center z-20 sticky top-0 shadow-lg">
+    <!-- Top Header Bar (Clean White Glass) -->
+    <header class="bg-white border-b border-slate-200 px-4 sm:px-6 py-3 flex justify-between items-center z-20 sticky top-0 shadow-sm">
         <div class="flex items-center space-x-3">
-            <!-- Tombol Navigasi Bulat dengan Panah -->
-            <button onclick="toggleSidebarPopup()" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-tr from-indigo-600 to-blue-500 border border-white/20 flex items-center justify-center text-white shadow-lg hover:scale-105 transition flex-shrink-0" title="Buka Menu Navigasi">
+            <!-- Tombol Navigasi Bulat Terang dengan Panah -->
+            <button onclick="toggleSidebarPopup()" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-indigo-600 border border-indigo-700 flex items-center justify-center text-white shadow-md hover:bg-indigo-700 transition flex-shrink-0" title="Buka Menu Navigasi">
                 <i class="fa-solid fa-chevron-right text-xs"></i>
             </button>
 
-            <img src="BSS_logo.jpg" alt="Logo" class="h-6 sm:h-7 w-auto glow-gold" onerror="this.src='https://via.placeholder.com/100x30?text=BSS'">
+            <img src="BSS_logo.jpg" alt="Logo" class="h-6 sm:h-7 w-auto" onerror="this.src='https://via.placeholder.com/100x30?text=BSS'">
             <div class="hidden sm:block">
-                <span class="font-extrabold text-xs sm:text-sm tracking-wide text-white block">BACKLOG MANAGEMENT</span>
-                <span class="text-[10px] text-indigo-300 font-bold">Monitoring Control Plant & Maintenance</span>
+                <span class="font-extrabold text-xs sm:text-sm tracking-wide text-slate-900 block">BACKLOG MANAGEMENT</span>
+                <span class="text-[10px] text-indigo-600 font-bold">Executive Plant Monitoring & Maintenance</span>
             </div>
         </div>
         <div class="flex items-center space-x-2 sm:space-x-3">
-            <button onclick="toggleUserModal(true)" class="text-xs bg-slate-800 hover:bg-slate-700 text-indigo-300 border border-slate-700 px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 shadow-sm font-semibold">
-                <i class="fa-solid fa-user-gear"></i> <span class="hidden sm:inline">Kelola Akses</span>
+            <button onclick="toggleUserModal(true)" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 shadow-sm font-semibold">
+                <i class="fa-solid fa-user-gear text-indigo-600"></i> <span class="hidden sm:inline">Kelola Akses</span>
             </button>
-            <button onclick="refreshData()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 shadow-sm font-semibold">
-                <i class="fa-solid fa-rotate text-indigo-400"></i> <span class="hidden sm:inline">Refresh</span>
+            <button onclick="refreshData()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 shadow-sm font-semibold">
+                <i class="fa-solid fa-rotate text-indigo-600"></i> <span class="hidden sm:inline">Refresh</span>
             </button>
-            <div class="flex items-center space-x-2 border-l border-slate-700/80 pl-3">
-                <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-indigo-500 flex items-center justify-center text-xs font-bold text-white shadow-md shadow-indigo-600/30 flex-shrink-0" id="user-avatar">
+            <div class="flex items-center space-x-2 border-l border-slate-200 pl-3">
+                <div class="w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center text-xs font-bold text-white shadow-sm flex-shrink-0" id="user-avatar">
                     A
                 </div>
                 <div class="text-xs hidden md:block">
-                    <p class="font-bold leading-none text-white" id="current-user-name">Admin</p>
-                    <p class="text-[10px] text-slate-400 leading-tight mt-0.5" id="current-user-role">Maintenance Administrator</p>
+                    <p class="font-bold leading-none text-slate-900" id="current-user-name">Admin</p>
+                    <p class="text-[10px] text-slate-500 leading-tight mt-0.5" id="current-user-role">Maintenance Administrator</p>
                 </div>
-                <button onclick="handleLogout()" class="text-xs text-rose-400 hover:text-rose-300 ml-1 p-1" title="Logout">
+                <button onclick="handleLogout()" class="text-xs text-rose-600 hover:text-rose-700 ml-1 p-1" title="Logout">
                     <i class="fa-solid fa-right-from-bracket"></i>
                 </button>
             </div>
@@ -305,26 +293,26 @@
 
     <div class="flex flex-1 overflow-hidden relative">
         
-        <!-- Backdrop Gelap saat Sidebar Pop-up Terbuka -->
-        <div id="sidebar-backdrop" onclick="toggleSidebarPopup()" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-30 hidden transition-opacity"></div>
+        <!-- Backdrop Gelap Transparan saat Sidebar Pop-up Terbuka -->
+        <div id="sidebar-backdrop" onclick="toggleSidebarPopup()" class="fixed inset-0 bg-slate-900/30 backdrop-blur-xs z-30 hidden transition-opacity"></div>
 
-        <!-- Sidebar Futuristic Glassmorphism (Mobile Optimized width: 85% max 320px) -->
-        <aside id="sidebar-popup" class="fixed inset-y-0 left-0 z-45 w-[85%] sm:w-80 futuristic-sidebar text-slate-200 p-4 sm:p-5 flex flex-col justify-between -translate-x-full">
+        <!-- Sidebar Putih Sangat Jelas (Mobile Optimized width: 85% max 320px) -->
+        <aside id="sidebar-popup" class="fixed inset-y-0 left-0 z-45 w-[85%] sm:w-80 futuristic-sidebar text-slate-800 p-4 sm:p-5 flex flex-col justify-between -translate-x-full">
             <div class="space-y-4 overflow-y-auto pr-1">
                 
                 <!-- Header Profil & Tombol Close Panah Kiri -->
                 <div class="relative glass-profile p-3 rounded-2xl flex items-center justify-between">
                     <div class="flex items-center space-x-3">
-                        <div class="w-9 h-9 rounded-full border-2 border-indigo-400 flex items-center justify-center text-indigo-200 font-bold bg-indigo-950 shadow-inner flex-shrink-0" id="sidebar-avatar-letter">
+                        <div class="w-9 h-9 rounded-full border-2 border-indigo-600 flex items-center justify-center text-indigo-700 font-bold bg-indigo-50 shadow-inner flex-shrink-0" id="sidebar-avatar-letter">
                             A
                         </div>
                         <div class="overflow-hidden">
-                            <p class="font-bold text-xs text-white truncate" id="sidebar-user-name">Admin</p>
-                            <p class="text-[10px] text-indigo-300 truncate">Maintenance Planner</p>
+                            <p class="font-bold text-xs text-slate-900 truncate" id="sidebar-user-name">Admin</p>
+                            <p class="text-[10px] text-indigo-600 font-semibold truncate">Maintenance Planner</p>
                         </div>
                     </div>
                     <!-- Tombol Tutup Sidebar Panah Kiri -->
-                    <button onclick="toggleSidebarPopup()" class="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-600 to-blue-500 border border-white/20 flex items-center justify-center text-white shadow-lg hover:scale-105 transition flex-shrink-0">
+                    <button onclick="toggleSidebarPopup()" class="w-9 h-9 rounded-full bg-indigo-600 border border-indigo-700 flex items-center justify-center text-white shadow-md hover:bg-indigo-700 transition flex-shrink-0">
                         <i class="fa-solid fa-chevron-left text-xs"></i>
                     </button>
                 </div>
@@ -332,60 +320,60 @@
                 <!-- Kolom Search Command -->
                 <div class="relative">
                     <input type="text" id="filter-search" placeholder="Search Command..." class="w-full glass-search text-xs rounded-xl py-3 pl-3.5 pr-9 focus:outline-none transition shadow-inner placeholder-slate-400">
-                    <i class="fa-solid fa-magnifying-glass absolute right-3.5 top-3.5 text-indigo-400 text-xs"></i>
+                    <i class="fa-solid fa-magnifying-glass absolute right-3.5 top-3.5 text-indigo-600 text-xs"></i>
                 </div>
 
-                <!-- Menu Pill Items -->
+                <!-- Menu Pill Items (Warna Kontras & Jelas) -->
                 <nav class="space-y-2 text-xs">
-                    <a href="#" onclick="toggleSidebarPopup()" class="menu-pill active flex items-center justify-between px-3.5 py-3 rounded-xl text-white font-bold">
-                        <span class="flex items-center gap-3"><i class="fa-solid fa-house text-indigo-400"></i> Home</span>
+                    <a href="#" onclick="toggleSidebarPopup()" class="menu-pill active flex items-center justify-between px-3.5 py-3 rounded-xl font-bold">
+                        <span class="flex items-center gap-3"><i class="fa-solid fa-house text-indigo-600"></i> Home</span>
                     </a>
-                    <a href="#" onclick="toggleSidebarPopup()" class="menu-pill flex items-center justify-between px-3.5 py-3 rounded-xl text-slate-300 font-medium">
-                        <span class="flex items-center gap-3"><i class="fa-solid fa-chart-line text-rose-400"></i> Realtime Dashboard</span>
+                    <a href="#" onclick="toggleSidebarPopup()" class="menu-pill flex items-center justify-between px-3.5 py-3 rounded-xl text-slate-700 font-medium">
+                        <span class="flex items-center gap-3"><i class="fa-solid fa-chart-line text-rose-600"></i> Realtime Dashboard</span>
                     </a>
-                    <a href="#" onclick="toggleSidebarPopup()" class="menu-pill flex items-center justify-between px-3.5 py-3 rounded-xl text-slate-300 font-medium">
-                        <span class="flex items-center gap-3"><i class="fa-solid fa-chart-pie text-amber-400"></i> Realtime Dashboard - Site</span>
+                    <a href="#" onclick="toggleSidebarPopup()" class="menu-pill flex items-center justify-between px-3.5 py-3 rounded-xl text-slate-700 font-medium">
+                        <span class="flex items-center gap-3"><i class="fa-solid fa-chart-pie text-amber-600"></i> Realtime Dashboard - Site</span>
                     </a>
 
                     <div class="pt-3 pb-1">
-                        <p class="px-2 text-[10px] font-extrabold uppercase tracking-wider text-indigo-400">Filter Controls</p>
+                        <p class="px-2 text-[10px] font-extrabold uppercase tracking-wider text-indigo-600">Filter Controls</p>
                     </div>
 
                     <!-- Filter Dropdowns -->
                     <div class="space-y-3 px-1 pt-1">
                         <div>
-                            <label class="block text-[11px] font-bold text-slate-300 mb-1.5">Filter Kesiapan MO</label>
-                            <select id="filter-mo-readiness" class="w-full glass-select text-xs rounded-xl p-2.5 transition font-bold text-amber-300">
-                                <option value="ALL" class="bg-slate-900">Semua Status MO</option>
-                                <option value="READY" class="bg-slate-900">Ready Eksekusi</option>
-                                <option value="NOT_READY" class="bg-slate-900">Not Ready</option>
-                                <option value="CLOSE" class="bg-slate-900">Close</option>
+                            <label class="block text-[11px] font-bold text-slate-700 mb-1.5">Filter Kesiapan MO</label>
+                            <select id="filter-mo-readiness" class="w-full glass-select text-xs rounded-xl p-2.5 transition font-bold text-amber-700 bg-white">
+                                <option value="ALL">Semua Status MO</option>
+                                <option value="READY">Ready Eksekusi</option>
+                                <option value="NOT_READY">Not Ready</option>
+                                <option value="CLOSE">Close</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-[11px] font-bold text-slate-300 mb-1.5">No Unit</label>
-                            <select id="filter-unit" class="w-full glass-select text-xs rounded-xl p-2.5 transition font-medium">
-                                <option value="ALL" class="bg-slate-900">Semua No Unit</option>
+                            <label class="block text-[11px] font-bold text-slate-700 mb-1.5">No Unit</label>
+                            <select id="filter-unit" class="w-full glass-select text-xs rounded-xl p-2.5 transition font-medium bg-white">
+                                <option value="ALL">Semua No Unit</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-[11px] font-bold text-slate-300 mb-1.5">Cluster (Section)</label>
-                            <select id="filter-section" class="w-full glass-select text-xs rounded-xl p-2.5 transition font-medium">
-                                <option value="ALL" class="bg-slate-900">Semua Cluster</option>
+                            <label class="block text-[11px] font-bold text-slate-700 mb-1.5">Cluster (Section)</label>
+                            <select id="filter-section" class="w-full glass-select text-xs rounded-xl p-2.5 transition font-medium bg-white">
+                                <option value="ALL">Semua Cluster</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-[11px] font-bold text-slate-300 mb-1.5">Status Part</label>
-                            <select id="filter-status" class="w-full glass-select text-xs rounded-xl p-2.5 transition font-medium">
-                                <option value="ALL" class="bg-slate-900">Semua Status Part</option>
+                            <label class="block text-[11px] font-bold text-slate-700 mb-1.5">Status Part</label>
+                            <select id="filter-status" class="w-full glass-select text-xs rounded-xl p-2.5 transition font-medium bg-white">
+                                <option value="ALL">Semua Status Part</option>
                             </select>
                         </div>
                     </div>
                 </nav>
             </div>
 
-            <div class="bg-white/5 border border-white/10 p-3 rounded-xl text-center backdrop-blur-md mt-4">
-                <span id="data-status" class="text-[11px] font-bold text-amber-400">
+            <div class="bg-indigo-50 border border-indigo-100 p-3 rounded-xl text-center mt-4 shadow-sm">
+                <span id="data-status" class="text-[11px] font-bold text-amber-600">
                     <i class="fa-solid fa-spinner fa-spin mr-1.5"></i> Memuat Data...
                 </span>
             </div>
@@ -396,88 +384,88 @@
 
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                 <div>
-                    <h2 class="text-lg sm:text-xl font-extrabold text-white tracking-tight">Executive Dashboard</h2>
-                    <p class="text-xs text-slate-400 font-medium">Ringkasan Operasional & Evaluasi Valuation Backlog</p>
+                    <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight">Executive Dashboard</h2>
+                    <p class="text-xs text-slate-500 font-medium">Ringkasan Operasional & Evaluasi Valuation Backlog</p>
                 </div>
             </div>
 
-            <!-- KPI Cards Section (Responsive Grid) -->
+            <!-- KPI Cards Section (Responsive Clean Grid) -->
             <section class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-6 gap-3 sm:gap-4">
                 <div class="metric-card light-card p-3.5 sm:p-4 rounded-2xl flex flex-col justify-between h-32 sm:h-36 cursor-pointer" onclick="resetMOFilter()">
                     <div class="flex justify-between items-center">
-                        <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-300">Total Unique MO</span>
-                        <div class="w-7 h-7 sm:w-8 sm:h-8 bg-indigo-500/20 rounded-xl flex items-center justify-center text-indigo-400 text-xs">
+                        <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500">Total Unique MO</span>
+                        <div class="w-7 h-7 sm:w-8 sm:h-8 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 text-xs">
                             <i class="fa-solid fa-file-signature"></i>
                         </div>
                     </div>
                     <div>
-                        <h3 id="kpi-mo" class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">0</h3>
+                        <h3 id="kpi-mo" class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">0</h3>
                         <p class="text-[8px] sm:text-[9px] text-slate-400 font-semibold mt-0.5">Total nomor MO unik</p>
                     </div>
                 </div>
 
-                <div class="metric-card light-card p-3.5 sm:p-4 rounded-2xl flex flex-col justify-between h-32 sm:h-36 border-l-4 border-l-emerald-500 cursor-pointer hover:bg-emerald-950/20 transition" onclick="filterByReadiness('READY')" title="Klik untuk filter Ready Eksekusi">
+                <div class="metric-card light-card p-3.5 sm:p-4 rounded-2xl flex flex-col justify-between h-32 sm:h-36 border-l-4 border-l-emerald-500 cursor-pointer hover:bg-emerald-50/50 transition" onclick="filterByReadiness('READY')" title="Klik untuk filter Ready Eksekusi">
                     <div class="flex justify-between items-center">
-                        <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-emerald-400">MO Ready</span>
-                        <div class="w-7 h-7 sm:w-8 sm:h-8 bg-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-400 text-xs">
+                        <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-emerald-600">MO Ready</span>
+                        <div class="w-7 h-7 sm:w-8 sm:h-8 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 text-xs">
                             <i class="fa-solid fa-circle-check"></i>
                         </div>
                     </div>
                     <div>
-                        <h3 id="kpi-mo-ready" class="text-xl sm:text-2xl font-extrabold text-emerald-400 tracking-tight">0</h3>
-                        <p class="text-[8px] sm:text-[9px] text-emerald-400 font-bold mt-0.5">Ready Eksekusi</p>
+                        <h3 id="kpi-mo-ready" class="text-xl sm:text-2xl font-extrabold text-emerald-600 tracking-tight">0</h3>
+                        <p class="text-[8px] sm:text-[9px] text-emerald-600 font-bold mt-0.5">Ready Eksekusi</p>
                     </div>
                 </div>
 
-                <div class="metric-card light-card p-3.5 sm:p-4 rounded-2xl flex flex-col justify-between h-32 sm:h-36 border-l-4 border-l-amber-500 cursor-pointer hover:bg-amber-950/20 transition" onclick="filterByReadiness('NOT_READY')" title="Klik untuk filter Not Ready">
+                <div class="metric-card light-card p-3.5 sm:p-4 rounded-2xl flex flex-col justify-between h-32 sm:h-36 border-l-4 border-l-amber-500 cursor-pointer hover:bg-amber-50/50 transition" onclick="filterByReadiness('NOT_READY')" title="Klik untuk filter Not Ready">
                     <div class="flex justify-between items-center">
-                        <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-amber-400">MO Not Ready</span>
-                        <div class="w-7 h-7 sm:w-8 sm:h-8 bg-amber-500/20 rounded-xl flex items-center justify-center text-amber-400 text-xs">
+                        <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-amber-600">MO Not Ready</span>
+                        <div class="w-7 h-7 sm:w-8 sm:h-8 bg-amber-50 rounded-xl flex items-center justify-center text-amber-600 text-xs">
                             <i class="fa-solid fa-clock"></i>
                         </div>
                     </div>
                     <div>
-                        <h3 id="kpi-mo-not-ready" class="text-xl sm:text-2xl font-extrabold text-amber-400 tracking-tight">0</h3>
-                        <p class="text-[8px] sm:text-[9px] text-amber-400 font-bold mt-0.5">Belum Ready</p>
+                        <h3 id="kpi-mo-not-ready" class="text-xl sm:text-2xl font-extrabold text-amber-600 tracking-tight">0</h3>
+                        <p class="text-[8px] sm:text-[9px] text-amber-600 font-bold mt-0.5">Belum Ready</p>
                     </div>
                 </div>
 
-                <div class="metric-card light-card p-3.5 sm:p-4 rounded-2xl flex flex-col justify-between h-32 sm:h-36 border-l-4 border-l-blue-500 cursor-pointer hover:bg-blue-950/20 transition" onclick="filterByReadiness('CLOSE')" title="Klik untuk filter Close">
+                <div class="metric-card light-card p-3.5 sm:p-4 rounded-2xl flex flex-col justify-between h-32 sm:h-36 border-l-4 border-l-blue-500 cursor-pointer hover:bg-blue-50/50 transition" onclick="filterByReadiness('CLOSE')" title="Klik untuk filter Close">
                     <div class="flex justify-between items-center">
-                        <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-blue-400">MO Close</span>
-                        <div class="w-7 h-7 sm:w-8 sm:h-8 bg-blue-500/20 rounded-xl flex items-center justify-center text-blue-400 text-xs">
+                        <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-blue-600">MO Close</span>
+                        <div class="w-7 h-7 sm:w-8 sm:h-8 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 text-xs">
                             <i class="fa-solid fa-circle-xmark"></i>
                         </div>
                     </div>
                     <div>
-                        <h3 id="kpi-mo-close" class="text-xl sm:text-2xl font-extrabold text-blue-400 tracking-tight">0</h3>
-                        <p class="text-[8px] sm:text-[9px] text-blue-400 font-bold mt-0.5">Status Close/TECO</p>
+                        <h3 id="kpi-mo-close" class="text-xl sm:text-2xl font-extrabold text-blue-600 tracking-tight">0</h3>
+                        <p class="text-[8px] sm:text-[9px] text-blue-600 font-bold mt-0.5">Status Close/TECO</p>
                     </div>
                 </div>
 
                 <div class="metric-card light-card p-3.5 sm:p-4 rounded-2xl flex flex-col justify-between h-32 sm:h-36">
                     <div class="flex justify-between items-center">
-                        <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-300">Available Parts</span>
-                        <div class="w-7 h-7 sm:w-8 sm:h-8 bg-teal-500/20 rounded-xl flex items-center justify-center text-teal-400 text-xs">
+                        <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500">Available Parts</span>
+                        <div class="w-7 h-7 sm:w-8 sm:h-8 bg-teal-50 rounded-xl flex items-center justify-center text-teal-600 text-xs">
                             <i class="fa-solid fa-boxes-packing"></i>
                         </div>
                     </div>
                     <div>
-                        <h3 id="exec-safe" class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">0</h3>
-                        <p class="text-[8px] sm:text-[9px] text-teal-400 font-bold mt-0.5">Total stok part</p>
+                        <h3 id="exec-safe" class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">0</h3>
+                        <p class="text-[8px] sm:text-[9px] text-teal-600 font-bold mt-0.5">Total stok part</p>
                     </div>
                 </div>
 
                 <div class="metric-card light-card p-3.5 sm:p-4 rounded-2xl flex flex-col justify-between h-32 sm:h-36">
                     <div class="flex justify-between items-center">
-                        <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-300">Out of Stock</span>
-                        <div class="w-7 h-7 sm:w-8 sm:h-8 bg-rose-500/20 rounded-xl flex items-center justify-center text-rose-400 text-xs">
+                        <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500">Out of Stock</span>
+                        <div class="w-7 h-7 sm:w-8 sm:h-8 bg-rose-50 rounded-xl flex items-center justify-center text-rose-600 text-xs">
                             <i class="fa-solid fa-triangle-exclamation"></i>
                         </div>
                     </div>
                     <div>
-                        <h3 id="kpi-stockout" class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">0</h3>
-                        <p class="text-[8px] sm:text-[9px] text-rose-400 font-bold mt-0.5">Stok habis (0)</p>
+                        <h3 id="kpi-stockout" class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">0</h3>
+                        <p class="text-[8px] sm:text-[9px] text-rose-600 font-bold mt-0.5">Stok habis (0)</p>
                     </div>
                 </div>
             </section>
@@ -485,9 +473,9 @@
             <!-- Middle Section: Visual Charts & Valuation Card -->
             <section class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5">
                 <div class="light-card p-4 sm:p-5 rounded-2xl flex flex-col justify-between">
-                    <div class="flex justify-between items-center mb-3 pb-2 border-b border-white/10">
-                        <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-200 flex items-center gap-2">
-                            <i class="fa-solid fa-chart-column text-indigo-400"></i> Top 10 MO Terbanyak
+                    <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
+                        <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-column text-indigo-600"></i> Top 10 MO Terbanyak
                         </h4>
                     </div>
                     <div class="relative h-56 sm:h-60 w-full">
@@ -496,9 +484,9 @@
                 </div>
 
                 <div class="light-card p-4 sm:p-5 rounded-2xl flex flex-col justify-between">
-                    <div class="flex justify-between items-center mb-3 pb-2 border-b border-white/10">
-                        <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-200 flex items-center gap-2">
-                            <i class="fa-solid fa-chart-pie text-indigo-400"></i> Sebaran Cluster (Section)
+                    <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
+                        <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-pie text-indigo-600"></i> Sebaran Cluster (Section)
                         </h4>
                     </div>
                     <div class="relative h-56 sm:h-60 w-full flex justify-center">
@@ -506,8 +494,8 @@
                     </div>
                 </div>
 
-                <!-- Valuation Card -->
-                <div class="bg-gradient-to-br from-indigo-900 via-indigo-950 to-blue-950 text-white p-5 sm:p-6 rounded-2xl border border-indigo-500/30 shadow-xl flex flex-col justify-between relative overflow-hidden">
+                <!-- Valuation Card (Executive Gradient Royal Blue) -->
+                <div class="bg-gradient-to-br from-indigo-900 via-indigo-950 to-blue-900 text-white p-5 sm:p-6 rounded-2xl border border-indigo-700 shadow-xl flex flex-col justify-between relative overflow-hidden">
                     <div class="absolute -right-8 -bottom-8 w-40 h-40 bg-indigo-500/20 rounded-full blur-2xl pointer-events-none"></div>
                     <div class="flex justify-between items-center relative z-10">
                         <h4 class="text-xs font-extrabold text-amber-300 uppercase tracking-wider flex items-center gap-2">
@@ -525,33 +513,33 @@
                         </h3>
                     </div>
 
-                    <div class="border-t border-indigo-500/30 pt-3 flex justify-between items-center text-xs text-slate-300 relative z-10 font-medium">
+                    <div class="border-t border-indigo-700/60 pt-3 flex justify-between items-center text-xs text-slate-300 relative z-10 font-medium">
                         <span class="text-[10px] sm:text-[11px]">Data Synchronization</span>
                         <span class="font-extrabold text-white text-xs">MONRES 2026</span>
                     </div>
                 </div>
             </section>
 
-            <!-- Bottom Table Section (Mobile Scroll Friendly) -->
+            <!-- Bottom Table Section (Clean White) -->
             <section class="light-card rounded-2xl overflow-hidden">
-                <div class="p-4 sm:p-5 border-b border-white/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div class="p-4 sm:p-5 border-b border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                     <div>
-                        <h3 class="text-xs sm:text-sm font-extrabold text-white flex items-center gap-2 flex-wrap">
+                        <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2 flex-wrap">
                             <span>Rincian Detail Backlog Unit</span>
-                            <span id="active-filter-badge" class="hidden text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-800 font-bold px-2 py-0.5 rounded-full">
+                            <span id="active-filter-badge" class="hidden text-[10px] bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold px-2 py-0.5 rounded-full">
                                 Filter Active
                             </span>
                         </h3>
-                        <p class="text-xs text-slate-400 font-medium mt-0.5" id="table-count-info">Menampilkan 0 data backlog</p>
+                        <p class="text-xs text-slate-500 font-medium mt-0.5" id="table-count-info">Menampilkan 0 data backlog</p>
                     </div>
-                    <button onclick="exportTableToCSV()" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-2 shadow-md shadow-indigo-600/30">
+                    <button onclick="exportTableToCSV()" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-2 shadow-md shadow-indigo-600/30">
                         <i class="fa-solid fa-file-csv text-indigo-200"></i> Ekspor CSV
                     </button>
                 </div>
 
                 <div class="overflow-x-auto min-h-[320px]">
-                    <table class="min-w-[1000px] w-full divide-y divide-slate-800 text-xs text-left">
-                        <thead class="bg-slate-900/90 text-slate-300 font-extrabold tracking-wider uppercase text-[10px] sticky top-0 z-10 border-b border-slate-800">
+                    <table class="min-w-[1000px] w-full divide-y divide-slate-200 text-xs text-left">
+                        <thead class="bg-slate-100 text-slate-700 font-extrabold tracking-wider uppercase text-[10px] sticky top-0 z-10 border-b border-slate-200">
                             <tr>
                                 <th class="px-4 py-3.5">No Unit</th>
                                 <th class="px-4 py-3.5">Cluster (Section)</th>
@@ -566,30 +554,30 @@
                                 <th class="px-4 py-3.5 text-center">Status MO (X)</th>
                             </tr>
                         </thead>
-                        <tbody id="table-body" class="divide-y divide-slate-800/60 bg-slate-900/30 text-slate-300">
+                        <tbody id="table-body" class="divide-y divide-slate-200 bg-white text-slate-700">
                         </tbody>
                     </table>
                 </div>
 
-                <div class="p-3.5 sm:p-4 border-t border-white/10 bg-slate-950/40 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-                    <div class="text-slate-400 font-medium text-center sm:text-left" id="pagination-info">
+                <div class="p-3.5 sm:p-4 border-t border-slate-200 bg-slate-50 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+                    <div class="text-slate-500 font-medium text-center sm:text-left" id="pagination-info">
                         Halaman 1 dari 1
                     </div>
                     <div class="flex items-center space-x-2">
-                        <button id="btn-prev" onclick="changePage(-1)" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 transition disabled:opacity-30 shadow-sm">
+                        <button id="btn-prev" onclick="changePage(-1)" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 transition disabled:opacity-30 shadow-sm">
                             <i class="fa-solid fa-chevron-left mr-1"></i> Prev
                         </button>
                         <div id="page-numbers" class="flex space-x-1"></div>
-                        <button id="btn-next" onclick="changePage(1)" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 transition disabled:opacity-30 shadow-sm">
+                        <button id="btn-next" onclick="changePage(1)" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 transition disabled:opacity-30 shadow-sm">
                             Next <i class="fa-solid fa-chevron-right ml-1"></i>
                         </button>
                     </div>
                 </div>
             </section>
 
-            <div class="relative z-10 border-t border-white/10 pt-4 flex flex-col sm:flex-row justify-between items-center text-[11px] text-slate-400 font-medium gap-2">
+            <div class="relative z-10 border-t border-slate-200 pt-4 flex flex-col sm:flex-row justify-between items-center text-[11px] text-slate-500 font-medium gap-2">
                 <span>© 2026 MONRES. All rights reserved.</span>
-                <span class="font-bold text-indigo-300">BSS Engineering</span>
+                <span class="font-bold text-indigo-600">BSS Engineering</span>
             </div>
 
         </main>
@@ -684,12 +672,12 @@
             listContainer.innerHTML = '';
             allowedUsers.forEach((u, index) => {
                 listContainer.innerHTML += `
-                    <div class="flex justify-between items-center bg-slate-950 p-2.5 rounded-lg border border-slate-800 text-xs">
+                    <div class="flex justify-between items-center bg-slate-50 p-2.5 rounded-lg border border-slate-200 text-xs">
                         <div>
-                            <p class="font-bold text-white">${u.username}</p>
-                            <p class="text-[10px] text-slate-400">${u.role}</p>
+                            <p class="font-bold text-slate-900">${u.username}</p>
+                            <p class="text-[10px] text-slate-500">${u.role}</p>
                         </div>
-                        ${index !== 0 ? `<button onclick="deleteUser(${index})" class="text-rose-400 hover:text-rose-300 text-xs"><i class="fa-solid fa-trash"></i></button>` : `<span class="text-[10px] text-indigo-400 font-bold">Owner</span>`}
+                        ${index !== 0 ? `<button onclick="deleteUser(${index})" class="text-rose-600 hover:text-rose-700 text-xs"><i class="fa-solid fa-trash"></i></button>` : `<span class="text-[10px] text-indigo-600 font-bold">Owner</span>`}
                     </div>
                 `;
             });
@@ -738,7 +726,7 @@
         function fetchSheetData() {
             const statusBadge = document.getElementById('data-status');
             statusBadge.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> Memuat Data...';
-            statusBadge.className = 'text-[11px] font-bold text-amber-400';
+            statusBadge.className = 'text-[11px] font-bold text-amber-600';
 
             Papa.parse(GOOGLE_SHEET_CSV_URL, {
                 download: true,
@@ -751,14 +739,14 @@
                     }
 
                     statusBadge.innerHTML = '<i class="fa-solid fa-circle-check mr-1.5"></i> Connected';
-                    statusBadge.className = 'text-[11px] font-bold text-emerald-400';
+                    statusBadge.className = 'text-[11px] font-bold text-emerald-600';
                     
                     populateFilterOptions();
                     updateDashboard();
                 },
                 error: function(err) {
                     statusBadge.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1.5"></i> Error';
-                    statusBadge.className = 'text-[11px] font-bold text-rose-400';
+                    statusBadge.className = 'text-[11px] font-bold text-rose-600';
                 }
             });
         }
@@ -784,9 +772,9 @@
 
             const buildOptions = (id, set, label) => {
                 const el = document.getElementById(id);
-                el.innerHTML = `<option value="ALL" class="bg-slate-900">Semua ${label}</option>`;
+                el.innerHTML = `<option value="ALL">Semua ${label}</option>`;
                 Array.from(set).sort().forEach(val => {
-                    el.innerHTML += `<option value="${val}" class="bg-slate-900">${val}</option>`;
+                    el.innerHTML += `<option value="${val}">${val}</option>`;
                 });
             };
 
@@ -956,7 +944,7 @@
             if (barChartInstance) barChartInstance.destroy();
             if (pieChartInstance) pieChartInstance.destroy();
 
-            Chart.defaults.color = '#94a3b8';
+            Chart.defaults.color = '#475569';
             Chart.defaults.font.family = 'Plus Jakarta Sans';
 
             const ctxBar = document.getElementById('barChart').getContext('2d');
@@ -967,8 +955,8 @@
                     datasets: [{
                         label: 'Jumlah Part',
                         data: sortedMO.map(item => item[1]),
-                        backgroundColor: '#6366f1',
-                        hoverBackgroundColor: '#818cf8',
+                        backgroundColor: '#4f46e5',
+                        hoverBackgroundColor: '#6366f1',
                         borderRadius: 6
                     }]
                 },
@@ -977,7 +965,7 @@
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        y: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.05)' } },
+                        y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
                         x: { grid: { display: false } }
                     }
                 }
@@ -990,16 +978,16 @@
                     labels: Object.keys(sectionCounts),
                     datasets: [{
                         data: Object.values(sectionCounts),
-                        backgroundColor: ['#6366f1', '#06b6d4', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6'],
+                        backgroundColor: ['#4f46e5', '#0ea5e9', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6'],
                         borderWidth: 2,
-                        borderColor: '#0b1329'
+                        borderColor: '#ffffff'
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10, weight: '600' }, color: '#cbd5e1' } }
+                        legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10, weight: '600' }, color: '#334155' } }
                     }
                 }
             });
@@ -1013,7 +1001,7 @@
             document.getElementById('table-count-info').innerText = `Menampilkan ${total.toLocaleString('id-ID')} baris item backlog`;
 
             if (total === 0) {
-                tbody.innerHTML = `<tr><td colspan="11" class="text-center py-12 text-slate-500 font-medium">Tidak ada data backlog.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="11" class="text-center py-12 text-slate-400 font-medium">Tidak ada data backlog.</td></tr>`;
                 updatePaginationControls(0);
                 return;
             }
@@ -1028,38 +1016,38 @@
 
             pageData.forEach(row => { 
                 const tr = document.createElement('tr');
-                tr.className = 'hover:bg-indigo-950/40 transition border-b border-slate-800/60';
+                tr.className = 'hover:bg-slate-50 transition border-b border-slate-100';
                 
                 const moNo = getColumnPValue(row);
 
                 const statusPart = getColumnWValue(row) || '-';
-                let partBadge = 'bg-slate-800 text-slate-300 border border-slate-700';
+                let partBadge = 'bg-slate-100 text-slate-700 border border-slate-200';
                 const partUpper = statusPart.toUpperCase();
                 if (partUpper.includes('COMPLETED') || partUpper.includes('CLOSED')) {
-                    partBadge = 'bg-emerald-950/80 text-emerald-300 border border-emerald-800';
+                    partBadge = 'bg-emerald-50 text-emerald-700 border border-emerald-200';
                 } else if (partUpper.includes('PROGRESS') || partUpper.includes('PROCESS')) {
-                    partBadge = 'bg-amber-950/80 text-amber-300 border border-amber-800';
+                    partBadge = 'bg-amber-50 text-amber-700 border border-amber-200';
                 } else if (partUpper.includes('OUTSTANDING') || partUpper.includes('OPEN')) {
-                    partBadge = 'bg-rose-950/80 text-rose-300 border border-rose-800';
+                    partBadge = 'bg-rose-50 text-rose-700 border border-rose-200';
                 }
 
                 const statusMO = getColumnXValue(row) || '-';
-                let moBadge = 'bg-indigo-950/80 text-indigo-300 border border-indigo-800';
+                let moBadge = 'bg-indigo-50 text-indigo-700 border border-indigo-200';
 
                 const qtyRes = getValue(row, 'Qty Res') || getValue(row, 'Qty Res.') || getValue(row, 'Qty Resv') || '0';
                 const stock = cleanNumber(getValue(row, 'Stock On Hand'));
                 const amount = cleanNumber(getValue(row, 'Total Price'));
 
                 tr.innerHTML = `
-                    <td class="px-4 py-3 font-bold text-indigo-400 whitespace-nowrap">${getValue(row, 'No Unit') || '-'}</td>
-                    <td class="px-4 py-3 font-medium text-slate-300 whitespace-nowrap">${getValue(row, 'Section') || '-'}</td>
-                    <td class="px-4 py-3 font-mono font-semibold text-white whitespace-nowrap">${moNo || '-'}</td>
-                    <td class="px-4 py-3 text-slate-300 max-w-[180px] truncate">${getValue(row, 'Maint. Order Desc.') || '-'}</td>
-                    <td class="px-4 py-3 font-mono text-slate-300 whitespace-nowrap">${getValue(row, 'Part Number') || '-'}</td>
-                    <td class="px-4 py-3 font-medium text-white max-w-[200px] truncate">${getValue(row, 'Description') || '-'}</td>
-                    <td class="px-3 py-3 text-center font-bold text-slate-300 bg-slate-900/40 whitespace-nowrap">${qtyRes}</td>
-                    <td class="px-3 py-3 text-center font-bold whitespace-nowrap ${stock === 0 ? 'text-rose-400 bg-rose-950/50 rounded-lg border border-rose-900/50' : 'text-slate-300'}">${getValue(row, 'Stock On Hand') || '0'}</td>
-                    <td class="px-4 py-3 text-right font-extrabold text-white whitespace-nowrap">Rp ${amount.toLocaleString('id-ID')}</td>
+                    <td class="px-4 py-3 font-bold text-indigo-600 whitespace-nowrap">${getValue(row, 'No Unit') || '-'}</td>
+                    <td class="px-4 py-3 font-medium text-slate-700 whitespace-nowrap">${getValue(row, 'Section') || '-'}</td>
+                    <td class="px-4 py-3 font-mono font-semibold text-slate-900 whitespace-nowrap">${moNo || '-'}</td>
+                    <td class="px-4 py-3 text-slate-600 max-w-[180px] truncate">${getValue(row, 'Maint. Order Desc.') || '-'}</td>
+                    <td class="px-4 py-3 font-mono text-slate-600 whitespace-nowrap">${getValue(row, 'Part Number') || '-'}</td>
+                    <td class="px-4 py-3 font-medium text-slate-900 max-w-[200px] truncate">${getValue(row, 'Description') || '-'}</td>
+                    <td class="px-3 py-3 text-center font-bold text-slate-700 bg-slate-50/80 whitespace-nowrap">${qtyRes}</td>
+                    <td class="px-3 py-3 text-center font-bold whitespace-nowrap ${stock === 0 ? 'text-rose-600 bg-rose-50 rounded-lg border border-rose-200' : 'text-slate-700'}">${getValue(row, 'Stock On Hand') || '0'}</td>
+                    <td class="px-4 py-3 text-right font-extrabold text-slate-900 whitespace-nowrap">Rp ${amount.toLocaleString('id-ID')}</td>
                     <td class="px-4 py-3 text-center whitespace-nowrap"><span class="px-2.5 py-1 text-[10px] font-bold rounded-lg ${partBadge}">${statusPart}</span></td>
                     <td class="px-4 py-3 text-center whitespace-nowrap"><span class="px-2.5 py-1 text-[10px] font-bold rounded-lg ${moBadge}">${statusMO}</span></td>
                 `;
@@ -1091,7 +1079,7 @@
             btnPrev.disabled = currentPage === 1;
             btnNext.disabled = currentPage === totalPages;
 
-            pageNumbers.innerHTML = `<span class="px-3 py-1 rounded-xl text-xs font-bold bg-indigo-600 text-white shadow-md shadow-indigo-600/30">${currentPage}</span>`;
+            pageNumbers.innerHTML = `<span class="px-3 py-1 rounded-xl text-xs font-bold bg-indigo-600 text-white shadow-sm">${currentPage}</span>`;
         }
 
         function changePage(direction) {
