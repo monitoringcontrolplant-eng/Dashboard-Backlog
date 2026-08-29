@@ -67,7 +67,7 @@
 </head>
 <body class="antialiased min-h-screen flex flex-col justify-between">
 
-    <!-- Modal Login Full Screen (Glowing Light Theme) -->
+    <!-- Modal Login Full Screen -->
     <div id="login-modal" class="fixed inset-0 z-50 flex bg-slate-50 text-slate-800 overflow-y-auto">
         <div class="min-h-screen w-full flex flex-col lg:flex-row">
             
@@ -77,7 +77,6 @@
                 <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-blue-400/30 rounded-full blur-3xl pointer-events-none"></div>
                 
                 <div class="relative z-10 space-y-8 max-w-2xl">
-                    <!-- Branding Header -->
                     <div class="flex items-center space-x-3 bg-white/10 backdrop-blur-md px-4 py-2.5 rounded-2xl w-fit border border-white/20 shadow-lg">
                         <img src="BSS_logo.jpg" alt="BSS Logo" class="h-9 w-auto glow-gold" onerror="this.src='https://via.placeholder.com/120x40?text=BSS+LOGO'">
                         <div>
@@ -86,7 +85,6 @@
                         </div>
                     </div>
 
-                    <!-- Main Headline -->
                     <div class="space-y-4 pt-2">
                         <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight drop-shadow-sm">
                             Manage backlog items, unit availability, parts & maintenance reports in one platform.
@@ -96,7 +94,6 @@
                         </p>
                     </div>
 
-                    <!-- Action Button Preview -->
                     <div class="flex items-center space-x-3 pt-2">
                         <a href="#login-username" class="bg-amber-400 hover:bg-amber-300 text-slate-900 font-extrabold text-xs px-6 py-3.5 rounded-xl transition flex items-center gap-2 shadow-xl shadow-amber-500/30 transform hover:-translate-y-0.5">
                             <i class="fa-solid fa-rocket"></i> Let's Start
@@ -104,7 +101,6 @@
                         <span class="text-xs text-indigo-100 font-medium">Tap untuk langsung ke form login.</span>
                     </div>
 
-                    <!-- Grid Feature Cards -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
                         <div class="bg-white/10 border border-white/20 p-4 rounded-2xl backdrop-blur-md shadow-lg">
                             <div class="w-9 h-9 rounded-xl bg-white/20 text-white flex items-center justify-center mb-3 shadow-inner">
@@ -137,12 +133,11 @@
                 </div>
             </div>
 
-            <!-- Sisi Kanan: Form Login (Cerah & Bergemilang dengan Logo BSS) -->
+            <!-- Sisi Kanan: Form Login -->
             <div class="lg:w-5/12 p-8 lg:p-16 flex items-center justify-center bg-slate-50/80 border-t lg:border-t-0 lg:border-l border-slate-200">
                 <div class="w-full max-w-sm space-y-6">
                     
                     <div class="text-center space-y-3">
-                        <!-- Ganti Logo Shield dengan Logo BSS Glowing -->
                         <div class="flex justify-center mb-2">
                             <div class="p-3 bg-white rounded-2xl shadow-xl shadow-indigo-100 border border-indigo-100 glow-indigo">
                                 <img src="BSS_logo.jpg" alt="BSS Logo" class="h-12 w-auto mx-auto object-contain" onerror="this.src='https://via.placeholder.com/150x50?text=BSS+LOGO'">
@@ -200,7 +195,7 @@
         </div>
     </div>
 
-    <!-- Modal User Management (Tambah Akses User) -->
+    <!-- Modal User Management -->
     <div id="user-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-900/40 backdrop-blur-md">
         <div class="bg-white border border-slate-200 p-6 rounded-2xl w-full max-w-lg shadow-2xl space-y-5">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
@@ -210,7 +205,6 @@
                 <button onclick="toggleUserModal(false)" class="text-slate-400 hover:text-slate-600 text-sm"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
-            <!-- Form Tambah User Baru -->
             <form id="add-user-form" onsubmit="handleAddUser(event)" class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
                 <p class="text-xs font-bold text-indigo-600 mb-2">Beri Akses Pengguna Baru</p>
                 <div class="grid grid-cols-2 gap-3">
@@ -232,12 +226,9 @@
                 </button>
             </form>
 
-            <!-- Daftar User Terdaftar -->
             <div>
                 <p class="text-xs font-bold text-slate-700 mb-2">Daftar Pengguna Memiliki Akses</p>
-                <div class="max-h-40 overflow-y-auto space-y-1.5 pr-1" id="user-list">
-                    <!-- User list item JS rendered -->
-                </div>
+                <div class="max-h-40 overflow-y-auto space-y-1.5 pr-1" id="user-list"></div>
             </div>
         </div>
     </div>
@@ -332,64 +323,80 @@
                 </div>
             </div>
 
-            <!-- KPI Cards Section (Urutan Baru: Total MO -> Total Items -> Available Parts -> Out of Stock) -->
-            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- KPI Cards Section (5 Grid Termasuk Total Item Siap Eksekusi) -->
+            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                 <!-- 1. Total MO -->
-                <div class="metric-card light-card p-5 rounded-2xl flex flex-col justify-between h-36">
+                <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36">
                     <div class="flex justify-between items-center">
-                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Total MO</span>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Total MO</span>
                         <div class="w-8 h-8 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 text-xs">
                             <i class="fa-solid fa-file-signature"></i>
                         </div>
                     </div>
                     <div>
-                        <h3 id="kpi-mo" class="text-3xl font-extrabold text-slate-800 tracking-tight">0</h3>
-                        <p class="text-[11px] text-slate-500 font-semibold mt-1">Maintenance Order aktif</p>
+                        <h3 id="kpi-mo" class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight">0</h3>
+                        <p class="text-[10px] text-slate-500 font-semibold mt-1">Maintenance Order aktif</p>
                     </div>
                 </div>
 
                 <!-- 2. Total Items -->
-                <div class="metric-card light-card p-5 rounded-2xl flex flex-col justify-between h-36">
+                <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36">
                     <div class="flex justify-between items-center">
-                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Total Items</span>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Total Items</span>
                         <div class="w-8 h-8 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 text-xs">
                             <i class="fa-solid fa-cubes"></i>
                         </div>
                     </div>
                     <div>
-                        <h3 id="kpi-total" class="text-3xl font-extrabold text-slate-800 tracking-tight">0</h3>
-                        <p class="text-[11px] text-slate-500 font-semibold mt-1">Total item backlog terdeteksi</p>
+                        <h3 id="kpi-total" class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight">0</h3>
+                        <p class="text-[10px] text-slate-500 font-semibold mt-1">Total item backlog</p>
                     </div>
                 </div>
 
-                <!-- 3. Available Parts -->
-                <div class="metric-card light-card p-5 rounded-2xl flex flex-col justify-between h-36">
+                <!-- 3. Total Item Siap Eksekusi (Baru Ditambahkan) -->
+                <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 border-l-4 border-l-emerald-500">
                     <div class="flex justify-between items-center">
-                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Available Parts</span>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Siap Eksekusi</span>
                         <div class="w-8 h-8 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600 text-xs">
-                            <i class="fa-solid fa-circle-check"></i>
+                            <i class="fa-solid fa-circle-play"></i>
                         </div>
                     </div>
                     <div>
-                        <h3 id="exec-safe" class="text-3xl font-extrabold text-slate-800 tracking-tight">0</h3>
-                        <p class="text-[11px] text-emerald-600 font-bold mt-1 flex items-center gap-1">
-                            <i class="fa-solid fa-boxes-packing text-[10px]"></i> Stok tersedia di gudang
+                        <h3 id="kpi-ready" class="text-2xl sm:text-3xl font-extrabold text-emerald-600 tracking-tight">0</h3>
+                        <p class="text-[10px] text-emerald-600 font-bold mt-1 flex items-center gap-1">
+                            <i class="fa-solid fa-wrench text-[9px]"></i> Stok part tersedia
                         </p>
                     </div>
                 </div>
 
-                <!-- 4. Out of Stock -->
-                <div class="metric-card light-card p-5 rounded-2xl flex flex-col justify-between h-36">
+                <!-- 4. Available Parts -->
+                <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36">
                     <div class="flex justify-between items-center">
-                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Out of Stock</span>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Available Parts</span>
+                        <div class="w-8 h-8 bg-teal-100 rounded-xl flex items-center justify-center text-teal-600 text-xs">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 id="exec-safe" class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight">0</h3>
+                        <p class="text-[10px] text-teal-600 font-bold mt-1 flex items-center gap-1">
+                            <i class="fa-solid fa-boxes-packing text-[9px]"></i> Stok tersedia di gudang
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 5. Out of Stock -->
+                <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Out of Stock</span>
                         <div class="w-8 h-8 bg-rose-100 rounded-xl flex items-center justify-center text-rose-600 text-xs">
                             <i class="fa-solid fa-triangle-exclamation"></i>
                         </div>
                     </div>
                     <div>
-                        <h3 id="kpi-stockout" class="text-3xl font-extrabold text-slate-800 tracking-tight">0</h3>
-                        <p class="text-[11px] text-rose-600 font-bold mt-1 flex items-center gap-1">
-                            <i class="fa-solid fa-circle-xmark text-[10px]"></i> Tidak ada stok (SOH 0)
+                        <h3 id="kpi-stockout" class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight">0</h3>
+                        <p class="text-[10px] text-rose-600 font-bold mt-1 flex items-center gap-1">
+                            <i class="fa-solid fa-circle-xmark text-[9px]"></i> Stok habis (SOH 0)
                         </p>
                     </div>
                 </div>
@@ -419,7 +426,7 @@
                     </div>
                 </div>
 
-                <!-- Valuation Card (Glowing Gradient) -->
+                <!-- Valuation Card -->
                 <div class="bg-gradient-to-br from-indigo-600 via-indigo-700 to-blue-800 text-white p-6 rounded-2xl border border-indigo-400/30 shadow-xl shadow-indigo-500/20 flex flex-col justify-between relative overflow-hidden">
                     <div class="absolute -right-8 -bottom-8 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
                     <div class="flex justify-between items-center relative z-10">
@@ -517,7 +524,6 @@
         const pageSize = 50;
         let searchTimeout = null;
 
-        // User Access Storage
         let allowedUsers = JSON.parse(localStorage.getItem('backlog_users')) || [
             { username: 'admin', password: 'admin123', role: 'Maintenance Administrator' }
         ];
@@ -738,6 +744,7 @@
             let totalAmount = 0;
             let stockOutCount = 0;
             let availableCount = 0;
+            let readyExecuteCount = 0;
             const moSet = new Set();
 
             filteredDataCache.forEach(row => {
@@ -748,6 +755,7 @@
                 totalAmount += amount;
                 if (stock > 0) {
                     availableCount++;
+                    readyExecuteCount++; // Item siap eksekusi karena part-nya sudah komplit/tersedia
                 } else {
                     stockOutCount++;
                 }
@@ -760,6 +768,7 @@
             document.getElementById('kpi-total').innerText = filteredDataCache.length.toLocaleString('id-ID');
             document.getElementById('kpi-mo').innerText = moSet.size.toLocaleString('id-ID');
             document.getElementById('kpi-stockout').innerText = stockOutCount.toLocaleString('id-ID');
+            document.getElementById('kpi-ready').innerText = readyExecuteCount.toLocaleString('id-ID');
 
             const execCost = document.getElementById('exec-cost');
             if (execCost) execCost.innerText = formattedCost;
