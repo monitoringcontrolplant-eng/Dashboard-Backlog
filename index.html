@@ -728,12 +728,12 @@
 
                 let matchReadiness = true;
                 if (moReadiness === 'READY') {
-                    // Memastikan mendeteksi status ready secara fleksibel
-                    matchReadiness = valX.includes('READY') || valX.includes('RESIKO') || valX === 'R';
+                    // DIUBAH: Hanya menghitung yang persis berstatus "READY EKSEKUSI"
+                    matchReadiness = valX === 'READY EKSEKUSI';
                 } else if (moReadiness === 'CLOSE') {
                     matchReadiness = valX.includes('CLOSE') || valX.includes('CLSD') || valX.includes('TECO');
                 } else if (moReadiness === 'NOT_READY') {
-                    matchReadiness = !valX.includes('READY') && !valX.includes('CLOSE') && !valX.includes('CLSD') && !valX.includes('TECO');
+                    matchReadiness = valX !== 'READY EKSEKUSI' && !valX.includes('CLOSE') && !valX.includes('CLSD') && !valX.includes('TECO');
                 }
 
                 const matchUnit = selectedUnit === 'ALL' || rowUnit === selectedUnit;
@@ -774,7 +774,8 @@
                     totalMoSet.add(moColP);
 
                     const valX = getColumnXValue(row).toUpperCase().trim();
-                    if (valX.includes('READY')) {
+                    // DIUBAH: Menghitung Unique MO yang status kolom X-nya persis "READY EKSEKUSI"
+                    if (valX === 'READY EKSEKUSI') {
                         readyMoSet.add(moColP);
                     }
                 }
