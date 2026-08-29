@@ -323,8 +323,8 @@
                 </div>
             </div>
 
-            <!-- KPI Cards Section (6 Grid Termasuk MO Ready Eksekusi & Item Siap Eksekusi) -->
-            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+            <!-- KPI Cards Section (5 Grid setelah Part Ready dihapus) -->
+            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                 <!-- 1. Total MO -->
                 <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36">
                     <div class="flex justify-between items-center">
@@ -339,7 +339,7 @@
                     </div>
                 </div>
 
-                <!-- 2. MO Ready Eksekusi (Baru) -->
+                <!-- 2. MO Ready Eksekusi -->
                 <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 border-l-4 border-l-indigo-500">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-700">MO Ready</span>
@@ -369,23 +369,7 @@
                     </div>
                 </div>
 
-                <!-- 4. Total Item Siap Eksekusi -->
-                <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 border-l-4 border-l-emerald-500">
-                    <div class="flex justify-between items-center">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Part Ready</span>
-                        <div class="w-8 h-8 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600 text-xs">
-                            <i class="fa-solid fa-circle-play"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 id="kpi-ready" class="text-2xl sm:text-3xl font-extrabold text-emerald-600 tracking-tight">0</h3>
-                        <p class="text-[10px] text-emerald-600 font-bold mt-1 flex items-center gap-1">
-                            <i class="fa-solid fa-wrench text-[9px]"></i> Stok part tersedia
-                        </p>
-                    </div>
-                </div>
-
-                <!-- 5. Available Parts -->
+                <!-- 4. Available Parts (Akumulasi Jumlah Stok Fisik dari Kolom Stock) -->
                 <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Available Parts</span>
@@ -396,12 +380,12 @@
                     <div>
                         <h3 id="exec-safe" class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight">0</h3>
                         <p class="text-[10px] text-teal-600 font-bold mt-1 flex items-center gap-1">
-                            <i class="fa-solid fa-boxes-stacked text-[9px]"></i> Stok tersedia di gudang
+                            <i class="fa-solid fa-boxes-stacked text-[9px]"></i> Total kuantitas stok part
                         </p>
                     </div>
                 </div>
 
-                <!-- 6. Out of Stock -->
+                <!-- 5. Out of Stock -->
                 <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Out of Stock</span>
@@ -759,10 +743,9 @@
 
             let totalAmount = 0;
             let stockOutCount = 0;
-            let availableCount = 0;
-            let readyExecuteCount = 0;
+            let totalStockQuantity = 0; // Mengumpulkan kuantitas fisik stok
             const moSet = new Set();
-            const moStockMap = {}; // Untuk mengecek ketersediaan seluruh part per MO
+            const moStockMap = {}; 
 
             filteredDataCache.forEach(row => {
                 const amount = cleanNumber(getValue(row, 'Total Price')); 
@@ -770,10 +753,9 @@
                 const mo = getValue(row, 'MO').trim();
 
                 totalAmount += amount;
-                if (stock > 0) {
-                    availableCount++;
-                    readyExecuteCount++; // Item siap eksekusi karena part-nya sudah komplit/tersedia
-                } else {
+                totalStockQuantity += stock; // Menjumlahkan seluruh isi kolom Stock On Hand
+
+                if (stock <= 0) {
                     stockOutCount++;
                 }
 
@@ -797,12 +779,11 @@
 
             const formattedCost = 'Rp ' + totalAmount.toLocaleString('id-ID', {maximumFractionDigits: 0});
 
-            document.getElementById('exec-safe').innerText = availableCount.toLocaleString('id-ID');
+            document.getElementById('exec-safe').innerText = totalStockQuantity.toLocaleString('id-ID'); // Menampilkan total kuantitas stok
             document.getElementById('kpi-total').innerText = filteredDataCache.length.toLocaleString('id-ID');
             document.getElementById('kpi-mo').innerText = moSet.size.toLocaleString('id-ID');
             document.getElementById('kpi-mo-ready').innerText = moReadyCount.toLocaleString('id-ID');
             document.getElementById('kpi-stockout').innerText = stockOutCount.toLocaleString('id-ID');
-            document.getElementById('kpi-ready').innerText = readyExecuteCount.toLocaleString('id-ID');
 
             const execCost = document.getElementById('exec-cost');
             if (execCost) execCost.innerText = formattedCost;
