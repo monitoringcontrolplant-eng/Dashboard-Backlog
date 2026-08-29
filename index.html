@@ -61,6 +61,11 @@
         .glow-gold {
             filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.4));
         }
+
+        /* Transisi Sidebar Pop-up */
+        #sidebar-popup {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col justify-between">
@@ -226,6 +231,11 @@
     <!-- Top Header Bar -->
     <header class="bg-white border-b border-slate-200 text-slate-800 px-6 py-3 flex justify-between items-center z-20 shadow-sm">
         <div class="flex items-center space-x-3.5">
+            <!-- Tombol Toggle Pop-up Sidebar dengan Ikon Sliders/Filter yang Modern -->
+            <button onclick="toggleSidebarPopup()" class="text-indigo-600 hover:text-indigo-700 p-2 rounded-xl bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition shadow-sm" title="Buka/Tutup Menu Filter">
+                <i class="fa-solid fa-sliders text-sm"></i>
+            </button>
+
             <img src="BSS_logo.jpg" alt="Logo" class="h-7 w-auto" onerror="this.src='https://via.placeholder.com/100x30?text=BSS'">
             <div>
                 <span class="font-extrabold text-sm tracking-wide text-slate-900 block">BACKLOG MANAGEMENT</span>
@@ -254,11 +264,23 @@
         </div>
     </header>
 
-    <div class="flex flex-1 overflow-hidden">
+    <div class="flex flex-1 overflow-hidden relative">
         
-        <!-- Sidebar Navigation -->
-        <aside class="w-64 bg-white text-slate-600 p-4 hidden md:flex flex-col justify-between border-r border-slate-200 shrink-0">
+        <!-- Backdrop Gelap saat Sidebar Pop-up Terbuka -->
+        <div id="sidebar-backdrop" onclick="toggleSidebarPopup()" class="fixed inset-0 bg-slate-900/30 backdrop-blur-xs z-30 hidden transition-opacity"></div>
+
+        <!-- Sidebar Navigation (Model Pop-up Drawer dari Kiri) -->
+        <aside id="sidebar-popup" class="fixed inset-y-0 left-0 z-40 w-72 bg-white text-slate-600 p-5 flex flex-col justify-between border-r border-slate-200 shadow-2xl -translate-x-full">
             <div class="space-y-5">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-indigo-600 flex items-center gap-2">
+                        <i class="fa-solid fa-sliders"></i> Filter & Navigasi
+                    </h3>
+                    <button onclick="toggleSidebarPopup()" class="text-slate-400 hover:text-slate-600 text-sm p-1">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
                 <div class="relative">
                     <input type="text" id="filter-search" placeholder="Cari Part / MO / Desc..." class="w-full bg-slate-50 border border-slate-200 text-xs text-slate-800 placeholder-slate-400 rounded-xl py-2.5 pl-3.5 pr-9 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition shadow-inner">
                     <i class="fa-solid fa-magnifying-glass absolute right-3 top-3 text-slate-400 text-xs"></i>
@@ -322,9 +344,8 @@
                 </div>
             </div>
 
-            <!-- KPI Cards Section (Dibuat 6 Kolom agar Card MO Ready, Not Ready, dan Close tampil berdampingan) -->
+            <!-- KPI Cards Section (6 Kolom) -->
             <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
-                <!-- 1. Total MO Unik -->
                 <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 cursor-pointer" onclick="resetMOFilter()">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Total Unique MO</span>
@@ -338,7 +359,6 @@
                     </div>
                 </div>
 
-                <!-- 2. MO Ready Eksekusi -->
                 <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 border-l-4 border-l-emerald-500 cursor-pointer hover:bg-emerald-50/30 transition" onclick="filterByReadiness('READY')" title="Klik untuk filter Ready Eksekusi">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700">MO Ready</span>
@@ -352,7 +372,6 @@
                     </div>
                 </div>
 
-                <!-- 3. MO Not Ready -->
                 <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 border-l-4 border-l-amber-500 cursor-pointer hover:bg-amber-50/30 transition" onclick="filterByReadiness('NOT_READY')" title="Klik untuk filter Not Ready">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-amber-700">MO Not Ready</span>
@@ -366,7 +385,6 @@
                     </div>
                 </div>
 
-                <!-- 4. MO Close -->
                 <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 border-l-4 border-l-blue-500 cursor-pointer hover:bg-blue-50/30 transition" onclick="filterByReadiness('CLOSE')" title="Klik untuk filter Close">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-blue-700">MO Close</span>
@@ -380,7 +398,6 @@
                     </div>
                 </div>
 
-                <!-- 5. Available Parts -->
                 <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Available Parts</span>
@@ -394,7 +411,6 @@
                     </div>
                 </div>
 
-                <!-- 6. Out of Stock -->
                 <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Out of Stock</span>
@@ -540,6 +556,20 @@
         let allowedUsers = JSON.parse(localStorage.getItem('backlog_users')) || [
             { username: 'admin', password: 'admin123', role: 'Maintenance Administrator' }
         ];
+
+        // Fungsi Toggle Pop-up Drawer Sidebar
+        function toggleSidebarPopup() {
+            const sidebar = document.getElementById('sidebar-popup');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                backdrop.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                backdrop.classList.add('hidden');
+            }
+        }
 
         function handleLogin(e) {
             e.preventDefault();
