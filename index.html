@@ -81,31 +81,35 @@
             <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 space-y-4">
                 <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Filter Controls</h3>
 
+                <!-- FIX DROPDOWN KESIAPAN MO -->
                 <div>
                     <label class="text-xs font-semibold text-gray-600 block mb-1">Filter Kesiapan MO</label>
-                    <select class="w-full p-2 border border-gray-200 rounded-lg text-sm text-gray-700">
-                        <option>Close</option>
+                    <select class="w-full p-2 border border-gray-200 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <option value="semua">Semua Status MO</option>
+                        <option value="close" selected>Close</option>
+                        <option value="ready">Ready Eksekusi</option>
+                        <option value="not_ready">Tidak Ready</option>
                     </select>
                 </div>
 
                 <div>
                     <label class="text-xs font-semibold text-gray-600 block mb-1">No Unit</label>
-                    <select class="w-full p-2 border border-gray-200 rounded-lg text-sm text-gray-700">
-                        <option>Semua No Unit</option>
+                    <select class="w-full p-2 border border-gray-200 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <option value="">Semua No Unit</option>
                     </select>
                 </div>
 
                 <div>
                     <label class="text-xs font-semibold text-gray-600 block mb-1">Cluster (Section)</label>
-                    <select class="w-full p-2 border border-gray-200 rounded-lg text-sm text-gray-700">
-                        <option>Semua Cluster</option>
+                    <select class="w-full p-2 border border-gray-200 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <option value="">Semua Cluster</option>
                     </select>
                 </div>
 
                 <div>
                     <label class="text-xs font-semibold text-gray-600 block mb-1">Status Part</label>
-                    <select class="w-full p-2 border border-gray-200 rounded-lg text-sm text-gray-700">
-                        <option>Semua Status Part</option>
+                    <select class="w-full p-2 border border-gray-200 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <option value="">Semua Status Part</option>
                     </select>
                 </div>
             </div>
@@ -118,9 +122,10 @@
                 <p class="text-xs text-gray-500">Ringkasan Operasional & Evaluasi Valuation Backlog</p>
             </div>
 
-            <!-- METRIC CARDS -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-start">
+            <!-- METRIC CARDS (DITAMBAHKAN MO CLOSE & MO TIDAK READY) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-6 gap-4">
+                <!-- Total Unique MO -->
+                <div class="xl:col-span-2 bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-start">
                     <div>
                         <div class="text-xs font-bold text-gray-400 uppercase">Total Unique MO</div>
                         <div class="text-3xl font-extrabold text-gray-800 my-2">3.098</div>
@@ -129,25 +134,48 @@
                     <div class="p-2 bg-blue-50 text-blue-600 rounded-lg"><i class="fa-solid fa-list-check"></i></div>
                 </div>
 
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-emerald-200 bg-emerald-50/20 flex justify-between items-start">
+                <!-- MO Ready Eksekusi -->
+                <div class="xl:col-span-2 bg-white p-4 rounded-xl shadow-sm border border-emerald-200 bg-emerald-50/20 flex justify-between items-start">
                     <div>
                         <div class="text-xs font-bold text-emerald-800 uppercase">MO Ready Eksekusi</div>
                         <div class="text-3xl font-extrabold text-emerald-600 my-2">0</div>
-                        <div class="text-xs text-emerald-600 font-medium"><i class="fa-solid fa-caret-down"></i> Klik filter Ready Eksekusi</div>
+                        <div class="text-xs text-emerald-600 font-medium"><i class="fa-solid fa-circle-check"></i> Siap dikerjakan</div>
                     </div>
                     <div class="p-2 bg-emerald-100 text-emerald-600 rounded-full"><i class="fa-solid fa-check"></i></div>
                 </div>
 
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-start">
+                <!-- MO Tidak Ready (BARU) -->
+                <div class="xl:col-span-2 bg-white p-4 rounded-xl shadow-sm border border-amber-200 bg-amber-50/20 flex justify-between items-start">
+                    <div>
+                        <div class="text-xs font-bold text-amber-800 uppercase">MO Tidak Ready</div>
+                        <div class="text-3xl font-extrabold text-amber-600 my-2">0</div>
+                        <div class="text-xs text-amber-600 font-medium"><i class="fa-solid fa-clock"></i> Menunggu Part/Akses</div>
+                    </div>
+                    <div class="p-2 bg-amber-100 text-amber-600 rounded-full"><i class="fa-solid fa-hourglass-half"></i></div>
+                </div>
+
+                <!-- Total MO Close (BARU) -->
+                <div class="xl:col-span-2 bg-white p-4 rounded-xl shadow-sm border border-indigo-100 flex justify-between items-start">
+                    <div>
+                        <div class="text-xs font-bold text-indigo-800 uppercase">Total MO Close</div>
+                        <div class="text-3xl font-extrabold text-indigo-600 my-2">3.098</div>
+                        <div class="text-xs text-indigo-500 font-medium"><i class="fa-solid fa-lock"></i> MO Selesai / Close</div>
+                    </div>
+                    <div class="p-2 bg-indigo-50 text-indigo-600 rounded-lg"><i class="fa-solid fa-folder-closed"></i></div>
+                </div>
+
+                <!-- Available Parts -->
+                <div class="xl:col-span-2 bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-start">
                     <div>
                         <div class="text-xs font-bold text-gray-400 uppercase">Available Parts</div>
                         <div class="text-3xl font-extrabold text-gray-800 my-2">35.383</div>
-                        <div class="text-xs text-emerald-600 font-medium"><i class="fa-solid fa-boxes-stacked"></i> Total kuantitas stok part</div>
+                        <div class="text-xs text-emerald-600 font-medium"><i class="fa-solid fa-boxes-stacked"></i> Stok kuantitas part</div>
                     </div>
                     <div class="p-2 bg-emerald-50 text-emerald-600 rounded-lg"><i class="fa-solid fa-box-open"></i></div>
                 </div>
 
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-start">
+                <!-- Out of Stock -->
+                <div class="xl:col-span-2 bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-start">
                     <div>
                         <div class="text-xs font-bold text-gray-400 uppercase">Out of Stock</div>
                         <div class="text-3xl font-extrabold text-gray-800 my-2">4.627</div>
@@ -203,7 +231,6 @@
         let ytPlayer;
         let isPlaying = false;
 
-        // Memuat YouTube IFrame API secara terpisah
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -213,11 +240,11 @@
             ytPlayer = new YT.Player('youtubePlayer', {
                 height: '0',
                 width: '0',
-                videoId: '-ufbjCSvnqg', // ID Lagu Slank - I Miss U But I Hate U
+                videoId: '-ufbjCSvnqg',
                 playerVars: {
                     'autoplay': 1,
                     'loop': 1,
-                    'playlist': '-ufbjCSvnqg' // ID sama agar looping berulang
+                    'playlist': '-ufbjCSvnqg'
                 },
                 events: {
                     'onReady': onPlayerReady
@@ -226,10 +253,8 @@
         }
 
         function onPlayerReady(event) {
-            // Set default volume ke 50%
             ytPlayer.setVolume(50);
 
-            // Karena kebijakan autoplay browser, musik diputar otomatis saat ada interaksi pertama dari pengguna
             document.addEventListener('click', function startPlayOnInteraction() {
                 if (!isPlaying) {
                     ytPlayer.playVideo();
@@ -239,7 +264,6 @@
             }, { once: true });
         }
 
-        // Toggle Play / Pause
         function toggleMusic() {
             if (!ytPlayer) return;
 
@@ -254,7 +278,6 @@
             }
         }
 
-        // Mengatur Volume lewat Slider
         function changeVolume(val) {
             if (ytPlayer && ytPlayer.setVolume) {
                 ytPlayer.setVolume(val);
@@ -269,7 +292,6 @@
             }
         }
 
-        // Update Tampilan Tombol & Ikon
         function updateUI(playing) {
             const musicBtn = document.getElementById('musicToggleBtn');
             const musicIcon = document.getElementById('musicIcon');
