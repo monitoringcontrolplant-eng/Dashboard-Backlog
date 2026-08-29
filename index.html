@@ -805,7 +805,10 @@
 
             document.getElementById('exec-safe').innerText = totalStockQuantity.toLocaleString('id-ID');
             document.getElementById('kpi-mo').innerText = moTotalSet.size.toLocaleString('id-ID');
+            
+            // PERBAIKAN: Menggunakan ukuran Set (moReadySet.size) agar menghitung MO unik secara akurat
             document.getElementById('kpi-mo-ready').innerText = moReadySet.size.toLocaleString('id-ID');
+            
             document.getElementById('kpi-stockout').innerText = stockOutCount.toLocaleString('id-ID');
 
             const activeBadge = document.getElementById('active-filter-badge');
