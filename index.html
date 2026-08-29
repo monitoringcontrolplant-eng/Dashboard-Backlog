@@ -485,6 +485,7 @@
                                 <th class="px-4 py-3.5">Status MO (Desc)</th>
                                 <th class="px-4 py-3.5">Part Number</th>
                                 <th class="px-4 py-3.5">Description Part</th>
+                                <th class="px-3 py-3.5 text-center">Qty Res</th>
                                 <th class="px-3 py-3.5 text-center">Stock</th>
                                 <th class="px-4 py-3.5 text-right">Total Price</th>
                                 <th class="px-4 py-3.5 text-center">Status Part (W)</th>
@@ -928,7 +929,7 @@
             document.getElementById('table-count-info').innerText = `Menampilkan ${total.toLocaleString('id-ID')} data backlog`;
 
             if (total === 0) {
-                tbody.innerHTML = `<tr><td colspan="11" class="text-center py-12 text-slate-400 font-medium">Tidak ada data backlog.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="12" class="text-center py-12 text-slate-400 font-medium">Tidak ada data backlog.</td></tr>`;
                 updatePaginationControls(0);
                 return;
             }
@@ -965,6 +966,7 @@
                 const statusMO = getColumnXValue(row) || '-';
                 let moBadge = 'bg-indigo-50 text-indigo-700 border border-indigo-200';
 
+                const qtyRes = getValue(row, 'Qty Res') || getValue(row, 'Qty Res.') || getValue(row, 'Qty Resv') || '0';
                 const stock = cleanNumber(getValue(row, 'Stock On Hand'));
                 const amount = cleanNumber(getValue(row, 'Total Price'));
 
@@ -976,6 +978,7 @@
                     <td class="px-4 py-3 text-slate-600 max-w-[180px] truncate">${getValue(row, 'Maint. Order Desc.') || '-'}</td>
                     <td class="px-4 py-3 font-mono text-slate-700">${getValue(row, 'Part Number') || '-'}</td>
                     <td class="px-4 py-3 font-medium text-slate-800 max-w-[200px] truncate">${getValue(row, 'Description') || '-'}</td>
+                    <td class="px-3 py-3 text-center font-bold text-slate-700 bg-slate-50/50">${qtyRes}</td>
                     <td class="px-3 py-3 text-center font-bold ${stock === 0 ? 'text-rose-600 bg-rose-50 rounded-lg border border-rose-100' : 'text-slate-700'}">${getValue(row, 'Stock On Hand') || '0'}</td>
                     <td class="px-4 py-3 text-right font-extrabold text-slate-900">Rp ${amount.toLocaleString('id-ID')}</td>
                     <td class="px-4 py-3 text-center"><span class="px-2.5 py-1 text-[10px] font-bold rounded-lg ${partBadge}">${statusPart}</span></td>
@@ -1020,10 +1023,11 @@
         function exportTableToCSV() {
             if (filteredDataCache.length === 0) return;
 
-            let csvContent = "No Unit,Section,MO,Status Ready,Maint. Order Desc,Part Number,Description,Stock On Hand,Total Price,Status Part,Status MO\n";
+            let csvContent = "No Unit,Section,MO,Status Ready,Maint. Order Desc,Part Number,Description,Qty Res,Stock On Hand,Total Price,Status Part,Status MO\n";
             filteredDataCache.forEach(row => {
                 const moNo = getValue(row, 'MO').trim();
                 const isReadyStr = readyMOList.has(moNo) ? 'READY' : 'PENDING PART';
+                const qtyResVal = getValue(row, 'Qty Res') || getValue(row, 'Qty Res.') || getValue(row, 'Qty Resv') || '0';
 
                 const line = [
                     `"${getValue(row, 'No Unit')}"`,
@@ -1033,6 +1037,7 @@
                     `"${getValue(row, 'Maint. Order Desc.')}"`,
                     `"${getValue(row, 'Part Number')}"`,
                     `"${getValue(row, 'Description')}"`,
+                    `"${qtyResVal}"`,
                     `"${getValue(row, 'Stock On Hand')}"`,
                     `"${getValue(row, 'Total Price')}"`,
                     `"${getColumnWValue(row)}"`,
