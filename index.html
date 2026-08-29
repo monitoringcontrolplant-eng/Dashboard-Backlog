@@ -15,9 +15,6 @@
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f4f6f9;
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background-color: #f8fafc;
@@ -66,24 +63,8 @@
         }
     </style>
 </head>
-<body class="p-6">
 <body class="antialiased min-h-screen flex flex-col justify-between">
 
-    <!-- HEADER / NAVBAR -->
-    <header class="flex flex-wrap justify-between items-center mb-6 bg-white p-4 rounded-xl shadow-sm gap-4">
-        <div class="flex items-center space-x-3">
-            <span class="text-red-600 font-extrabold text-2xl tracking-wider">BSS</span>
-            <div>
-                <h1 class="font-bold text-gray-800 text-lg leading-none">BACKLOG MANAGEMENT</h1>
-                <p class="text-xs text-indigo-600 font-medium">Monitoring Control Plant & Maintenance</p>
-            </div>
-        </div>
-
-        <div class="flex items-center space-x-3">
-            <!-- WIDGET MUSIK YOUTUBE WITH VOLUME CONTROL -->
-            <div class="flex items-center bg-indigo-50 px-3 py-1.5 rounded-full border border-indigo-100 space-x-3 shadow-sm">
-                <i id="musicNoteIcon" class="fa-solid fa-music font-bold text-indigo-600 text-sm animate-bounce"></i>
-                <span class="text-xs font-semibold text-indigo-700 hidden md:inline">Slank - I Miss U</span>
     <!-- Modal Login Full Screen -->
     <div id="login-modal" class="fixed inset-0 z-50 flex bg-slate-50 text-slate-800 overflow-y-auto">
         <div class="min-h-screen w-full flex flex-col lg:flex-row">
@@ -92,79 +73,66 @@
                 <div class="absolute -top-24 -left-24 w-96 h-96 bg-white/20 rounded-full blur-3xl pointer-events-none"></div>
                 <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-blue-400/30 rounded-full blur-3xl pointer-events-none"></div>
 
-                <!-- Tombol Play/Pause -->
-                <button id="musicToggleBtn" onclick="toggleMusic()" class="bg-indigo-600 text-white text-xs px-3 py-1 rounded-full font-medium hover:bg-indigo-700 transition flex items-center space-x-1">
-                    <i id="musicIcon" class="fa-solid fa-pause"></i>
-                    <span id="musicText">Pause</span>
-                </button>
-                <div class="relative z-10 space-y-8 max-w-2xl">
+                <div class="flex items-center justify-between relative z-10">
                     <div class="flex items-center space-x-3 bg-white/10 backdrop-blur-md px-4 py-2.5 rounded-2xl w-fit border border-white/20 shadow-lg">
                         <img src="BSS_logo.jpg" alt="BSS Logo" class="h-9 w-auto glow-gold" onerror="this.src='https://via.placeholder.com/120x40?text=BSS+LOGO'">
                         <div>
                             <span class="text-[10px] font-bold tracking-widest uppercase text-amber-300 block">2026</span>
-                            <span class="text-sm font-extrabold text-white tracking-wide">PT.BINA SARANA SUKSES</span>
+                            <span class="text-sm font-extrabold text-white tracking-wide">PT. BINA SARANA SUKSES</span>
                         </div>
                     </div>
 
-                <!-- Slider Volume -->
-                <div class="flex items-center space-x-1 pl-1 border-l border-indigo-200">
-                    <i id="volumeIcon" class="fa-solid fa-volume-high text-xs text-indigo-600"></i>
-                    <input type="range" id="volumeSlider" min="0" max="100" value="50" oninput="changeVolume(this.value)" class="w-16 h-1 bg-indigo-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+                    <!-- WIDGET MUSIK YOUTUBE WITH VOLUME CONTROL -->
+                    <div class="flex items-center bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20 space-x-3 shadow-sm">
+                        <i id="musicNoteIcon" class="fa-solid fa-music font-bold text-amber-300 text-sm animate-bounce"></i>
+                        <span class="text-xs font-semibold text-white hidden md:inline">Slank - I Miss U</span>
+                        
+                        <!-- Tombol Play/Pause -->
+                        <button id="musicToggleBtn" onclick="toggleMusic()" class="bg-indigo-600 text-white text-xs px-3 py-1 rounded-full font-medium hover:bg-indigo-700 transition flex items-center space-x-1">
+                            <i id="musicIcon" class="fa-solid fa-pause"></i>
+                            <span id="musicText">Pause</span>
+                        </button>
+
+                        <!-- Slider Volume -->
+                        <div class="flex items-center space-x-1 pl-1 border-l border-white/20">
+                            <i id="volumeIcon" class="fa-solid fa-volume-high text-xs text-white"></i>
+                            <input type="range" id="volumeSlider" min="0" max="100" value="50" oninput="changeVolume(this.value)" class="w-16 h-1 bg-white/30 rounded-lg appearance-none cursor-pointer accent-amber-300">
+                        </div>
+                    </div>
                 </div>
-            </div>
-                    <div class="space-y-4 pt-2">
-                        <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight drop-shadow-sm">
-                            Manage backlog items, unit availability, parts & maintenance reports in one platform.
-                        </h1>
-                        <p class="text-indigo-100 text-sm sm:text-base leading-relaxed">
-                            <strong class="text-amber-300 font-bold">Backlog Management</strong> membantu tim maintenance memantau status Maintenance Order (MO), ketersediaan stok spare part, valuasi total biaya backlog, serta analisis performa unit secara real-time, cepat, dan terukur.
-                        </p>
+
+                <div class="space-y-4 pt-8 relative z-10">
+                    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight drop-shadow-sm">
+                        Manage backlog items, unit availability, parts & maintenance reports in one platform.
+                    </h1>
+                    <p class="text-indigo-100 text-sm sm:text-base leading-relaxed">
+                        <strong class="text-amber-300 font-bold">Backlog Management</strong> membantu tim maintenance memantau status Maintenance Order (MO), ketersediaan stok spare part, valuasi total biaya backlog, serta analisis performa unit secara real-time, cepat, dan terukur.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 relative z-10">
+                    <div class="bg-white/10 border border-white/20 p-4 rounded-2xl backdrop-blur-md shadow-lg">
+                        <div class="w-9 h-9 rounded-xl bg-white/20 text-white flex items-center justify-center mb-3 shadow-inner">
+                            <i class="fa-solid fa-truck-monster text-sm"></i>
+                        </div>
+                        <h4 class="text-xs font-bold text-white mb-1">Unit & Cluster Control</h4>
+                        <p class="text-[11px] text-indigo-100 leading-snug">Pantau backlog berdasarkan No Unit dan sebaran Cluster (Section) operasional.</p>
                     </div>
 
-            <!-- Tombol Kelola Akses & Refresh -->
-            <button class="bg-indigo-50 text-indigo-600 text-sm px-4 py-2 rounded-lg font-medium hover:bg-indigo-100">
-                <i class="fa-solid fa-user-gear mr-1"></i> Kelola Akses
-            </button>
-            <button class="bg-indigo-50 text-indigo-600 text-sm px-4 py-2 rounded-lg font-medium hover:bg-indigo-100">
-                <i class="fa-solid fa-rotate mr-1"></i> Refresh
-            </button>
-                    <div class="flex items-center space-x-3 pt-2">
-                        <a href="#login-username" class="bg-amber-400 hover:bg-amber-300 text-slate-900 font-extrabold text-xs px-6 py-3.5 rounded-xl transition flex items-center gap-2 shadow-xl shadow-amber-500/30 transform hover:-translate-y-0.5">
-                            <i class="fa-solid fa-rocket"></i> Let's Start
-                        </a>
-                        <span class="text-xs text-indigo-100 font-medium">Tap untuk langsung ke form login.</span>
+                    <div class="bg-white/10 border border-white/20 p-4 rounded-2xl backdrop-blur-md shadow-lg">
+                        <div class="w-9 h-9 rounded-xl bg-emerald-400/30 text-emerald-200 flex items-center justify-center mb-3 shadow-inner">
+                            <i class="fa-solid fa-boxes-stacked text-sm"></i>
+                        </div>
+                        <h4 class="text-xs font-bold text-white mb-1">Part Stock Monitoring</h4>
+                        <p class="text-[11px] text-indigo-100 leading-snug">Identifikasi ketersediaan spare part di gudang serta peringatan Out of Stock.</p>
                     </div>
 
-            <!-- Profile Admin -->
-            <div class="flex items-center space-x-2 pl-2 border-l border-gray-200">
-                <div class="w-9 h-9 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">A</div>
-                <div class="hidden sm:block">
-                    <div class="text-sm font-bold text-gray-800 leading-none">admin</div>
-                    <div class="text-xs text-gray-500">Maintenance Administrator</div>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
-                        <div class="bg-white/10 border border-white/20 p-4 rounded-2xl backdrop-blur-md shadow-lg">
-                            <div class="w-9 h-9 rounded-xl bg-white/20 text-white flex items-center justify-center mb-3 shadow-inner">
-                                <i class="fa-solid fa-truck-monster text-sm"></i>
-                            </div>
-                            <h4 class="text-xs font-bold text-white mb-1">Unit & Cluster Control</h4>
-                            <p class="text-[11px] text-indigo-100 leading-snug">Pantau backlog berdasarkan No Unit dan sebaran Cluster (Section) operasional.</p>
+                    <div class="bg-white/10 border border-white/20 p-4 rounded-2xl backdrop-blur-md shadow-lg">
+                        <div class="w-9 h-9 rounded-xl bg-amber-400/30 text-amber-200 flex items-center justify-center mb-3 shadow-inner">
+                            <i class="fa-solid fa-file-invoice-dollar text-sm"></i>
                         </div>
-
-                        <div class="bg-white/10 border border-white/20 p-4 rounded-2xl backdrop-blur-md shadow-lg">
-                            <div class="w-9 h-9 rounded-xl bg-emerald-400/30 text-emerald-200 flex items-center justify-center mb-3 shadow-inner">
-                                <i class="fa-solid fa-boxes-stacked text-sm"></i>
-                            </div>
-                            <h4 class="text-xs font-bold text-white mb-1">Part Stock Monitoring</h4>
-                            <p class="text-[11px] text-indigo-100 leading-snug">Identifikasi ketersediaan spare part di gudang serta peringatan Out of Stock.</p>
-                        </div>
-
-                        <div class="bg-white/10 border border-white/20 p-4 rounded-2xl backdrop-blur-md shadow-lg">
-                            <div class="w-9 h-9 rounded-xl bg-amber-400/30 text-amber-200 flex items-center justify-center mb-3 shadow-inner">
-                                <i class="fa-solid fa-file-invoice-dollar text-sm"></i>
-                            </div>
-                            <h4 class="text-xs font-bold text-white mb-1">Valuation & MO Workflow</h4>
-                            <p class="text-[11px] text-indigo-100 leading-snug">Kalkulasi otomatis total biaya backlog dan tracking status Work Order/MO.</p>
-                        </div>
+                        <h4 class="text-xs font-bold text-white mb-1">Valuation & MO Workflow</h4>
+                        <p class="text-[11px] text-indigo-100 leading-snug">Kalkulasi otomatis total biaya backlog dan tracking status Work Order/MO.</p>
                     </div>
                 </div>
 
@@ -172,12 +140,9 @@
                     Copyright © PT. Mitra Parama Gemilang - 2026 | MONRES System
                 </div>
             </div>
-        </div>
-    </header>
 
-    <!-- CONTENT LAYOUT -->
-    <div class="grid grid-cols-12 gap-6">
-            <div class="lg:w-5/12 p-8 lg:p-16 flex items-center justify-center bg-slate-50/80 border-t lg:border-t-0 lg:border-l border-slate-200">
+            <!-- Login Form Section -->
+            <div class="lg:w-5/12 p-8 lg:p-16 flex items-center justify-center bg-slate-50/80">
                 <div class="w-full max-w-sm space-y-6">
                     
                     <div class="text-center space-y-3">
@@ -190,12 +155,6 @@
                         <p class="text-xs text-slate-500">Sign in to access your Backlog Management dashboard.</p>
                     </div>
 
-        <!-- SIDEBAR FILTER -->
-        <aside class="col-span-12 lg:col-span-3 space-y-4">
-            <div class="relative">
-                <input type="text" placeholder="Cari Part / MO / Desc..." class="w-full pl-4 pr-10 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
-                <i class="fa-solid fa-magnifying-glass absolute right-3 top-3 text-gray-400"></i>
-            </div>
                     <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
                         <div>
                             <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">USER ID / USERNAME</label>
@@ -205,9 +164,6 @@
                             </div>
                         </div>
 
-            <div class="bg-indigo-600 text-white p-3 rounded-xl font-medium text-sm flex items-center shadow-md">
-                <i class="fa-solid fa-chart-pie mr-2"></i> Dashboard Executive
-            </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">PASSWORD</label>
                             <div class="relative">
@@ -216,8 +172,6 @@
                             </div>
                         </div>
 
-            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 space-y-4">
-                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Filter Controls</h3>
                         <div id="login-error" class="text-xs text-rose-600 hidden text-center bg-rose-50 border border-rose-200 py-2.5 rounded-xl font-medium">
                             <i class="fa-solid fa-circle-exclamation mr-1"></i> Username atau password salah!
                         </div>
@@ -240,18 +194,9 @@
                     </div>
 
                     <div class="text-center text-[11px] text-slate-400">
-                        Default Login: <code class="text-indigo-600 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-md font-semibold">NIK</code> / <code class="text-indigo-600 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-md font-semibold">Username</code>
+                        Default Login: <code class="text-indigo-600 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-md font-semibold">admin</code> / <code class="text-indigo-600 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-md font-semibold">admin123</code>
                     </div>
 
-                <!-- FIX DROPDOWN KESIAPAN MO -->
-                <div>
-                    <label class="text-xs font-semibold text-gray-600 block mb-1">Filter Kesiapan MO</label>
-                    <select class="w-full p-2 border border-gray-200 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                        <option value="semua">Semua Status MO</option>
-                        <option value="close" selected>Close</option>
-                        <option value="ready">Ready Eksekusi</option>
-                        <option value="not_ready">Tidak Ready</option>
-                    </select>
                 </div>
             </div>
 
@@ -281,10 +226,6 @@
                     </div>
                 </div>
                 <div>
-                    <label class="text-xs font-semibold text-gray-600 block mb-1">No Unit</label>
-                    <select class="w-full p-2 border border-gray-200 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                        <option value="">Semua No Unit</option>
-                    </select>
                     <label class="block text-[10px] font-semibold text-slate-500 mb-1">Password</label>
                     <input type="password" id="new-password" required placeholder="Password Akses" class="w-full bg-white border border-slate-300 text-xs text-slate-800 rounded-lg p-2 focus:outline-none focus:border-indigo-600">
                 </div>
@@ -293,11 +234,6 @@
                 </button>
             </form>
 
-                <div>
-                    <label class="text-xs font-semibold text-gray-600 block mb-1">Cluster (Section)</label>
-                    <select class="w-full p-2 border border-gray-200 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                        <option value="">Semua Cluster</option>
-                    </select>
             <div>
                 <p class="text-xs font-bold text-slate-700 mb-2">Daftar Pengguna Memiliki Akses</p>
                 <div class="max-h-40 overflow-y-auto space-y-1.5 pr-1" id="user-list"></div>
@@ -336,11 +272,6 @@
         </div>
     </header>
 
-                <div>
-                    <label class="text-xs font-semibold text-gray-600 block mb-1">Status Part</label>
-                    <select class="w-full p-2 border border-gray-200 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                        <option value="">Semua Status Part</option>
-                    </select>
     <div class="flex flex-1 overflow-hidden">
         
         <!-- Sidebar Navigation -->
@@ -361,7 +292,6 @@
                     </div>
 
                     <div class="space-y-3 px-1">
-                        <!-- Filter Kesiapan MO (3 Pilihan) -->
                         <div>
                             <label class="block text-[11px] font-bold text-slate-600 mb-1.5">Filter Kesiapan MO</label>
                             <select id="filter-mo-readiness" class="w-full bg-slate-50 border border-slate-200 text-xs text-slate-700 rounded-xl p-2.5 focus:outline-none focus:border-indigo-600 transition font-bold text-indigo-600">
@@ -400,11 +330,6 @@
             </div>
         </aside>
 
-        <!-- MAIN EXECUTIVE DASHBOARD -->
-        <main class="col-span-12 lg:col-span-9 space-y-6">
-            <div>
-                <h2 class="text-xl font-bold text-gray-800">Executive Dashboard</h2>
-                <p class="text-xs text-gray-500">Ringkasan Operasional & Evaluasi Valuation Backlog</p>
         <!-- Main Content Area -->
         <main class="flex-1 main-bg p-5 sm:p-7 overflow-y-auto space-y-6">
 
@@ -415,10 +340,6 @@
                 </div>
             </div>
 
-            <!-- METRIC CARDS (DITAMBAHKAN MO CLOSE & MO TIDAK READY) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-6 gap-4">
-                <!-- Total Unique MO -->
-                <div class="xl:col-span-2 bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-start">
             <!-- KPI Cards Section -->
             <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <!-- 1. Total MO Unik -->
@@ -430,17 +351,11 @@
                         </div>
                     </div>
                     <div>
-                        <div class="text-xs font-bold text-gray-400 uppercase">Total Unique MO</div>
-                        <div class="text-3xl font-extrabold text-gray-800 my-2">3.098</div>
-                        <div class="text-xs text-gray-400">Total nomor MO unik</div>
                         <h3 id="kpi-mo" class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight">0</h3>
                         <p class="text-[10px] text-slate-500 font-semibold mt-1">Total nomor MO unik</p>
                     </div>
-                    <div class="p-2 bg-blue-50 text-blue-600 rounded-lg"><i class="fa-solid fa-list-check"></i></div>
                 </div>
 
-                <!-- MO Ready Eksekusi -->
-                <div class="xl:col-span-2 bg-white p-4 rounded-xl shadow-sm border border-emerald-200 bg-emerald-50/20 flex justify-between items-start">
                 <!-- 2. MO Ready Eksekusi Unik -->
                 <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 border-l-4 border-l-emerald-500 cursor-pointer hover:bg-emerald-50/30 transition" onclick="filterByReadyMO()" title="Klik untuk filter Ready Eksekusi">
                     <div class="flex justify-between items-center">
@@ -450,19 +365,13 @@
                         </div>
                     </div>
                     <div>
-                        <div class="text-xs font-bold text-emerald-800 uppercase">MO Ready Eksekusi</div>
-                        <div class="text-3xl font-extrabold text-emerald-600 my-2">0</div>
-                        <div class="text-xs text-emerald-600 font-medium"><i class="fa-solid fa-circle-check"></i> Siap dikerjakan</div>
                         <h3 id="kpi-mo-ready" class="text-2xl sm:text-3xl font-extrabold text-emerald-600 tracking-tight">0</h3>
                         <p class="text-[10px] text-emerald-600 font-bold mt-1 flex items-center gap-1">
                             <i class="fa-solid fa-filter text-[9px]"></i> Klik filter Ready Eksekusi
                         </p>
                     </div>
-                    <div class="p-2 bg-emerald-100 text-emerald-600 rounded-full"><i class="fa-solid fa-check"></i></div>
                 </div>
 
-                <!-- MO Tidak Ready (BARU) -->
-                <div class="xl:col-span-2 bg-white p-4 rounded-xl shadow-sm border border-amber-200 bg-amber-50/20 flex justify-between items-start">
                 <!-- 3. Available Parts -->
                 <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36">
                     <div class="flex justify-between items-center">
@@ -472,19 +381,13 @@
                         </div>
                     </div>
                     <div>
-                        <div class="text-xs font-bold text-amber-800 uppercase">MO Tidak Ready</div>
-                        <div class="text-3xl font-extrabold text-amber-600 my-2">0</div>
-                        <div class="text-xs text-amber-600 font-medium"><i class="fa-solid fa-clock"></i> Menunggu Part/Akses</div>
                         <h3 id="exec-safe" class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight">0</h3>
                         <p class="text-[10px] text-teal-600 font-bold mt-1 flex items-center gap-1">
                             <i class="fa-solid fa-boxes-stacked text-[9px]"></i> Total kuantitas stok part
                         </p>
                     </div>
-                    <div class="p-2 bg-amber-100 text-amber-600 rounded-full"><i class="fa-solid fa-hourglass-half"></i></div>
                 </div>
 
-                <!-- Total MO Close (BARU) -->
-                <div class="xl:col-span-2 bg-white p-4 rounded-xl shadow-sm border border-indigo-100 flex justify-between items-start">
                 <!-- 4. Out of Stock -->
                 <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36">
                     <div class="flex justify-between items-center">
@@ -494,24 +397,14 @@
                         </div>
                     </div>
                     <div>
-                        <div class="text-xs font-bold text-indigo-800 uppercase">Total MO Close</div>
-                        <div class="text-3xl font-extrabold text-indigo-600 my-2">3.098</div>
-                        <div class="text-xs text-indigo-500 font-medium"><i class="fa-solid fa-lock"></i> MO Selesai / Close</div>
                         <h3 id="kpi-stockout" class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight">0</h3>
                         <p class="text-[10px] text-rose-600 font-bold mt-1 flex items-center gap-1">
                             <i class="fa-solid fa-circle-xmark text-[9px]"></i> Stok habis (SOH 0)
                         </p>
                     </div>
-                    <div class="p-2 bg-indigo-50 text-indigo-600 rounded-lg"><i class="fa-solid fa-folder-closed"></i></div>
                 </div>
             </section>
 
-                <!-- Available Parts -->
-                <div class="xl:col-span-2 bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-start">
-                    <div>
-                        <div class="text-xs font-bold text-gray-400 uppercase">Available Parts</div>
-                        <div class="text-3xl font-extrabold text-gray-800 my-2">35.383</div>
-                        <div class="text-xs text-emerald-600 font-medium"><i class="fa-solid fa-boxes-stacked"></i> Stok kuantitas part</div>
             <!-- Middle Section: Visual Charts & Valuation Card -->
             <section class="grid grid-cols-1 lg:grid-cols-3 gap-5">
                 <div class="light-card p-5 rounded-2xl flex flex-col justify-between">
@@ -523,15 +416,8 @@
                     <div class="relative h-60 w-full">
                         <canvas id="barChart"></canvas>
                     </div>
-                    <div class="p-2 bg-emerald-50 text-emerald-600 rounded-lg"><i class="fa-solid fa-box-open"></i></div>
                 </div>
 
-                <!-- Out of Stock -->
-                <div class="xl:col-span-2 bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-start">
-                    <div>
-                        <div class="text-xs font-bold text-gray-400 uppercase">Out of Stock</div>
-                        <div class="text-3xl font-extrabold text-gray-800 my-2">4.627</div>
-                        <div class="text-xs text-red-500 font-medium"><i class="fa-solid fa-circle-exclamation"></i> Stok habis (SOH 0)</div>
                 <div class="light-card p-5 rounded-2xl flex flex-col justify-between">
                     <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-100">
                         <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-700 flex items-center gap-2">
@@ -541,20 +427,8 @@
                     <div class="relative h-60 w-full flex justify-center">
                         <canvas id="pieChart"></canvas>
                     </div>
-                    <div class="p-2 bg-red-50 text-red-500 rounded-lg"><i class="fa-solid fa-triangle-exclamation"></i></div>
                 </div>
-            </div>
 
-            <!-- CHARTS & VALUATION SUMMARY -->
-            <div class="grid grid-cols-12 gap-4">
-                <div class="col-span-12 md:col-span-4 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                    <h4 class="text-xs font-bold text-gray-500 uppercase mb-4"><i class="fa-solid fa-chart-column mr-1"></i> Top 10 MO Terbanyak</h4>
-                    <div class="h-40 bg-indigo-50/50 rounded-lg flex items-end justify-around p-2 border-b border-indigo-200">
-                        <div class="w-3 bg-indigo-600 h-full rounded-t"></div>
-                        <div class="w-3 bg-indigo-500 h-3/5 rounded-t"></div>
-                        <div class="w-3 bg-indigo-500 h-1/2 rounded-t"></div>
-                        <div class="w-3 bg-indigo-400 h-2/5 rounded-t"></div>
-                        <div class="w-3 bg-indigo-400 h-1/3 rounded-t"></div>
                 <!-- Valuation Card -->
                 <div class="bg-gradient-to-br from-indigo-600 via-indigo-700 to-blue-800 text-white p-6 rounded-2xl border border-indigo-400/30 shadow-xl shadow-indigo-500/20 flex flex-col justify-between relative overflow-hidden">
                     <div class="absolute -right-8 -bottom-8 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
@@ -573,12 +447,7 @@
                             Rp 0
                         </h3>
                     </div>
-                </div>
 
-                <div class="col-span-12 md:col-span-4 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                    <h4 class="text-xs font-bold text-gray-500 uppercase mb-4"><i class="fa-solid fa-chart-pie mr-1"></i> Sebaran Cluster (Section)</h4>
-                    <div class="h-40 flex items-center justify-center">
-                        <div class="w-28 h-28 rounded-full border-8 border-indigo-600 border-t-amber-500 border-r-emerald-500"></div>
                     <div class="border-t border-indigo-500/40 pt-3 flex justify-between items-center text-xs text-indigo-100 relative z-10 font-medium">
                         <span class="text-[11px]">Data Synchronization</span>
                         <span class="font-extrabold text-white">MONRES 2026</span>
@@ -586,17 +455,10 @@
                 </div>
             </section>
 
-                <div class="col-span-12 md:col-span-4 bg-indigo-600 text-white p-6 rounded-2xl shadow-lg flex flex-col justify-between">
             <!-- Bottom Table Section -->
             <section class="light-card rounded-2xl overflow-hidden">
                 <div class="p-5 border-b border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white">
                     <div>
-                        <div class="flex justify-between items-center text-xs font-semibold mb-6">
-                            <span class="bg-indigo-700/60 px-2.5 py-1 rounded border border-indigo-400/30">VALUATION SUMMARY</span>
-                            <span class="text-indigo-200">TOTAL PRICE</span>
-                        </div>
-                        <div class="text-xs uppercase text-indigo-200 tracking-wider">Total Biaya Backlog</div>
-                        <div class="text-3xl font-extrabold my-2">Rp 35.724.788.717</div>
                         <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
                             <span>Rincian Detail Backlog Unit</span>
                             <span id="active-filter-badge" class="hidden text-[10px] bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold px-2.5 py-0.5 rounded-full">
@@ -605,9 +467,6 @@
                         </h3>
                         <p class="text-xs text-slate-500 font-medium" id="table-count-info">Menampilkan 0 data backlog</p>
                     </div>
-                    <div class="flex justify-between items-center text-[10px] text-indigo-200 pt-4 border-t border-indigo-500/50">
-                        <span>Data Synchronization</span>
-                        <span class="font-bold text-white">MONRES 2026</span>
                     <button onclick="exportTableToCSV()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-2 shadow-md shadow-indigo-600/30">
                         <i class="fa-solid fa-file-csv text-indigo-200"></i> Ekspor CSV
                     </button>
@@ -662,8 +521,7 @@
     <!-- ELEMENT CONTAINER YOUTUBE (HIDDEN) -->
     <div id="youtubePlayer" class="hidden"></div>
 
-    <!-- SCRIPT YOUTUBE IFRAME API & AUDIO CONTROL -->
-    <!-- Script Interaction & Dashboard Logic -->
+    <!-- SCRIPT LOGIC & DASHBOARD INTERACTION -->
     <script>
         let ytPlayer;
         let isPlaying = false;
@@ -682,6 +540,70 @@
                     'autoplay': 1,
                     'loop': 1,
                     'playlist': '-ufbjCSvnqg'
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            ytPlayer.setVolume(50);
+            document.addEventListener('click', function startPlayOnInteraction() {
+                if (!isPlaying && ytPlayer) {
+                    ytPlayer.playVideo();
+                    isPlaying = true;
+                    updateMusicUI(true);
+                }
+            }, { once: true });
+        }
+
+        function toggleMusic() {
+            if (!ytPlayer) return;
+            if (isPlaying) {
+                ytPlayer.pauseVideo();
+                isPlaying = false;
+                updateMusicUI(false);
+            } else {
+                ytPlayer.playVideo();
+                isPlaying = true;
+                updateMusicUI(true);
+            }
+        }
+
+        function changeVolume(val) {
+            if (ytPlayer && ytPlayer.setVolume) {
+                ytPlayer.setVolume(val);
+                const volIcon = document.getElementById('volumeIcon');
+                if (val == 0) {
+                    volIcon.className = "fa-solid fa-volume-xmark text-xs text-white";
+                } else if (val < 50) {
+                    volIcon.className = "fa-solid fa-volume-low text-xs text-white";
+                } else {
+                    volIcon.className = "fa-solid fa-volume-high text-xs text-white";
+                }
+            }
+        }
+
+        function updateMusicUI(playing) {
+            const musicBtn = document.getElementById('musicToggleBtn');
+            const musicIcon = document.getElementById('musicIcon');
+            const musicText = document.getElementById('musicText');
+            const musicNoteIcon = document.getElementById('musicNoteIcon');
+
+            if (playing) {
+                musicIcon.className = "fa-solid fa-pause";
+                musicText.innerText = "Pause";
+                musicBtn.className = "bg-indigo-600 text-white text-xs px-3 py-1 rounded-full font-medium hover:bg-indigo-700 transition flex items-center space-x-1";
+                musicNoteIcon.classList.add('animate-bounce');
+            } else {
+                musicIcon.className = "fa-solid fa-play";
+                musicText.innerText = "Play";
+                musicBtn.className = "bg-slate-500 text-white text-xs px-3 py-1 rounded-full font-medium hover:bg-slate-600 transition flex items-center space-x-1";
+                musicNoteIcon.classList.remove('animate-bounce');
+            }
+        }
+
         const SHEET_ID = '1ZR7lEwe9XAWxrmGa7SiXokkAD1rCsX0VRFtnNhmQ2Ok';
         const SHEET_NAME = 'Monres';
         const GOOGLE_SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(SHEET_NAME)}`;
@@ -815,8 +737,6 @@
                     populateFilterOptions();
                     updateDashboard();
                 },
-                events: {
-                    'onReady': onPlayerReady
                 error: function(err) {
                     statusBadge.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1.5"></i> Error';
                     statusBadge.className = 'text-[11px] font-bold text-rose-600';
@@ -824,8 +744,6 @@
             });
         }
 
-        function onPlayerReady(event) {
-            ytPlayer.setVolume(50);
         function refreshData() {
             fetchSheetData();
         }
@@ -885,21 +803,17 @@
             onFilterChange();
         }
 
-        // PERBAIKAN LOGIKA 1: Kategori Kesiapan MO Berdasarkan Kata Kunci Kolom X
         function getMOReadinessCategory(row) {
             const valX = getColumnXValue(row).toUpperCase().trim();
             
             if (!valX) return 'NOT_READY';
 
-            // 1. Cek Kategori CLOSE (Close, Closed, TECO, Clsd, Completed)
             if (valX.includes('CLOSE') || valX.includes('CLSD') || valX.includes('TECO') || valX.includes('COMPL')) {
                 return 'CLOSE';
             } 
-            // 2. Cek Kategori READY (Released, Rel, Ready, Exec, Eksekusi)
             else if (valX.includes('RELEASE') || valX.includes('REL') || valX.includes('READY') || valX.includes('EXEC')) {
                 return 'READY';
             } 
-            // 3. Status Lainnya Masuk NOT READY (Outstanding, CRTD, Open, Hold, Waiting, dll)
             else {
                 return 'NOT_READY';
             }
@@ -917,17 +831,11 @@
                 const rowSection = getValue(row, 'Section').trim();
                 const rowStatus = getColumnWValue(row);
 
-            document.addEventListener('click', function startPlayOnInteraction() {
-                if (!isPlaying) {
-                    ytPlayer.playVideo();
-                    isPlaying = true;
-                    updateUI(true);
                 const categoryX = getMOReadinessCategory(row);
                 let matchReadiness = true;
                 if (moReadiness !== 'ALL') {
                     matchReadiness = (categoryX === moReadiness);
                 }
-            }, { once: true });
 
                 const matchUnit = selectedUnit === 'ALL' || rowUnit === selectedUnit;
                 const matchSection = selectedSection === 'ALL' || rowSection === selectedSection;
@@ -957,9 +865,6 @@
             return parseFloat(str) || 0;
         }
 
-        function toggleMusic() {
-            if (!ytPlayer) return;
-        // PERBAIKAN LOGIKA 2: Kalkulasi Perhitungan Nomor MO Unik
         function updateDashboard() {
             filteredDataCache = getFilteredData();
 
@@ -967,7 +872,6 @@
             let stockOutCount = 0;
             let totalStockQuantity = 0;
 
-            // Menggunakan Set agar nomor MO yang sama tidak dihitung ganda
             const moTotalSet = new Set();
             const moReadySet = new Set();
             const moNotReadySet = new Set();
@@ -986,7 +890,7 @@
                 }
 
                 if (mo) {
-                    moTotalSet.add(mo); // Simpan nomor MO unik
+                    moTotalSet.add(mo);
                     
                     const readiness = getMOReadinessCategory(row);
                     if (readiness === 'READY') {
@@ -1002,25 +906,16 @@
             const formattedCost = 'Rp ' + totalAmount.toLocaleString('id-ID', {maximumFractionDigits: 0});
 
             document.getElementById('exec-safe').innerText = totalStockQuantity.toLocaleString('id-ID');
-            
-            // Tampilkan jumlah unik MO pada KPI Card
             document.getElementById('kpi-mo').innerText = moTotalSet.size.toLocaleString('id-ID');
             document.getElementById('kpi-mo-ready').innerText = moReadySet.size.toLocaleString('id-ID');
             document.getElementById('kpi-stockout').innerText = stockOutCount.toLocaleString('id-ID');
 
-            if (isPlaying) {
-                ytPlayer.pauseVideo();
-                isPlaying = false;
-                updateUI(false);
             const activeBadge = document.getElementById('active-filter-badge');
             const readinessVal = document.getElementById('filter-mo-readiness').value;
             if (readinessVal !== 'ALL') {
                 activeBadge.innerText = 'Filter: ' + readinessVal.replace('_', ' ');
                 activeBadge.classList.remove('hidden');
             } else {
-                ytPlayer.playVideo();
-                isPlaying = true;
-                updateUI(true);
                 activeBadge.classList.add('hidden');
             }
 
@@ -1031,16 +926,6 @@
             renderTable();
         }
 
-        function changeVolume(val) {
-            if (ytPlayer && ytPlayer.setVolume) {
-                ytPlayer.setVolume(val);
-                const volIcon = document.getElementById('volumeIcon');
-                if (val == 0) {
-                    volIcon.className = "fa-solid fa-volume-xmark text-xs text-indigo-400";
-                } else if (val < 50) {
-                    volIcon.className = "fa-solid fa-volume-low text-xs text-indigo-600";
-                } else {
-                    volIcon.className = "fa-solid fa-volume-high text-xs text-indigo-600";
         function renderCharts(data) {
             const moCounts = {};
             const sectionCounts = {};
@@ -1173,27 +1058,12 @@
             updatePaginationControls(totalPages);
         }
 
-        function updateUI(playing) {
-            const musicBtn = document.getElementById('musicToggleBtn');
-            const musicIcon = document.getElementById('musicIcon');
-            const musicText = document.getElementById('musicText');
-            const musicNoteIcon = document.getElementById('musicNoteIcon');
         function updatePaginationControls(totalPages) {
             const info = document.getElementById('pagination-info');
             const btnPrev = document.getElementById('btn-prev');
             const btnNext = document.getElementById('btn-next');
             const pageNumbers = document.getElementById('page-numbers');
 
-            if (playing) {
-                musicIcon.className = "fa-solid fa-pause";
-                musicText.innerText = "Pause";
-                musicBtn.className = "bg-indigo-600 text-white text-xs px-3 py-1 rounded-full font-medium hover:bg-indigo-700 transition flex items-center space-x-1";
-                musicNoteIcon.classList.add('animate-bounce');
-            } else {
-                musicIcon.className = "fa-solid fa-play";
-                musicText.innerText = "Play";
-                musicBtn.className = "bg-slate-500 text-white text-xs px-3 py-1 rounded-full font-medium hover:bg-slate-600 transition flex items-center space-x-1";
-                musicNoteIcon.classList.remove('animate-bounce');
             if (totalPages === 0) {
                 info.innerText = 'Menampilkan 0 data';
                 btnPrev.disabled = true;
@@ -1253,3 +1123,4 @@
         }
     </script>
 </body>
+</html>
