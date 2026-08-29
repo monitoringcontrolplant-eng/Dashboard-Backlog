@@ -328,7 +328,7 @@
                 </div>
             </div>
 
-            <!-- KPI Cards Section (Tersisa 4 Kartu) -->
+            <!-- KPI Cards Section -->
             <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <!-- 1. Total MO -->
                 <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 cursor-pointer" onclick="resetMOFilter()">
@@ -443,7 +443,7 @@
                 </div>
             </section>
 
-            <!-- Bottom Table Section -->
+            <!-- Bottom Table Section (Tanpa Kolom Status MO Ready) -->
             <section class="light-card rounded-2xl overflow-hidden">
                 <div class="p-5 border-b border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white">
                     <div>
@@ -467,7 +467,6 @@
                                 <th class="px-4 py-3.5">No Unit</th>
                                 <th class="px-4 py-3.5">Cluster (Section)</th>
                                 <th class="px-4 py-3.5">No MO</th>
-                                <th class="px-3 py-3.5 text-center">Status MO Ready</th>
                                 <th class="px-4 py-3.5">Status MO (Desc)</th>
                                 <th class="px-4 py-3.5">Part Number</th>
                                 <th class="px-4 py-3.5">Description Part</th>
@@ -913,7 +912,7 @@
             document.getElementById('table-count-info').innerText = `Menampilkan ${total.toLocaleString('id-ID')} data backlog`;
 
             if (total === 0) {
-                tbody.innerHTML = `<tr><td colspan="12" class="text-center py-12 text-slate-400 font-medium">Tidak ada data backlog.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="11" class="text-center py-12 text-slate-400 font-medium">Tidak ada data backlog.</td></tr>`;
                 updatePaginationControls(0);
                 return;
             }
@@ -931,10 +930,6 @@
                 tr.className = 'hover:bg-indigo-50/40 transition border-b border-slate-100';
                 
                 const moNo = getValue(row, 'MO').trim();
-                const isMOReady = readyMOList.has(moNo);
-                const moReadyBadge = isMOReady 
-                    ? `<span class="px-2 py-0.5 text-[9px] font-extrabold rounded-md bg-emerald-100 text-emerald-800 border border-emerald-200"><i class="fa-solid fa-check mr-0.5"></i> READY</span>` 
-                    : `<span class="px-2 py-0.5 text-[9px] font-extrabold rounded-md bg-amber-100 text-amber-800 border border-amber-200"><i class="fa-solid fa-clock mr-0.5"></i> PENDING PART</span>`;
 
                 const statusPart = getColumnWValue(row) || '-';
                 let partBadge = 'bg-slate-100 text-slate-600 border border-slate-200';
@@ -958,7 +953,6 @@
                     <td class="px-4 py-3 font-bold text-indigo-600">${getValue(row, 'No Unit') || '-'}</td>
                     <td class="px-4 py-3 font-medium text-slate-700">${getValue(row, 'Section') || '-'}</td>
                     <td class="px-4 py-3 font-mono font-semibold text-slate-800">${moNo || '-'}</td>
-                    <td class="px-3 py-3 text-center">${moReadyBadge}</td>
                     <td class="px-4 py-3 text-slate-600 max-w-[180px] truncate">${getValue(row, 'Maint. Order Desc.') || '-'}</td>
                     <td class="px-4 py-3 font-mono text-slate-700">${getValue(row, 'Part Number') || '-'}</td>
                     <td class="px-4 py-3 font-medium text-slate-800 max-w-[200px] truncate">${getValue(row, 'Description') || '-'}</td>
@@ -1007,17 +1001,15 @@
         function exportTableToCSV() {
             if (filteredDataCache.length === 0) return;
 
-            let csvContent = "No Unit,Section,MO,Status Ready,Maint. Order Desc,Part Number,Description,Qty Res,Stock On Hand,Total Price,Status Part,Status MO\n";
+            let csvContent = "No Unit,Section,MO,Maint. Order Desc,Part Number,Description,Qty Res,Stock On Hand,Total Price,Status Part,Status MO\n";
             filteredDataCache.forEach(row => {
                 const moNo = getValue(row, 'MO').trim();
-                const isReadyStr = readyMOList.has(moNo) ? 'READY' : 'PENDING PART';
                 const qtyResVal = getValue(row, 'Qty Res') || getValue(row, 'Qty Res.') || getValue(row, 'Qty Resv') || '0';
 
                 const line = [
                     `"${getValue(row, 'No Unit')}"`,
                     `"${getValue(row, 'Section')}"`,
                     `"${moNo}"`,
-                    `"${isReadyStr}"`,
                     `"${getValue(row, 'Maint. Order Desc.')}"`,
                     `"${getValue(row, 'Part Number')}"`,
                     `"${getValue(row, 'Description')}"`,
