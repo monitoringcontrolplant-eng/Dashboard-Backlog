@@ -17,204 +17,194 @@
     <style>
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #030712;
-            color: #f8fafc;
+            background-color: #0b1329;
+            color: #f1f5f9;
         }
 
         ::-webkit-scrollbar {
-            width: 5px;
-            height: 5px;
+            width: 6px;
+            height: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(15, 23, 42, 0.6);
+            background: rgba(15, 23, 42, 0.4);
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(99, 102, 241, 0.5);
+            background: rgba(99, 102, 241, 0.4);
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(99, 102, 241, 0.8);
+            background: rgba(99, 102, 241, 0.7);
         }
 
         .main-bg {
-            background: radial-gradient(circle at top left, #0f172a 0%, #030712 100%);
+            background: radial-gradient(circle at top right, #1e1b4b 0%, #0b1329 50%, #030712 100%);
         }
 
         .light-card {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+            background: rgba(30, 41, 59, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
         }
 
         .metric-card {
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .metric-card:hover {
-            transform: translateY(-2px);
-            border-color: rgba(129, 140, 248, 0.4);
-            box-shadow: 0 15px 30px -5px rgba(99, 102, 241, 0.25);
+            transform: translateY(-3px);
+            border-color: rgba(129, 140, 248, 0.5);
+            box-shadow: 0 15px 35px -5px rgba(99, 102, 241, 0.25);
         }
 
         .glow-indigo {
-            box-shadow: 0 0 25px rgba(99, 102, 241, 0.35);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
         }
         .glow-gold {
-            filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.4));
+            filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.5));
         }
 
-        /* Styling Futuristic Glassmorphism Sidebar */
+        /* Styling Sidebar */
         .futuristic-sidebar {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.75) 100%);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-right: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 15px 0 40px rgba(0, 0, 0, 0.6);
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 20px 0 50px rgba(0, 0, 0, 0.6);
             transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .glass-profile {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .glass-search {
-            background: rgba(3, 7, 18, 0.5);
+        .glass-search, .glass-select {
+            background: rgba(15, 23, 42, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #f8fafc;
+            color: #f1f5f9;
         }
-        .glass-search:focus {
+        .glass-search:focus, .glass-select:focus {
             border-color: #818cf8;
-            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.25);
+            outline: none;
         }
 
         .menu-pill {
             background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.2s ease;
         }
         .menu-pill:hover {
             background: rgba(255, 255, 255, 0.06);
             border-color: rgba(255, 255, 255, 0.15);
-            transform: translateX(3px);
+            transform: translateX(4px);
         }
         .menu-pill.active {
-            background: linear-gradient(90deg, rgba(99, 102, 241, 0.35) 0%, rgba(79, 70, 229, 0.15) 100%);
+            background: linear-gradient(90deg, rgba(99, 102, 241, 0.4) 0%, rgba(79, 70, 229, 0.15) 100%);
             border: 1px solid rgba(129, 140, 248, 0.5);
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.25);
-        }
-
-        .glass-select {
-            background: rgba(3, 7, 18, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-        }
-        .glass-select:focus {
-            border-color: #818cf8;
-            outline: none;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
         }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col justify-between">
 
     <!-- Modal Login Full Screen -->
-    <div id="login-modal" class="fixed inset-0 z-50 flex bg-slate-950 text-slate-100 overflow-y-auto">
+    <div id="login-modal" class="fixed inset-0 z-50 flex bg-[#070b19] text-slate-100 overflow-y-auto">
         <div class="min-h-screen w-full flex flex-col lg:flex-row">
             
-            <div class="lg:w-7/12 p-8 lg:p-16 flex flex-col justify-between bg-gradient-to-br from-indigo-900 via-slate-900 to-blue-950 relative overflow-hidden text-white border-r border-white/10">
-                <div class="absolute -top-24 -left-24 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
-                <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="lg:w-7/12 p-6 sm:p-12 lg:p-16 flex flex-col justify-between bg-gradient-to-br from-indigo-950 via-[#0b1329] to-slate-950 relative overflow-hidden text-white border-r border-white/10">
+                <div class="absolute -top-24 -left-24 w-96 h-96 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl pointer-events-none"></div>
 
                 <div class="flex items-center justify-between relative z-10">
                     <div class="flex items-center space-x-3 bg-white/5 backdrop-blur-md px-4 py-2.5 rounded-2xl w-fit border border-white/10 shadow-lg">
-                        <img src="BSS_logo.jpg" alt="BSS Logo" class="h-9 w-auto glow-gold" onerror="this.src='https://via.placeholder.com/120x40?text=BSS+LOGO'">
+                        <img src="BSS_logo.jpg" alt="BSS Logo" class="h-8 sm:h-9 w-auto glow-gold" onerror="this.src='https://via.placeholder.com/120x40?text=BSS+LOGO'">
                         <div>
-                            <span class="text-[10px] font-bold tracking-widest uppercase text-amber-400 block">2026</span>
-                            <span class="text-sm font-extrabold text-white tracking-wide">PT. BINA SARANA SUKSES</span>
+                            <span class="text-[9px] font-bold tracking-widest uppercase text-amber-400 block">2026</span>
+                            <span class="text-xs sm:text-sm font-extrabold text-white tracking-wide">PT. BINA SARANA SUKSES</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="space-y-4 pt-8 relative z-10">
-                    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight">
+                <div class="space-y-4 py-8 relative z-10">
+                    <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white leading-snug">
                         Manage backlog items, unit availability, parts & maintenance reports in one platform.
                     </h1>
-                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                    <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
                         <strong class="text-amber-400 font-bold">Backlog Management</strong> membantu tim maintenance memantau status Maintenance Order (MO), ketersediaan stok spare part, valuasi total biaya backlog, serta analisis performa unit secara real-time.
                     </p>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 relative z-10">
-                    <div class="bg-white/5 border border-white/10 p-4 rounded-2xl backdrop-blur-md">
-                        <div class="w-9 h-9 rounded-xl bg-indigo-500/20 text-indigo-300 flex items-center justify-center mb-3">
-                            <i class="fa-solid fa-truck-monster text-sm"></i>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 relative z-10">
+                    <div class="bg-white/5 border border-white/10 p-3.5 rounded-2xl backdrop-blur-md">
+                        <div class="w-8 h-8 rounded-xl bg-indigo-500/20 text-indigo-300 flex items-center justify-center mb-2.5 text-xs">
+                            <i class="fa-solid fa-truck-monster"></i>
                         </div>
                         <h4 class="text-xs font-bold text-white mb-1">Unit & Cluster Control</h4>
-                        <p class="text-[11px] text-slate-400 leading-snug">Pantau backlog berdasarkan No Unit dan sebaran Cluster operasional.</p>
+                        <p class="text-[10px] text-slate-400 leading-snug">Pantau backlog berdasarkan No Unit dan sebaran Cluster.</p>
                     </div>
 
-                    <div class="bg-white/5 border border-white/10 p-4 rounded-2xl backdrop-blur-md">
-                        <div class="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center mb-3">
-                            <i class="fa-solid fa-boxes-stacked text-sm"></i>
+                    <div class="bg-white/5 border border-white/10 p-3.5 rounded-2xl backdrop-blur-md">
+                        <div class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center mb-2.5 text-xs">
+                            <i class="fa-solid fa-boxes-stacked"></i>
                         </div>
                         <h4 class="text-xs font-bold text-white mb-1">Part Stock Monitoring</h4>
-                        <p class="text-[11px] text-slate-400 leading-snug">Identifikasi ketersediaan spare part di gudang serta peringatan Out of Stock.</p>
+                        <p class="text-[10px] text-slate-400 leading-snug">Identifikasi ketersediaan spare part dan peringatan Stock Out.</p>
                     </div>
 
-                    <div class="bg-white/5 border border-white/10 p-4 rounded-2xl backdrop-blur-md">
-                        <div class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center mb-3">
-                            <i class="fa-solid fa-file-invoice-dollar text-sm"></i>
+                    <div class="bg-white/5 border border-white/10 p-3.5 rounded-2xl backdrop-blur-md">
+                        <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center mb-2.5 text-xs">
+                            <i class="fa-solid fa-file-invoice-dollar"></i>
                         </div>
                         <h4 class="text-xs font-bold text-white mb-1">Valuation & MO Workflow</h4>
-                        <p class="text-[11px] text-slate-400 leading-snug">Kalkulasi otomatis total biaya backlog dan tracking status Work Order/MO.</p>
+                        <p class="text-[10px] text-slate-400 leading-snug">Kalkulasi otomatis total biaya backlog dan tracking status MO.</p>
                     </div>
                 </div>
 
-                <div class="pt-8 text-[11px] text-slate-500 font-medium relative z-10">
+                <div class="pt-6 text-[10px] text-slate-400 font-medium relative z-10">
                     Copyright © PT. Mitra Parama Gemilang - 2026 | MONRES System
                 </div>
             </div>
 
             <!-- Login Form Section -->
-            <div class="lg:w-5/12 p-8 lg:p-16 flex items-center justify-center bg-slate-950">
+            <div class="lg:w-5/12 p-6 sm:p-12 flex items-center justify-center bg-[#0b1329]">
                 <div class="w-full max-w-sm space-y-6">
                     
-                    <div class="text-center space-y-3">
+                    <div class="text-center space-y-2">
                         <div class="flex justify-center mb-2">
-                            <div class="p-3 bg-slate-900 rounded-2xl shadow-xl border border-slate-800 glow-indigo">
-                                <img src="BSS_logo.jpg" alt="BSS Logo" class="h-12 w-auto mx-auto object-contain" onerror="this.src='https://via.placeholder.com/150x50?text=BSS+LOGO'">
+                            <div class="p-3 bg-slate-900/80 rounded-2xl shadow-xl border border-slate-700 glow-indigo">
+                                <img src="BSS_logo.jpg" alt="BSS Logo" class="h-10 sm:h-12 w-auto mx-auto object-contain" onerror="this.src='https://via.placeholder.com/150x50?text=BSS+LOGO'">
                             </div>
                         </div>
-                        <h2 class="text-2xl font-extrabold text-white tracking-tight">WELCOME</h2>
+                        <h2 class="text-2xl font-extrabold text-white tracking-tight">WELCOME BACK</h2>
                         <p class="text-xs text-slate-400">Sign in to access your Backlog Management dashboard.</p>
                     </div>
 
                     <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
                         <div>
-                            <label class="block text-xs font-bold text-slate-400 mb-1.5 uppercase tracking-wider">USER ID / USERNAME</label>
+                            <label class="block text-[11px] font-bold text-slate-300 mb-1.5 uppercase tracking-wider">USER ID / USERNAME</label>
                             <div class="relative">
-                                <input type="text" id="login-username" required placeholder="Enter your User ID" class="w-full bg-slate-900 border border-slate-800 text-xs text-white rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition">
-                                <i class="fa-solid fa-user absolute left-3.5 top-3.5 text-slate-500 text-xs"></i>
+                                <input type="text" id="login-username" required placeholder="Enter your User ID" class="w-full bg-slate-900/90 border border-slate-700 text-xs text-white rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition">
+                                <i class="fa-solid fa-user absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
                             </div>
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold text-slate-400 mb-1.5 uppercase tracking-wider">PASSWORD</label>
+                            <label class="block text-[11px] font-bold text-slate-300 mb-1.5 uppercase tracking-wider">PASSWORD</label>
                             <div class="relative">
-                                <input type="password" id="login-password" required placeholder="Enter your password" class="w-full bg-slate-900 border border-slate-800 text-xs text-white rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition">
-                                <i class="fa-solid fa-key absolute left-3.5 top-3.5 text-slate-500 text-xs"></i>
+                                <input type="password" id="login-password" required placeholder="Enter your password" class="w-full bg-slate-900/90 border border-slate-700 text-xs text-white rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition">
+                                <i class="fa-solid fa-key absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
                             </div>
                         </div>
 
-                        <div id="login-error" class="text-xs text-rose-400 hidden text-center bg-rose-950/40 border border-rose-900/50 py-2.5 rounded-xl font-medium">
+                        <div id="login-error" class="text-xs text-rose-300 hidden text-center bg-rose-950/60 border border-rose-900 py-2.5 rounded-xl font-medium">
                             <i class="fa-solid fa-circle-exclamation mr-1"></i> Username atau password salah!
                         </div>
 
                         <div class="grid grid-cols-2 gap-3 pt-2">
-                            <button type="button" onclick="alert('Silakan hubungi Administrator Sistem untuk reset password.')" class="w-full bg-slate-900 hover:bg-slate-800 text-rose-400 border border-rose-900/30 font-bold text-xs py-3 rounded-xl transition flex items-center justify-center gap-1.5">
-                                <i class="fa-solid fa-circle-question"></i> Forgot Password
+                            <button type="button" onclick="alert('Silakan hubungi Administrator Sistem untuk reset password.')" class="w-full bg-slate-800 hover:bg-slate-700 text-rose-300 border border-slate-700 font-bold text-xs py-3 rounded-xl transition flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-circle-question"></i> Forgot
                             </button>
                             <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs py-3 rounded-xl transition shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-1.5">
                                 <i class="fa-solid fa-right-to-bracket"></i> Login
@@ -222,15 +212,15 @@
                         </div>
                     </form>
 
-                    <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-xl text-[11px] text-slate-400 space-y-1">
+                    <div class="bg-slate-900/50 border border-slate-800 p-3.5 rounded-xl text-[11px] text-slate-400 space-y-1">
                         <p class="font-bold text-slate-300 flex items-center gap-1.5">
                             <i class="fa-solid fa-shield-halved text-indigo-400"></i> Authorized users only
                         </p>
-                        <p class="leading-relaxed">All activity may be monitored to protect operational data and company assets.</p>
+                        <p class="leading-relaxed">All activity may be monitored to protect operational data.</p>
                     </div>
 
-                    <div class="text-center text-[11px] text-slate-500">
-                        Default Login: <code class="text-indigo-400 bg-slate-900 border border-slate-800 px-2 py-0.5 rounded-md font-semibold">admin</code> / <code class="text-indigo-400 bg-slate-900 border border-slate-800 px-2 py-0.5 rounded-md font-semibold">admin123</code>
+                    <div class="text-center text-[11px] text-slate-400">
+                        Default Login: <code class="text-indigo-300 bg-slate-900 border border-slate-700 px-2 py-0.5 rounded-md font-semibold">admin</code> / <code class="text-indigo-300 bg-slate-900 border border-slate-700 px-2 py-0.5 rounded-md font-semibold">admin123</code>
                     </div>
 
                 </div>
@@ -240,73 +230,73 @@
     </div>
 
     <!-- Modal User Management -->
-    <div id="user-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-950/80 backdrop-blur-md">
-        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl w-full max-w-lg shadow-2xl space-y-5 text-slate-100">
+    <div id="user-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4">
+        <div class="bg-slate-900 border border-slate-700 p-5 sm:p-6 rounded-2xl w-full max-w-lg shadow-2xl space-y-4 text-slate-100">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                <h3 class="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-user-plus text-indigo-400"></i> Manajemen Akses Pengguna
                 </h3>
                 <button onclick="toggleUserModal(false)" class="text-slate-400 hover:text-white text-sm"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
-            <form id="add-user-form" onsubmit="handleAddUser(event)" class="space-y-3 bg-slate-950 p-4 rounded-xl border border-slate-800">
-                <p class="text-xs font-bold text-indigo-400 mb-2">Beri Akses Pengguna Baru</p>
-                <div class="grid grid-cols-2 gap-3">
+            <form id="add-user-form" onsubmit="handleAddUser(event)" class="space-y-3 bg-slate-950 p-3.5 sm:p-4 rounded-xl border border-slate-800">
+                <p class="text-xs font-bold text-indigo-400 mb-1">Beri Akses Pengguna Baru</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <label class="block text-[10px] font-semibold text-slate-400 mb-1">Nama / Username</label>
-                        <input type="text" id="new-username" required placeholder="Nama User" class="w-full bg-slate-900 border border-slate-800 text-xs text-white rounded-lg p-2 focus:outline-none focus:border-indigo-500">
+                        <input type="text" id="new-username" required placeholder="Nama User" class="w-full bg-slate-900 border border-slate-700 text-xs text-white rounded-lg p-2.5 focus:outline-none focus:border-indigo-500">
                     </div>
                     <div>
                         <label class="block text-[10px] font-semibold text-slate-400 mb-1">Role / Jabatan</label>
-                        <input type="text" id="new-role" required placeholder="Planner / Supervisor" class="w-full bg-slate-900 border border-slate-800 text-xs text-white rounded-lg p-2 focus:outline-none focus:border-indigo-500">
+                        <input type="text" id="new-role" required placeholder="Planner / Supervisor" class="w-full bg-slate-900 border border-slate-700 text-xs text-white rounded-lg p-2.5 focus:outline-none focus:border-indigo-500">
                     </div>
                 </div>
                 <div>
                     <label class="block text-[10px] font-semibold text-slate-400 mb-1">Password</label>
-                    <input type="password" id="new-password" required placeholder="Password Akses" class="w-full bg-slate-900 border border-slate-800 text-xs text-white rounded-lg p-2 focus:outline-none focus:border-indigo-500">
+                    <input type="password" id="new-password" required placeholder="Password Akses" class="w-full bg-slate-900 border border-slate-700 text-xs text-white rounded-lg p-2.5 focus:outline-none focus:border-indigo-500">
                 </div>
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold py-2 rounded-lg transition shadow-md shadow-indigo-600/20">
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold py-2.5 rounded-lg transition shadow-md shadow-indigo-600/20">
                     + Tambahkan Pengguna
                 </button>
             </form>
 
             <div>
-                <p class="text-xs font-bold text-slate-300 mb-2">Daftar Pengguna Memiliki Akses</p>
+                <p class="text-xs font-bold text-slate-300 mb-2">Daftar Pengguna Aktif</p>
                 <div class="max-h-40 overflow-y-auto space-y-1.5 pr-1" id="user-list"></div>
             </div>
         </div>
     </div>
 
     <!-- Top Header Bar -->
-    <header class="light-card border-b border-white/10 px-6 py-3 flex justify-between items-center z-20 sticky top-0">
-        <div class="flex items-center space-x-3.5">
-            <!-- TOMBOL MELAYANG DENGAN IKON PANAH (Khas Referensi Gambar) -->
-            <button onclick="toggleSidebarPopup()" class="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-600 to-blue-500 border border-white/20 flex items-center justify-center text-white shadow-lg hover:scale-105 transition" title="Buka Menu Navigasi">
+    <header class="light-card border-b border-white/10 px-4 sm:px-6 py-3 flex justify-between items-center z-20 sticky top-0 shadow-lg">
+        <div class="flex items-center space-x-3">
+            <!-- Tombol Navigasi Bulat dengan Panah -->
+            <button onclick="toggleSidebarPopup()" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-tr from-indigo-600 to-blue-500 border border-white/20 flex items-center justify-center text-white shadow-lg hover:scale-105 transition flex-shrink-0" title="Buka Menu Navigasi">
                 <i class="fa-solid fa-chevron-right text-xs"></i>
             </button>
 
-            <img src="BSS_logo.jpg" alt="Logo" class="h-7 w-auto glow-gold" onerror="this.src='https://via.placeholder.com/100x30?text=BSS'">
-            <div>
-                <span class="font-extrabold text-sm tracking-wide text-white block">BACKLOG MANAGEMENT</span>
-                <span class="text-[10px] text-indigo-400 font-bold">Monitoring Control Plant & Maintenance</span>
+            <img src="BSS_logo.jpg" alt="Logo" class="h-6 sm:h-7 w-auto glow-gold" onerror="this.src='https://via.placeholder.com/100x30?text=BSS'">
+            <div class="hidden sm:block">
+                <span class="font-extrabold text-xs sm:text-sm tracking-wide text-white block">BACKLOG MANAGEMENT</span>
+                <span class="text-[10px] text-indigo-300 font-bold">Monitoring Control Plant & Maintenance</span>
             </div>
         </div>
-        <div class="flex items-center space-x-3">
-            <button onclick="toggleUserModal(true)" class="text-xs bg-slate-800/80 hover:bg-slate-800 text-indigo-300 border border-slate-700 px-3.5 py-1.5 rounded-xl transition flex items-center gap-2 shadow-sm font-semibold backdrop-blur-md">
-                <i class="fa-solid fa-user-gear"></i> Kelola Akses
+        <div class="flex items-center space-x-2 sm:space-x-3">
+            <button onclick="toggleUserModal(true)" class="text-xs bg-slate-800 hover:bg-slate-700 text-indigo-300 border border-slate-700 px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 shadow-sm font-semibold">
+                <i class="fa-solid fa-user-gear"></i> <span class="hidden sm:inline">Kelola Akses</span>
             </button>
-            <button onclick="refreshData()" class="text-xs bg-slate-800/80 hover:bg-slate-800 text-slate-300 border border-slate-700 px-3.5 py-1.5 rounded-xl transition flex items-center gap-2 shadow-sm font-semibold backdrop-blur-md">
-                <i class="fa-solid fa-rotate text-indigo-400"></i> Refresh
+            <button onclick="refreshData()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 shadow-sm font-semibold">
+                <i class="fa-solid fa-rotate text-indigo-400"></i> <span class="hidden sm:inline">Refresh</span>
             </button>
-            <div class="flex items-center space-x-3 border-l border-slate-700/60 pl-4">
-                <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-indigo-500 flex items-center justify-center text-xs font-bold text-white shadow-md shadow-indigo-600/30" id="user-avatar">
+            <div class="flex items-center space-x-2 border-l border-slate-700/80 pl-3">
+                <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-indigo-500 flex items-center justify-center text-xs font-bold text-white shadow-md shadow-indigo-600/30 flex-shrink-0" id="user-avatar">
                     A
                 </div>
-                <div class="text-xs hidden sm:block">
+                <div class="text-xs hidden md:block">
                     <p class="font-bold leading-none text-white" id="current-user-name">Admin</p>
                     <p class="text-[10px] text-slate-400 leading-tight mt-0.5" id="current-user-role">Maintenance Administrator</p>
                 </div>
-                <button onclick="handleLogout()" class="text-xs text-rose-400 hover:text-rose-300 ml-2" title="Logout">
+                <button onclick="handleLogout()" class="text-xs text-rose-400 hover:text-rose-300 ml-1 p-1" title="Logout">
                     <i class="fa-solid fa-right-from-bracket"></i>
                 </button>
             </div>
@@ -318,23 +308,23 @@
         <!-- Backdrop Gelap saat Sidebar Pop-up Terbuka -->
         <div id="sidebar-backdrop" onclick="toggleSidebarPopup()" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-30 hidden transition-opacity"></div>
 
-        <!-- Sidebar Futuristic Glassmorphism -->
-        <aside id="sidebar-popup" class="fixed inset-y-0 left-0 z-40 w-80 futuristic-sidebar text-slate-200 p-5 flex flex-col justify-between -translate-x-full">
-            <div class="space-y-5 overflow-y-auto pr-1">
+        <!-- Sidebar Futuristic Glassmorphism (Mobile Optimized width: 85% max 320px) -->
+        <aside id="sidebar-popup" class="fixed inset-y-0 left-0 z-45 w-[85%] sm:w-80 futuristic-sidebar text-slate-200 p-4 sm:p-5 flex flex-col justify-between -translate-x-full">
+            <div class="space-y-4 overflow-y-auto pr-1">
                 
-                <!-- Header Profil & Tombol Close Melingkar (Ikon Panah Kiri) -->
-                <div class="relative glass-profile p-3.5 rounded-2xl flex items-center justify-between">
+                <!-- Header Profil & Tombol Close Panah Kiri -->
+                <div class="relative glass-profile p-3 rounded-2xl flex items-center justify-between">
                     <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-full border-2 border-indigo-400 flex items-center justify-center text-indigo-200 font-bold bg-indigo-950/80 shadow-inner" id="sidebar-avatar-letter">
+                        <div class="w-9 h-9 rounded-full border-2 border-indigo-400 flex items-center justify-center text-indigo-200 font-bold bg-indigo-950 shadow-inner flex-shrink-0" id="sidebar-avatar-letter">
                             A
                         </div>
-                        <div>
-                            <p class="font-bold text-xs text-white" id="sidebar-user-name">Admin</p>
-                            <p class="text-[10px] text-indigo-300">Maintenance Planner</p>
+                        <div class="overflow-hidden">
+                            <p class="font-bold text-xs text-white truncate" id="sidebar-user-name">Admin</p>
+                            <p class="text-[10px] text-indigo-300 truncate">Maintenance Planner</p>
                         </div>
                     </div>
                     <!-- Tombol Tutup Sidebar Panah Kiri -->
-                    <button onclick="toggleSidebarPopup()" class="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-600 to-blue-500 border border-white/20 flex items-center justify-center text-white shadow-lg hover:scale-105 transition">
+                    <button onclick="toggleSidebarPopup()" class="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-600 to-blue-500 border border-white/20 flex items-center justify-center text-white shadow-lg hover:scale-105 transition flex-shrink-0">
                         <i class="fa-solid fa-chevron-left text-xs"></i>
                     </button>
                 </div>
@@ -347,18 +337,18 @@
 
                 <!-- Menu Pill Items -->
                 <nav class="space-y-2 text-xs">
-                    <a href="#" class="menu-pill active flex items-center justify-between px-4 py-3 rounded-xl text-white font-bold">
+                    <a href="#" onclick="toggleSidebarPopup()" class="menu-pill active flex items-center justify-between px-3.5 py-3 rounded-xl text-white font-bold">
                         <span class="flex items-center gap-3"><i class="fa-solid fa-house text-indigo-400"></i> Home</span>
                     </a>
-                    <a href="#" class="menu-pill flex items-center justify-between px-4 py-3 rounded-xl text-slate-300 font-medium">
+                    <a href="#" onclick="toggleSidebarPopup()" class="menu-pill flex items-center justify-between px-3.5 py-3 rounded-xl text-slate-300 font-medium">
                         <span class="flex items-center gap-3"><i class="fa-solid fa-chart-line text-rose-400"></i> Realtime Dashboard</span>
                     </a>
-                    <a href="#" class="menu-pill flex items-center justify-between px-4 py-3 rounded-xl text-slate-300 font-medium">
+                    <a href="#" onclick="toggleSidebarPopup()" class="menu-pill flex items-center justify-between px-3.5 py-3 rounded-xl text-slate-300 font-medium">
                         <span class="flex items-center gap-3"><i class="fa-solid fa-chart-pie text-amber-400"></i> Realtime Dashboard - Site</span>
                     </a>
 
                     <div class="pt-3 pb-1">
-                        <p class="px-2 text-[10px] font-extrabold uppercase tracking-wider text-indigo-400/80">Filter Controls</p>
+                        <p class="px-2 text-[10px] font-extrabold uppercase tracking-wider text-indigo-400">Filter Controls</p>
                     </div>
 
                     <!-- Filter Dropdowns -->
@@ -402,128 +392,128 @@
         </aside>
 
         <!-- Main Content Area -->
-        <main class="flex-1 main-bg p-5 sm:p-7 overflow-y-auto space-y-6">
+        <main class="flex-1 main-bg p-4 sm:p-7 overflow-y-auto space-y-6">
 
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                 <div>
-                    <h2 class="text-xl font-extrabold text-white tracking-tight">Executive Dashboard</h2>
+                    <h2 class="text-lg sm:text-xl font-extrabold text-white tracking-tight">Executive Dashboard</h2>
                     <p class="text-xs text-slate-400 font-medium">Ringkasan Operasional & Evaluasi Valuation Backlog</p>
                 </div>
             </div>
 
-            <!-- KPI Cards Section (6 Kolom) -->
-            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
-                <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 cursor-pointer" onclick="resetMOFilter()">
+            <!-- KPI Cards Section (Responsive Grid) -->
+            <section class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-6 gap-3 sm:gap-4">
+                <div class="metric-card light-card p-3.5 sm:p-4 rounded-2xl flex flex-col justify-between h-32 sm:h-36 cursor-pointer" onclick="resetMOFilter()">
                     <div class="flex justify-between items-center">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Unique MO</span>
-                        <div class="w-8 h-8 bg-indigo-500/20 rounded-xl flex items-center justify-center text-indigo-400 text-xs">
+                        <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-300">Total Unique MO</span>
+                        <div class="w-7 h-7 sm:w-8 sm:h-8 bg-indigo-500/20 rounded-xl flex items-center justify-center text-indigo-400 text-xs">
                             <i class="fa-solid fa-file-signature"></i>
                         </div>
                     </div>
                     <div>
-                        <h3 id="kpi-mo" class="text-2xl font-extrabold text-white tracking-tight">0</h3>
-                        <p class="text-[9px] text-slate-400 font-semibold mt-1">Total nomor MO unik</p>
+                        <h3 id="kpi-mo" class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">0</h3>
+                        <p class="text-[8px] sm:text-[9px] text-slate-400 font-semibold mt-0.5">Total nomor MO unik</p>
                     </div>
                 </div>
 
-                <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 border-l-4 border-l-emerald-500 cursor-pointer hover:bg-emerald-950/20 transition" onclick="filterByReadiness('READY')" title="Klik untuk filter Ready Eksekusi">
+                <div class="metric-card light-card p-3.5 sm:p-4 rounded-2xl flex flex-col justify-between h-32 sm:h-36 border-l-4 border-l-emerald-500 cursor-pointer hover:bg-emerald-950/20 transition" onclick="filterByReadiness('READY')" title="Klik untuk filter Ready Eksekusi">
                     <div class="flex justify-between items-center">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400">MO Ready</span>
-                        <div class="w-8 h-8 bg-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-400 text-xs">
+                        <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-emerald-400">MO Ready</span>
+                        <div class="w-7 h-7 sm:w-8 sm:h-8 bg-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-400 text-xs">
                             <i class="fa-solid fa-circle-check"></i>
                         </div>
                     </div>
                     <div>
-                        <h3 id="kpi-mo-ready" class="text-2xl font-extrabold text-emerald-400 tracking-tight">0</h3>
-                        <p class="text-[9px] text-emerald-400 font-bold mt-1">Ready Eksekusi</p>
+                        <h3 id="kpi-mo-ready" class="text-xl sm:text-2xl font-extrabold text-emerald-400 tracking-tight">0</h3>
+                        <p class="text-[8px] sm:text-[9px] text-emerald-400 font-bold mt-0.5">Ready Eksekusi</p>
                     </div>
                 </div>
 
-                <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 border-l-4 border-l-amber-500 cursor-pointer hover:bg-amber-950/20 transition" onclick="filterByReadiness('NOT_READY')" title="Klik untuk filter Not Ready">
+                <div class="metric-card light-card p-3.5 sm:p-4 rounded-2xl flex flex-col justify-between h-32 sm:h-36 border-l-4 border-l-amber-500 cursor-pointer hover:bg-amber-950/20 transition" onclick="filterByReadiness('NOT_READY')" title="Klik untuk filter Not Ready">
                     <div class="flex justify-between items-center">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400">MO Not Ready</span>
-                        <div class="w-8 h-8 bg-amber-500/20 rounded-xl flex items-center justify-center text-amber-400 text-xs">
+                        <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-amber-400">MO Not Ready</span>
+                        <div class="w-7 h-7 sm:w-8 sm:h-8 bg-amber-500/20 rounded-xl flex items-center justify-center text-amber-400 text-xs">
                             <i class="fa-solid fa-clock"></i>
                         </div>
                     </div>
                     <div>
-                        <h3 id="kpi-mo-not-ready" class="text-2xl font-extrabold text-amber-400 tracking-tight">0</h3>
-                        <p class="text-[9px] text-amber-400 font-bold mt-1">Belum Ready</p>
+                        <h3 id="kpi-mo-not-ready" class="text-xl sm:text-2xl font-extrabold text-amber-400 tracking-tight">0</h3>
+                        <p class="text-[8px] sm:text-[9px] text-amber-400 font-bold mt-0.5">Belum Ready</p>
                     </div>
                 </div>
 
-                <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 border-l-4 border-l-blue-500 cursor-pointer hover:bg-blue-950/20 transition" onclick="filterByReadiness('CLOSE')" title="Klik untuk filter Close">
+                <div class="metric-card light-card p-3.5 sm:p-4 rounded-2xl flex flex-col justify-between h-32 sm:h-36 border-l-4 border-l-blue-500 cursor-pointer hover:bg-blue-950/20 transition" onclick="filterByReadiness('CLOSE')" title="Klik untuk filter Close">
                     <div class="flex justify-between items-center">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-blue-400">MO Close</span>
-                        <div class="w-8 h-8 bg-blue-500/20 rounded-xl flex items-center justify-center text-blue-400 text-xs">
+                        <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-blue-400">MO Close</span>
+                        <div class="w-7 h-7 sm:w-8 sm:h-8 bg-blue-500/20 rounded-xl flex items-center justify-center text-blue-400 text-xs">
                             <i class="fa-solid fa-circle-xmark"></i>
                         </div>
                     </div>
                     <div>
-                        <h3 id="kpi-mo-close" class="text-2xl font-extrabold text-blue-400 tracking-tight">0</h3>
-                        <p class="text-[9px] text-blue-400 font-bold mt-1">Status Close/TECO</p>
+                        <h3 id="kpi-mo-close" class="text-xl sm:text-2xl font-extrabold text-blue-400 tracking-tight">0</h3>
+                        <p class="text-[8px] sm:text-[9px] text-blue-400 font-bold mt-0.5">Status Close/TECO</p>
                     </div>
                 </div>
 
-                <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36">
+                <div class="metric-card light-card p-3.5 sm:p-4 rounded-2xl flex flex-col justify-between h-32 sm:h-36">
                     <div class="flex justify-between items-center">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Available Parts</span>
-                        <div class="w-8 h-8 bg-teal-500/20 rounded-xl flex items-center justify-center text-teal-400 text-xs">
+                        <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-300">Available Parts</span>
+                        <div class="w-7 h-7 sm:w-8 sm:h-8 bg-teal-500/20 rounded-xl flex items-center justify-center text-teal-400 text-xs">
                             <i class="fa-solid fa-boxes-packing"></i>
                         </div>
                     </div>
                     <div>
-                        <h3 id="exec-safe" class="text-2xl font-extrabold text-white tracking-tight">0</h3>
-                        <p class="text-[9px] text-teal-400 font-bold mt-1">Total stok part</p>
+                        <h3 id="exec-safe" class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">0</h3>
+                        <p class="text-[8px] sm:text-[9px] text-teal-400 font-bold mt-0.5">Total stok part</p>
                     </div>
                 </div>
 
-                <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36">
+                <div class="metric-card light-card p-3.5 sm:p-4 rounded-2xl flex flex-col justify-between h-32 sm:h-36">
                     <div class="flex justify-between items-center">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Out of Stock</span>
-                        <div class="w-8 h-8 bg-rose-500/20 rounded-xl flex items-center justify-center text-rose-400 text-xs">
+                        <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-300">Out of Stock</span>
+                        <div class="w-7 h-7 sm:w-8 sm:h-8 bg-rose-500/20 rounded-xl flex items-center justify-center text-rose-400 text-xs">
                             <i class="fa-solid fa-triangle-exclamation"></i>
                         </div>
                     </div>
                     <div>
-                        <h3 id="kpi-stockout" class="text-2xl font-extrabold text-white tracking-tight">0</h3>
-                        <p class="text-[9px] text-rose-400 font-bold mt-1">Stok habis (0)</p>
+                        <h3 id="kpi-stockout" class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">0</h3>
+                        <p class="text-[8px] sm:text-[9px] text-rose-400 font-bold mt-0.5">Stok habis (0)</p>
                     </div>
                 </div>
             </section>
 
             <!-- Middle Section: Visual Charts & Valuation Card -->
-            <section class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-                <div class="light-card p-5 rounded-2xl flex flex-col justify-between">
-                    <div class="flex justify-between items-center mb-4 pb-2 border-b border-white/10">
+            <section class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5">
+                <div class="light-card p-4 sm:p-5 rounded-2xl flex flex-col justify-between">
+                    <div class="flex justify-between items-center mb-3 pb-2 border-b border-white/10">
                         <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-200 flex items-center gap-2">
                             <i class="fa-solid fa-chart-column text-indigo-400"></i> Top 10 MO Terbanyak
                         </h4>
                     </div>
-                    <div class="relative h-60 w-full">
+                    <div class="relative h-56 sm:h-60 w-full">
                         <canvas id="barChart"></canvas>
                     </div>
                 </div>
 
-                <div class="light-card p-5 rounded-2xl flex flex-col justify-between">
-                    <div class="flex justify-between items-center mb-4 pb-2 border-b border-white/10">
+                <div class="light-card p-4 sm:p-5 rounded-2xl flex flex-col justify-between">
+                    <div class="flex justify-between items-center mb-3 pb-2 border-b border-white/10">
                         <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-200 flex items-center gap-2">
                             <i class="fa-solid fa-chart-pie text-indigo-400"></i> Sebaran Cluster (Section)
                         </h4>
                     </div>
-                    <div class="relative h-60 w-full flex justify-center">
+                    <div class="relative h-56 sm:h-60 w-full flex justify-center">
                         <canvas id="pieChart"></canvas>
                     </div>
                 </div>
 
                 <!-- Valuation Card -->
-                <div class="bg-gradient-to-br from-indigo-900 via-indigo-950 to-blue-950 text-white p-6 rounded-2xl border border-indigo-500/30 shadow-xl shadow-indigo-950/50 flex flex-col justify-between relative overflow-hidden">
+                <div class="bg-gradient-to-br from-indigo-900 via-indigo-950 to-blue-950 text-white p-5 sm:p-6 rounded-2xl border border-indigo-500/30 shadow-xl flex flex-col justify-between relative overflow-hidden">
                     <div class="absolute -right-8 -bottom-8 w-40 h-40 bg-indigo-500/20 rounded-full blur-2xl pointer-events-none"></div>
                     <div class="flex justify-between items-center relative z-10">
                         <h4 class="text-xs font-extrabold text-amber-300 uppercase tracking-wider flex items-center gap-2">
                             <i class="fa-solid fa-wallet text-amber-300"></i> Valuation Summary
                         </h4>
-                        <span class="text-[10px] bg-white/10 text-white border border-white/20 px-3 py-1 rounded-full font-bold uppercase tracking-wide backdrop-blur-md">
+                        <span class="text-[9px] sm:text-[10px] bg-white/10 text-white border border-white/20 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wide backdrop-blur-md">
                             Total Price
                         </span>
                     </div>
@@ -536,32 +526,32 @@
                     </div>
 
                     <div class="border-t border-indigo-500/30 pt-3 flex justify-between items-center text-xs text-slate-300 relative z-10 font-medium">
-                        <span class="text-[11px]">Data Synchronization</span>
-                        <span class="font-extrabold text-white">MONRES 2026</span>
+                        <span class="text-[10px] sm:text-[11px]">Data Synchronization</span>
+                        <span class="font-extrabold text-white text-xs">MONRES 2026</span>
                     </div>
                 </div>
             </section>
 
-            <!-- Bottom Table Section -->
+            <!-- Bottom Table Section (Mobile Scroll Friendly) -->
             <section class="light-card rounded-2xl overflow-hidden">
-                <div class="p-5 border-b border-white/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div class="p-4 sm:p-5 border-b border-white/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                     <div>
-                        <h3 class="text-sm font-extrabold text-white flex items-center gap-2">
+                        <h3 class="text-xs sm:text-sm font-extrabold text-white flex items-center gap-2 flex-wrap">
                             <span>Rincian Detail Backlog Unit</span>
-                            <span id="active-filter-badge" class="hidden text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-800 font-bold px-2.5 py-0.5 rounded-full">
+                            <span id="active-filter-badge" class="hidden text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-800 font-bold px-2 py-0.5 rounded-full">
                                 Filter Active
                             </span>
                         </h3>
-                        <p class="text-xs text-slate-400 font-medium" id="table-count-info">Menampilkan 0 data backlog</p>
+                        <p class="text-xs text-slate-400 font-medium mt-0.5" id="table-count-info">Menampilkan 0 data backlog</p>
                     </div>
-                    <button onclick="exportTableToCSV()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-2 shadow-md shadow-indigo-600/30">
+                    <button onclick="exportTableToCSV()" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-2 shadow-md shadow-indigo-600/30">
                         <i class="fa-solid fa-file-csv text-indigo-200"></i> Ekspor CSV
                     </button>
                 </div>
 
-                <div class="overflow-x-auto min-h-[350px]">
-                    <table class="min-w-full divide-y divide-slate-800 text-xs text-left">
-                        <thead class="bg-slate-900/80 text-slate-300 font-extrabold tracking-wider uppercase text-[10px] sticky top-0 z-10 border-b border-slate-800">
+                <div class="overflow-x-auto min-h-[320px]">
+                    <table class="min-w-[1000px] w-full divide-y divide-slate-800 text-xs text-left">
+                        <thead class="bg-slate-900/90 text-slate-300 font-extrabold tracking-wider uppercase text-[10px] sticky top-0 z-10 border-b border-slate-800">
                             <tr>
                                 <th class="px-4 py-3.5">No Unit</th>
                                 <th class="px-4 py-3.5">Cluster (Section)</th>
@@ -581,8 +571,8 @@
                     </table>
                 </div>
 
-                <div class="p-4 border-t border-white/10 bg-slate-950/40 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div class="text-xs text-slate-400 font-medium" id="pagination-info">
+                <div class="p-3.5 sm:p-4 border-t border-white/10 bg-slate-950/40 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+                    <div class="text-slate-400 font-medium text-center sm:text-left" id="pagination-info">
                         Halaman 1 dari 1
                     </div>
                     <div class="flex items-center space-x-2">
@@ -597,9 +587,9 @@
                 </div>
             </section>
 
-            <div class="relative z-10 border-t border-white/10 pt-4 flex justify-between items-center text-[11px] text-slate-500 font-medium">
+            <div class="relative z-10 border-t border-white/10 pt-4 flex flex-col sm:flex-row justify-between items-center text-[11px] text-slate-400 font-medium gap-2">
                 <span>© 2026 MONRES. All rights reserved.</span>
-                <span class="font-bold text-slate-400">BSS Engineering</span>
+                <span class="font-bold text-indigo-300">BSS Engineering</span>
             </div>
 
         </main>
@@ -1002,14 +992,14 @@
                         data: Object.values(sectionCounts),
                         backgroundColor: ['#6366f1', '#06b6d4', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6'],
                         borderWidth: 2,
-                        borderColor: '#0f172a'
+                        borderColor: '#0b1329'
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11, weight: '600' }, color: '#cbd5e1' } }
+                        legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10, weight: '600' }, color: '#cbd5e1' } }
                     }
                 }
             });
@@ -1038,7 +1028,7 @@
 
             pageData.forEach(row => { 
                 const tr = document.createElement('tr');
-                tr.className = 'hover:bg-indigo-950/30 transition border-b border-slate-800/60';
+                tr.className = 'hover:bg-indigo-950/40 transition border-b border-slate-800/60';
                 
                 const moNo = getColumnPValue(row);
 
@@ -1061,17 +1051,17 @@
                 const amount = cleanNumber(getValue(row, 'Total Price'));
 
                 tr.innerHTML = `
-                    <td class="px-4 py-3 font-bold text-indigo-400">${getValue(row, 'No Unit') || '-'}</td>
-                    <td class="px-4 py-3 font-medium text-slate-300">${getValue(row, 'Section') || '-'}</td>
-                    <td class="px-4 py-3 font-mono font-semibold text-white">${moNo || '-'}</td>
-                    <td class="px-4 py-3 text-slate-400 max-w-[180px] truncate">${getValue(row, 'Maint. Order Desc.') || '-'}</td>
-                    <td class="px-4 py-3 font-mono text-slate-300">${getValue(row, 'Part Number') || '-'}</td>
+                    <td class="px-4 py-3 font-bold text-indigo-400 whitespace-nowrap">${getValue(row, 'No Unit') || '-'}</td>
+                    <td class="px-4 py-3 font-medium text-slate-300 whitespace-nowrap">${getValue(row, 'Section') || '-'}</td>
+                    <td class="px-4 py-3 font-mono font-semibold text-white whitespace-nowrap">${moNo || '-'}</td>
+                    <td class="px-4 py-3 text-slate-300 max-w-[180px] truncate">${getValue(row, 'Maint. Order Desc.') || '-'}</td>
+                    <td class="px-4 py-3 font-mono text-slate-300 whitespace-nowrap">${getValue(row, 'Part Number') || '-'}</td>
                     <td class="px-4 py-3 font-medium text-white max-w-[200px] truncate">${getValue(row, 'Description') || '-'}</td>
-                    <td class="px-3 py-3 text-center font-bold text-slate-300 bg-slate-900/40">${qtyRes}</td>
-                    <td class="px-3 py-3 text-center font-bold ${stock === 0 ? 'text-rose-400 bg-rose-950/50 rounded-lg border border-rose-900/50' : 'text-slate-300'}">${getValue(row, 'Stock On Hand') || '0'}</td>
-                    <td class="px-4 py-3 text-right font-extrabold text-white">Rp ${amount.toLocaleString('id-ID')}</td>
-                    <td class="px-4 py-3 text-center"><span class="px-2.5 py-1 text-[10px] font-bold rounded-lg ${partBadge}">${statusPart}</span></td>
-                    <td class="px-4 py-3 text-center"><span class="px-2.5 py-1 text-[10px] font-bold rounded-lg ${moBadge}">${statusMO}</span></td>
+                    <td class="px-3 py-3 text-center font-bold text-slate-300 bg-slate-900/40 whitespace-nowrap">${qtyRes}</td>
+                    <td class="px-3 py-3 text-center font-bold whitespace-nowrap ${stock === 0 ? 'text-rose-400 bg-rose-950/50 rounded-lg border border-rose-900/50' : 'text-slate-300'}">${getValue(row, 'Stock On Hand') || '0'}</td>
+                    <td class="px-4 py-3 text-right font-extrabold text-white whitespace-nowrap">Rp ${amount.toLocaleString('id-ID')}</td>
+                    <td class="px-4 py-3 text-center whitespace-nowrap"><span class="px-2.5 py-1 text-[10px] font-bold rounded-lg ${partBadge}">${statusPart}</span></td>
+                    <td class="px-4 py-3 text-center whitespace-nowrap"><span class="px-2.5 py-1 text-[10px] font-bold rounded-lg ${moBadge}">${statusMO}</span></td>
                 `;
                 tbody.appendChild(tr);
             });
