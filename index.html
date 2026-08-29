@@ -322,8 +322,8 @@
                 </div>
             </div>
 
-            <!-- KPI Cards Section -->
-            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- KPI Cards Section (Updated to 6 Cards) -->
+            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
                 <!-- 1. Total MO Unik -->
                 <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 cursor-pointer" onclick="resetMOFilter()">
                     <div class="flex justify-between items-center">
@@ -339,7 +339,7 @@
                 </div>
 
                 <!-- 2. MO Ready Eksekusi Unik -->
-                <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 border-l-4 border-l-emerald-500 cursor-pointer hover:bg-emerald-50/30 transition" onclick="filterByReadyMO()" title="Klik untuk filter Ready Eksekusi">
+                <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 border-l-4 border-l-emerald-500 cursor-pointer hover:bg-emerald-50/30 transition" onclick="filterByMOStatus('READY')" title="Klik untuk filter Ready Eksekusi">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700">MO Ready Eksekusi</span>
                         <div class="w-8 h-8 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600 text-xs">
@@ -349,12 +349,44 @@
                     <div>
                         <h3 id="kpi-mo-ready" class="text-2xl sm:text-3xl font-extrabold text-emerald-600 tracking-tight">0</h3>
                         <p class="text-[10px] text-emerald-600 font-bold mt-1 flex items-center gap-1">
-                            <i class="fa-solid fa-filter text-[9px]"></i> Klik filter Ready Eksekusi
+                            <i class="fa-solid fa-filter text-[9px]"></i> Filter Ready
                         </p>
                     </div>
                 </div>
 
-                <!-- 3. Available Parts -->
+                <!-- 3. MO Not Ready -->
+                <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 border-l-4 border-l-amber-500 cursor-pointer hover:bg-amber-50/30 transition" onclick="filterByMOStatus('NOT_READY')" title="Klik untuk filter Not Ready">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-amber-700">MO Not Ready</span>
+                        <div class="w-8 h-8 bg-amber-100 rounded-xl flex items-center justify-center text-amber-600 text-xs">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 id="kpi-mo-not-ready" class="text-2xl sm:text-3xl font-extrabold text-amber-600 tracking-tight">0</h3>
+                        <p class="text-[10px] text-amber-600 font-bold mt-1 flex items-center gap-1">
+                            <i class="fa-solid fa-filter text-[9px]"></i> Filter Not Ready
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 4. MO Close -->
+                <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 border-l-4 border-l-slate-400 cursor-pointer hover:bg-slate-50 transition" onclick="filterByMOStatus('CLOSE')" title="Klik untuk filter Close">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-600">MO Close</span>
+                        <div class="w-8 h-8 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600 text-xs">
+                            <i class="fa-solid fa-lock"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 id="kpi-mo-close" class="text-2xl sm:text-3xl font-extrabold text-slate-700 tracking-tight">0</h3>
+                        <p class="text-[10px] text-slate-500 font-bold mt-1 flex items-center gap-1">
+                            <i class="fa-solid fa-filter text-[9px]"></i> Filter Close
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 5. Available Parts -->
                 <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Available Parts</span>
@@ -365,12 +397,12 @@
                     <div>
                         <h3 id="exec-safe" class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight">0</h3>
                         <p class="text-[10px] text-teal-600 font-bold mt-1 flex items-center gap-1">
-                            <i class="fa-solid fa-boxes-stacked text-[9px]"></i> Total kuantitas stok part
+                            <i class="fa-solid fa-boxes-stacked text-[9px]"></i> Total stok part
                         </p>
                     </div>
                 </div>
 
-                <!-- 4. Out of Stock -->
+                <!-- 6. Out of Stock -->
                 <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Out of Stock</span>
@@ -691,8 +723,8 @@
             updateDashboard();
         }
 
-        function filterByReadyMO() {
-            document.getElementById('filter-mo-readiness').value = 'READY';
+        function filterByMOStatus(status) {
+            document.getElementById('filter-mo-readiness').value = status;
             onFilterChange();
         }
 
@@ -701,6 +733,7 @@
             onFilterChange();
         }
 
+        // AKURAT: Mengambil kriteria Status MO secara langsung dari Kolom X Google Sheets
         function getMOReadinessCategory(row) {
             const valX = getColumnXValue(row).toUpperCase().trim();
             
@@ -709,7 +742,7 @@
             if (valX.includes('CLOSE') || valX.includes('CLSD') || valX.includes('TECO') || valX.includes('COMPL')) {
                 return 'CLOSE';
             } 
-            else if (valX.includes('RELEASE') || valX.includes('REL') || valX.includes('READY') || valX.includes('EXEC')) {
+            else if (valX.includes('READY') || valX.includes('RELEASE') || valX.includes('REL') || valX.includes('EXEC')) {
                 return 'READY';
             } 
             else {
@@ -806,6 +839,8 @@
             document.getElementById('exec-safe').innerText = totalStockQuantity.toLocaleString('id-ID');
             document.getElementById('kpi-mo').innerText = moTotalSet.size.toLocaleString('id-ID');
             document.getElementById('kpi-mo-ready').innerText = moReadySet.size.toLocaleString('id-ID');
+            document.getElementById('kpi-mo-not-ready').innerText = moNotReadySet.size.toLocaleString('id-ID');
+            document.getElementById('kpi-mo-close').innerText = moCloseSet.size.toLocaleString('id-ID');
             document.getElementById('kpi-stockout').innerText = stockOutCount.toLocaleString('id-ID');
 
             const activeBadge = document.getElementById('active-filter-badge');
