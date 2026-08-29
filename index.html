@@ -21,7 +21,6 @@
             color: #0f172a;
         }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -56,7 +55,6 @@
             border-color: #c7d2fe;
         }
 
-        /* Glowing Effects */
         .glow-indigo {
             box-shadow: 0 0 25px rgba(99, 102, 241, 0.35);
         }
@@ -71,7 +69,6 @@
     <div id="login-modal" class="fixed inset-0 z-50 flex bg-slate-50 text-slate-800 overflow-y-auto">
         <div class="min-h-screen w-full flex flex-col lg:flex-row">
             
-            <!-- Sisi Kiri: Hero Banner & Deskripsi Backlog Management -->
             <div class="lg:w-7/12 p-8 lg:p-16 flex flex-col justify-between bg-gradient-to-br from-indigo-500 via-indigo-600 to-blue-700 relative overflow-hidden text-white">
                 <div class="absolute -top-24 -left-24 w-96 h-96 bg-white/20 rounded-full blur-3xl pointer-events-none"></div>
                 <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-blue-400/30 rounded-full blur-3xl pointer-events-none"></div>
@@ -133,7 +130,6 @@
                 </div>
             </div>
 
-            <!-- Sisi Kanan: Form Login -->
             <div class="lg:w-5/12 p-8 lg:p-16 flex items-center justify-center bg-slate-50/80 border-t lg:border-t-0 lg:border-l border-slate-200">
                 <div class="w-full max-w-sm space-y-6">
                     
@@ -284,6 +280,15 @@
                     </div>
 
                     <div class="space-y-3 px-1">
+                        <!-- Filter Kategori Kesiapan MO -->
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-600 mb-1.5">Filter Kesiapan MO</label>
+                            <select id="filter-mo-readiness" class="w-full bg-slate-50 border border-slate-200 text-xs text-slate-700 rounded-xl p-2.5 focus:outline-none focus:border-indigo-600 transition font-bold text-indigo-600">
+                                <option value="ALL">Semua MO (All)</option>
+                                <option value="READY">MO Ready (Stok Lengkap)</option>
+                                <option value="PENDING">MO Pending (Stok Kurang/0)</option>
+                            </select>
+                        </div>
                         <div>
                             <label class="block text-[11px] font-bold text-slate-600 mb-1.5">No Unit</label>
                             <select id="filter-unit" class="w-full bg-slate-50 border border-slate-200 text-xs text-slate-700 rounded-xl p-2.5 focus:outline-none focus:border-indigo-600 transition font-medium">
@@ -323,10 +328,10 @@
                 </div>
             </div>
 
-            <!-- KPI Cards Section (5 Grid setelah Part Ready dihapus) -->
+            <!-- KPI Cards Section -->
             <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                 <!-- 1. Total MO -->
-                <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36">
+                <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 cursor-pointer" onclick="resetMOFilter()">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Total MO</span>
                         <div class="w-8 h-8 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 text-xs">
@@ -339,18 +344,18 @@
                     </div>
                 </div>
 
-                <!-- 2. MO Ready Eksekusi -->
-                <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 border-l-4 border-l-indigo-500">
+                <!-- 2. MO Ready Eksekusi (Klik untuk Memfilter) -->
+                <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 border-l-4 border-l-emerald-500 cursor-pointer hover:bg-emerald-50/30 transition" onclick="filterByReadyMO()" title="Klik untuk menampilkan hanya MO Ready">
                     <div class="flex justify-between items-center">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-700">MO Ready</span>
-                        <div class="w-8 h-8 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 text-xs">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700">MO Ready</span>
+                        <div class="w-8 h-8 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600 text-xs">
                             <i class="fa-solid fa-circle-check"></i>
                         </div>
                     </div>
                     <div>
-                        <h3 id="kpi-mo-ready" class="text-2xl sm:text-3xl font-extrabold text-indigo-600 tracking-tight">0</h3>
-                        <p class="text-[10px] text-indigo-600 font-bold mt-1 flex items-center gap-1">
-                            <i class="fa-solid fa-screws-tilting text-[9px]"></i> MO siap dikerjakan
+                        <h3 id="kpi-mo-ready" class="text-2xl sm:text-3xl font-extrabold text-emerald-600 tracking-tight">0</h3>
+                        <p class="text-[10px] text-emerald-600 font-bold mt-1 flex items-center gap-1">
+                            <i class="fa-solid fa-filter text-[9px]"></i> Klik untuk filter MO Ready
                         </p>
                     </div>
                 </div>
@@ -369,7 +374,7 @@
                     </div>
                 </div>
 
-                <!-- 4. Available Parts (Akumulasi Jumlah Stok Fisik dari Kolom Stock) -->
+                <!-- 4. Available Parts -->
                 <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Available Parts</span>
@@ -456,7 +461,12 @@
             <section class="light-card rounded-2xl overflow-hidden">
                 <div class="p-5 border-b border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white">
                     <div>
-                        <h3 class="text-sm font-extrabold text-slate-800">Rincian Detail Backlog Unit</h3>
+                        <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+                            <span>Rincian Detail Backlog Unit</span>
+                            <span id="active-filter-badge" class="hidden text-[10px] bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold px-2.5 py-0.5 rounded-full">
+                                Filter: MO Ready
+                            </span>
+                        </h3>
                         <p class="text-xs text-slate-500 font-medium" id="table-count-info">Menampilkan 0 data backlog</p>
                     </div>
                     <button onclick="exportTableToCSV()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-2 shadow-md shadow-indigo-600/30">
@@ -471,6 +481,7 @@
                                 <th class="px-4 py-3.5">No Unit</th>
                                 <th class="px-4 py-3.5">Cluster (Section)</th>
                                 <th class="px-4 py-3.5">No MO</th>
+                                <th class="px-3 py-3.5 text-center">Status MO Ready</th>
                                 <th class="px-4 py-3.5">Status MO (Desc)</th>
                                 <th class="px-4 py-3.5">Part Number</th>
                                 <th class="px-4 py-3.5">Description Part</th>
@@ -517,6 +528,7 @@
 
         let rawData = [];
         let filteredDataCache = [];
+        let readyMOList = new Set(); // Menyimpan daftar No MO yang siap dikerjakan
         let barChartInstance = null;
         let pieChartInstance = null;
 
@@ -642,6 +654,7 @@
                     statusBadge.className = 'text-[11px] font-bold text-emerald-600';
                     
                     populateFilterOptions();
+                    calculateReadyMOList();
                     updateDashboard();
                 },
                 error: function(err) {
@@ -653,6 +666,30 @@
 
         function refreshData() {
             fetchSheetData();
+        }
+
+        function calculateReadyMOList() {
+            readyMOList.clear();
+            const moStockMap = {};
+
+            rawData.forEach(row => {
+                const mo = getValue(row, 'MO').trim();
+                const stock = cleanNumber(getValue(row, 'Stock On Hand'));
+
+                if (mo) {
+                    if (!moStockMap[mo]) moStockMap[mo] = { totalParts: 0, readyParts: 0 };
+                    moStockMap[mo].totalParts += 1;
+                    if (stock > 0) {
+                        moStockMap[mo].readyParts += 1;
+                    }
+                }
+            });
+
+            Object.keys(moStockMap).forEach(mo => {
+                if (moStockMap[mo].totalParts > 0 && moStockMap[mo].totalParts === moStockMap[mo].readyParts) {
+                    readyMOList.add(mo);
+                }
+            });
         }
 
         function populateFilterOptions() {
@@ -682,6 +719,7 @@
             buildOptions('filter-section', sectionSet, 'Cluster');
             buildOptions('filter-status', statusSet, 'Status Part');
 
+            document.getElementById('filter-mo-readiness').onchange = onFilterChange;
             document.getElementById('filter-unit').onchange = onFilterChange;
             document.getElementById('filter-section').onchange = onFilterChange;
             document.getElementById('filter-status').onchange = onFilterChange;
@@ -699,7 +737,18 @@
             updateDashboard();
         }
 
+        function filterByReadyMO() {
+            document.getElementById('filter-mo-readiness').value = 'READY';
+            onFilterChange();
+        }
+
+        function resetMOFilter() {
+            document.getElementById('filter-mo-readiness').value = 'ALL';
+            onFilterChange();
+        }
+
         function getFilteredData() {
+            const moReadiness = document.getElementById('filter-mo-readiness').value;
             const selectedUnit = document.getElementById('filter-unit').value;
             const selectedSection = document.getElementById('filter-section').value;
             const selectedStatus = document.getElementById('filter-status').value;
@@ -709,7 +758,16 @@
                 const rowUnit = getValue(row, 'No Unit').trim();
                 const rowSection = getValue(row, 'Section').trim();
                 const rowStatus = getColumnWValue(row);
+                const rowMO = getValue(row, 'MO').trim();
                 
+                const isMOReady = readyMOList.has(rowMO);
+                let matchReadiness = true;
+                if (moReadiness === 'READY') {
+                    matchReadiness = isMOReady;
+                } else if (moReadiness === 'PENDING') {
+                    matchReadiness = !isMOReady;
+                }
+
                 const matchUnit = selectedUnit === 'ALL' || rowUnit === selectedUnit;
                 const matchSection = selectedSection === 'ALL' || rowSection === selectedSection;
                 const matchStatus = selectedStatus === 'ALL' || rowStatus === selectedStatus;
@@ -727,7 +785,7 @@
                                   moDesc.includes(searchQuery);
                 }
 
-                return matchUnit && matchSection && matchStatus && matchSearch;
+                return matchReadiness && matchUnit && matchSection && matchStatus && matchSearch;
             });
         }
 
@@ -743,9 +801,9 @@
 
             let totalAmount = 0;
             let stockOutCount = 0;
-            let totalStockQuantity = 0; // Mengumpulkan kuantitas fisik stok
+            let totalStockQuantity = 0;
             const moSet = new Set();
-            const moStockMap = {}; 
+            let moReadyCount = 0;
 
             filteredDataCache.forEach(row => {
                 const amount = cleanNumber(getValue(row, 'Total Price')); 
@@ -753,7 +811,7 @@
                 const mo = getValue(row, 'MO').trim();
 
                 totalAmount += amount;
-                totalStockQuantity += stock; // Menjumlahkan seluruh isi kolom Stock On Hand
+                totalStockQuantity += stock;
 
                 if (stock <= 0) {
                     stockOutCount++;
@@ -761,29 +819,31 @@
 
                 if (mo) {
                     moSet.add(mo);
-                    if (!moStockMap[mo]) moStockMap[mo] = { totalParts: 0, readyParts: 0 };
-                    moStockMap[mo].totalParts += 1;
-                    if (stock > 0) {
-                        moStockMap[mo].readyParts += 1;
-                    }
                 }
             });
 
-            // Hitung berapa banyak MO yang seluruh part-nya sudah siap (Ready Eksekusi)
-            let moReadyCount = 0;
-            Object.keys(moStockMap).forEach(mo => {
-                if (moStockMap[mo].totalParts > 0 && moStockMap[mo].totalParts === moStockMap[mo].readyParts) {
+            // Menghitung MO Ready dari ketersediaan global
+            moSet.forEach(mo => {
+                if (readyMOList.has(mo)) {
                     moReadyCount++;
                 }
             });
 
             const formattedCost = 'Rp ' + totalAmount.toLocaleString('id-ID', {maximumFractionDigits: 0});
 
-            document.getElementById('exec-safe').innerText = totalStockQuantity.toLocaleString('id-ID'); // Menampilkan total kuantitas stok
+            document.getElementById('exec-safe').innerText = totalStockQuantity.toLocaleString('id-ID');
             document.getElementById('kpi-total').innerText = filteredDataCache.length.toLocaleString('id-ID');
             document.getElementById('kpi-mo').innerText = moSet.size.toLocaleString('id-ID');
             document.getElementById('kpi-mo-ready').innerText = moReadyCount.toLocaleString('id-ID');
             document.getElementById('kpi-stockout').innerText = stockOutCount.toLocaleString('id-ID');
+
+            const activeBadge = document.getElementById('active-filter-badge');
+            const readinessVal = document.getElementById('filter-mo-readiness').value;
+            if (readinessVal === 'READY') {
+                activeBadge.classList.remove('hidden');
+            } else {
+                activeBadge.classList.add('hidden');
+            }
 
             const execCost = document.getElementById('exec-cost');
             if (execCost) execCost.innerText = formattedCost;
@@ -868,7 +928,7 @@
             document.getElementById('table-count-info').innerText = `Menampilkan ${total.toLocaleString('id-ID')} data backlog`;
 
             if (total === 0) {
-                tbody.innerHTML = `<tr><td colspan="10" class="text-center py-12 text-slate-400 font-medium">Tidak ada data backlog.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="11" class="text-center py-12 text-slate-400 font-medium">Tidak ada data backlog.</td></tr>`;
                 updatePaginationControls(0);
                 return;
             }
@@ -885,6 +945,12 @@
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-indigo-50/40 transition border-b border-slate-100';
                 
+                const moNo = getValue(row, 'MO').trim();
+                const isMOReady = readyMOList.has(moNo);
+                const moReadyBadge = isMOReady 
+                    ? `<span class="px-2 py-0.5 text-[9px] font-extrabold rounded-md bg-emerald-100 text-emerald-800 border border-emerald-200"><i class="fa-solid fa-check mr-0.5"></i> READY</span>` 
+                    : `<span class="px-2 py-0.5 text-[9px] font-extrabold rounded-md bg-amber-100 text-amber-800 border border-amber-200"><i class="fa-solid fa-clock mr-0.5"></i> PENDING PART</span>`;
+
                 const statusPart = getColumnWValue(row) || '-';
                 let partBadge = 'bg-slate-100 text-slate-600 border border-slate-200';
                 const partUpper = statusPart.toUpperCase();
@@ -905,7 +971,8 @@
                 tr.innerHTML = `
                     <td class="px-4 py-3 font-bold text-indigo-600">${getValue(row, 'No Unit') || '-'}</td>
                     <td class="px-4 py-3 font-medium text-slate-700">${getValue(row, 'Section') || '-'}</td>
-                    <td class="px-4 py-3 font-mono font-semibold text-slate-800">${getValue(row, 'MO') || '-'}</td>
+                    <td class="px-4 py-3 font-mono font-semibold text-slate-800">${moNo || '-'}</td>
+                    <td class="px-3 py-3 text-center">${moReadyBadge}</td>
                     <td class="px-4 py-3 text-slate-600 max-w-[180px] truncate">${getValue(row, 'Maint. Order Desc.') || '-'}</td>
                     <td class="px-4 py-3 font-mono text-slate-700">${getValue(row, 'Part Number') || '-'}</td>
                     <td class="px-4 py-3 font-medium text-slate-800 max-w-[200px] truncate">${getValue(row, 'Description') || '-'}</td>
@@ -953,12 +1020,16 @@
         function exportTableToCSV() {
             if (filteredDataCache.length === 0) return;
 
-            let csvContent = "No Unit,Section,MO,Maint. Order Desc,Part Number,Description,Stock On Hand,Total Price,Status Part,Status MO\n";
+            let csvContent = "No Unit,Section,MO,Status Ready,Maint. Order Desc,Part Number,Description,Stock On Hand,Total Price,Status Part,Status MO\n";
             filteredDataCache.forEach(row => {
+                const moNo = getValue(row, 'MO').trim();
+                const isReadyStr = readyMOList.has(moNo) ? 'READY' : 'PENDING PART';
+
                 const line = [
                     `"${getValue(row, 'No Unit')}"`,
                     `"${getValue(row, 'Section')}"`,
-                    `"${getValue(row, 'MO')}"`,
+                    `"${moNo}"`,
+                    `"${isReadyStr}"`,
                     `"${getValue(row, 'Maint. Order Desc.')}"`,
                     `"${getValue(row, 'Part Number')}"`,
                     `"${getValue(row, 'Description')}"`,
