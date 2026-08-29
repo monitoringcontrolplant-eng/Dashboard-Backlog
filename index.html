@@ -675,7 +675,6 @@
             });
         }
 
-        // Revisi 1: Tombol Refresh dengan animasi putar & simulasi tarik data
         function refreshData() {
             const icon = document.getElementById('refresh-icon');
             icon.classList.add('animate-spin-custom');
@@ -857,31 +856,6 @@
             renderTable();
         }
 
-        // Plugin kustom Chart.js untuk menampilkan persentase langsung di tengah donut chart
-        const centerPercentagePlugin = {
-            id: 'centerPercentagePlugin',
-            afterDraw(chart) {
-                if (chart.config.type === 'doughnut') {
-                    const ctx = chart.ctx;
-                    const width = chart.width;
-                    const height = chart.height;
-                    
-                    ctx.restore();
-                    const fontSize = (height / 110).toFixed(2);
-                    ctx.font = `bold ${fontSize}rem Plus Jakarta Sans`;
-                    ctx.textBaseline = 'middle';
-                    ctx.fillStyle = '#1e293b';
-
-                    const text = "100%";
-                    const textX = Math.round((width - ctx.measureText(text).width) / 2);
-                    const textY = height / 2;
-
-                    ctx.fillText(text, textX, textY);
-                    ctx.save();
-                }
-            }
-        };
-
         function renderCharts(data) {
             const moCounts = {};
             const sectionCounts = {};
@@ -928,21 +902,19 @@
                 }
             });
 
-            // Menghitung total data untuk persentase chart sebaran cluster
             const totalSectionValues = Object.values(sectionCounts).reduce((a, b) => a + b, 0);
             const sectionLabels = Object.keys(sectionCounts);
             const sectionValuesRaw = Object.values(sectionCounts);
             const sectionPercentages = totalSectionValues > 0 ? sectionValuesRaw.map(v => Math.round((v / totalSectionValues) * 100)) : sectionValuesRaw;
 
-            // Revisi 3: Donut Chart dengan persentase di chart & total item asli saat hover
             const ctxPie = document.getElementById('pieChart').getContext('2d');
             pieChartInstance = new Chart(ctxPie, {
                 type: 'doughnut',
                 data: {
                     labels: sectionLabels,
                     datasets: [{
-                        data: sectionPercentages, // Menampilkan persentase
-                        actualTotals: sectionValuesRaw, // Simpan angka asli untuk tooltip
+                        data: sectionPercentages,
+                        actualTotals: sectionValuesRaw,
                         backgroundColor: ['#4f46e5', '#0891b2', '#059669', '#d97706', '#db2777', '#7c3aed'],
                         borderWidth: 2,
                         borderColor: '#ffffff'
@@ -965,8 +937,7 @@
                         }
                     },
                     cutout: '65%'
-                },
-                plugins: [centerPercentagePlugin]
+                }
             });
         }
 
