@@ -331,24 +331,24 @@
 
             <!-- KPI Cards Section -->
             <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <!-- 1. Total MO -->
+                <!-- 1. Total MO Unik -->
                 <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 cursor-pointer" onclick="resetMOFilter()">
                     <div class="flex justify-between items-center">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Total MO</span>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Total Unique MO</span>
                         <div class="w-8 h-8 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 text-xs">
                             <i class="fa-solid fa-file-signature"></i>
                         </div>
                     </div>
                     <div>
                         <h3 id="kpi-mo" class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight">0</h3>
-                        <p class="text-[10px] text-slate-500 font-semibold mt-1">Maintenance Order aktif</p>
+                        <p class="text-[10px] text-slate-500 font-semibold mt-1">Total nomor MO unik</p>
                     </div>
                 </div>
 
-                <!-- 2. MO Ready Eksekusi -->
+                <!-- 2. MO Ready Eksekusi Unik -->
                 <div class="metric-card light-card p-4 rounded-2xl flex flex-col justify-between h-36 border-l-4 border-l-emerald-500 cursor-pointer hover:bg-emerald-50/30 transition" onclick="filterByReadyMO()" title="Klik untuk filter Ready Eksekusi">
                     <div class="flex justify-between items-center">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Ready Eksekusi</span>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700">MO Ready Eksekusi</span>
                         <div class="w-8 h-8 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600 text-xs">
                             <i class="fa-solid fa-circle-check"></i>
                         </div>
@@ -356,7 +356,7 @@
                     <div>
                         <h3 id="kpi-mo-ready" class="text-2xl sm:text-3xl font-extrabold text-emerald-600 tracking-tight">0</h3>
                         <p class="text-[10px] text-emerald-600 font-bold mt-1 flex items-center gap-1">
-                            <i class="fa-solid fa-filter text-[9px]"></i> Klik untuk filter Ready Eksekusi
+                            <i class="fa-solid fa-filter text-[9px]"></i> Klik filter Ready Eksekusi
                         </p>
                     </div>
                 </div>
@@ -708,15 +708,22 @@
             onFilterChange();
         }
 
-        // Kategori Kesiapan MO berdasarkan Kolom X
+        // PERBAIKAN LOGIKA 1: Kategori Kesiapan MO Berdasarkan Kata Kunci Kolom X
         function getMOReadinessCategory(row) {
-            const valX = getColumnXValue(row).toUpperCase();
+            const valX = getColumnXValue(row).toUpperCase().trim();
             
-            if (valX.includes('CLOSE') || valX.includes('TECO') || valX.includes('CLSD')) {
+            if (!valX) return 'NOT_READY';
+
+            // 1. Cek Kategori CLOSE (Close, Closed, TECO, Clsd, Completed)
+            if (valX.includes('CLOSE') || valX.includes('CLSD') || valX.includes('TECO') || valX.includes('COMPL')) {
                 return 'CLOSE';
-            } else if (valX.includes('RELEASE') || valX.includes('REL') || valX.includes('READY')) {
+            } 
+            // 2. Cek Kategori READY (Released, Rel, Ready, Exec, Eksekusi)
+            else if (valX.includes('RELEASE') || valX.includes('REL') || valX.includes('READY') || valX.includes('EXEC')) {
                 return 'READY';
-            } else {
+            } 
+            // 3. Status Lainnya Masuk NOT READY (Outstanding, CRTD, Open, Hold, Waiting, dll)
+            else {
                 return 'NOT_READY';
             }
         }
@@ -767,14 +774,19 @@
             return parseFloat(str) || 0;
         }
 
+        // PERBAIKAN LOGIKA 2: Kalkulasi Perhitungan Nomor MO Unik
         function updateDashboard() {
             filteredDataCache = getFilteredData();
 
             let totalAmount = 0;
             let stockOutCount = 0;
             let totalStockQuantity = 0;
-            const moSet = new Set();
+
+            // Menggunakan Set agar nomor MO yang sama tidak dihitung ganda
+            const moTotalSet = new Set();
             const moReadySet = new Set();
+            const moNotReadySet = new Set();
+            const moCloseSet = new Set();
 
             filteredDataCache.forEach(row => {
                 const amount = cleanNumber(getValue(row, 'Total Price')); 
@@ -789,9 +801,15 @@
                 }
 
                 if (mo) {
-                    moSet.add(mo);
-                    if (getMOReadinessCategory(row) === 'READY') {
+                    moTotalSet.add(mo); // Simpan nomor MO unik
+                    
+                    const readiness = getMOReadinessCategory(row);
+                    if (readiness === 'READY') {
                         moReadySet.add(mo);
+                    } else if (readiness === 'NOT_READY') {
+                        moNotReadySet.add(mo);
+                    } else if (readiness === 'CLOSE') {
+                        moCloseSet.add(mo);
                     }
                 }
             });
@@ -799,7 +817,9 @@
             const formattedCost = 'Rp ' + totalAmount.toLocaleString('id-ID', {maximumFractionDigits: 0});
 
             document.getElementById('exec-safe').innerText = totalStockQuantity.toLocaleString('id-ID');
-            document.getElementById('kpi-mo').innerText = moSet.size.toLocaleString('id-ID');
+            
+            // Tampilkan jumlah unik MO pada KPI Card
+            document.getElementById('kpi-mo').innerText = moTotalSet.size.toLocaleString('id-ID');
             document.getElementById('kpi-mo-ready').innerText = moReadySet.size.toLocaleString('id-ID');
             document.getElementById('kpi-stockout').innerText = stockOutCount.toLocaleString('id-ID');
 
@@ -892,7 +912,7 @@
             tbody.innerHTML = '';
             
             const total = filteredDataCache.length;
-            document.getElementById('table-count-info').innerText = `Menampilkan ${total.toLocaleString('id-ID')} data backlog`;
+            document.getElementById('table-count-info').innerText = `Menampilkan ${total.toLocaleString('id-ID')} baris item backlog`;
 
             if (total === 0) {
                 tbody.innerHTML = `<tr><td colspan="11" class="text-center py-12 text-slate-400 font-medium">Tidak ada data backlog.</td></tr>`;
@@ -968,7 +988,7 @@
             const startItem = (currentPage - 1) * pageSize + 1;
             const endItem = Math.min(currentPage * pageSize, filteredDataCache.length);
 
-            info.innerText = `Menampilkan ${startItem}-${endItem} dari ${filteredDataCache.length} data (Halaman ${currentPage}/${totalPages})`;
+            info.innerText = `Menampilkan ${startItem}-${endItem} dari ${filteredDataCache.length} baris data (Halaman ${currentPage}/${totalPages})`;
             
             btnPrev.disabled = currentPage === 1;
             btnNext.disabled = currentPage === totalPages;
