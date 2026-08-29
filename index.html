@@ -13,7 +13,7 @@
 </head>
 <body class="p-6">
 
-    <!-- HEADER / NAVBAR (Tanpa Pemutar Musik) -->
+    <!-- HEADER / NAVBAR -->
     <header class="flex flex-wrap justify-between items-center mb-6 bg-white p-4 rounded-xl shadow-sm gap-4">
         <div class="flex items-center space-x-3">
             <span class="text-red-600 font-extrabold text-2xl tracking-wider">BSS</span>
@@ -97,67 +97,67 @@
                 <p class="text-xs text-gray-500">Ringkasan Operasional & Evaluasi Valuation Backlog</p>
             </div>
 
-            <!-- 6 KARTU METRIK SEJAJAR -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-6 gap-3">
+            <!-- KARTU METRIK (GRID 3 KOLOM RAPI & STABIL) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 
                 <!-- 1. Total Unique MO -->
-                <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-100 flex justify-between items-start">
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-start">
                     <div>
-                        <div class="text-[10px] font-bold text-gray-400 uppercase tracking-tight">Total Unique MO</div>
+                        <div class="text-xs font-bold text-gray-400 uppercase tracking-tight">Total Unique MO</div>
                         <div id="cardTotalMO" class="text-2xl font-extrabold text-gray-800 my-1">0</div>
-                        <div class="text-[9px] text-gray-400">Total nomor MO unik</div>
+                        <div class="text-[11px] text-gray-400">Total nomor MO unik</div>
                     </div>
-                    <div class="p-2 bg-blue-50 text-blue-600 rounded-lg"><i class="fa-solid fa-list-check text-xs"></i></div>
+                    <div class="p-2.5 bg-blue-50 text-blue-600 rounded-lg"><i class="fa-solid fa-list-check"></i></div>
                 </div>
 
                 <!-- 2. MO Ready Eksekusi -->
-                <div class="bg-white p-3 rounded-xl shadow-sm border border-emerald-200 bg-emerald-50/20 flex justify-between items-start">
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-emerald-200 bg-emerald-50/20 flex justify-between items-start">
                     <div>
-                        <div class="text-[10px] font-bold text-emerald-800 uppercase tracking-tight">MO Ready Eksekusi</div>
+                        <div class="text-xs font-bold text-emerald-800 uppercase tracking-tight">MO Ready Eksekusi</div>
                         <div id="cardMOReady" class="text-2xl font-extrabold text-emerald-600 my-1">0</div>
-                        <div class="text-[9px] text-emerald-600 font-medium"><i class="fa-solid fa-circle-check"></i> Semua part ready</div>
+                        <div class="text-[11px] text-emerald-600 font-medium"><i class="fa-solid fa-circle-check"></i> Semua part ready</div>
                     </div>
-                    <div class="p-2 bg-emerald-100 text-emerald-600 rounded-full"><i class="fa-solid fa-check text-xs"></i></div>
+                    <div class="p-2.5 bg-emerald-100 text-emerald-600 rounded-full"><i class="fa-solid fa-check"></i></div>
                 </div>
 
                 <!-- 3. MO Tidak Ready -->
-                <div class="bg-white p-3 rounded-xl shadow-sm border border-amber-200 bg-amber-50/20 flex justify-between items-start">
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-amber-200 bg-amber-50/20 flex justify-between items-start">
                     <div>
-                        <div class="text-[10px] font-bold text-amber-800 uppercase tracking-tight">MO Tidak Ready</div>
+                        <div class="text-xs font-bold text-amber-800 uppercase tracking-tight">MO Tidak Ready</div>
                         <div id="cardMONotReady" class="text-2xl font-extrabold text-amber-600 my-1">0</div>
-                        <div class="text-[9px] text-amber-600 font-medium"><i class="fa-solid fa-clock"></i> Ada part out of stock</div>
+                        <div class="text-[11px] text-amber-600 font-medium"><i class="fa-solid fa-clock"></i> Ada part out of stock</div>
                     </div>
-                    <div class="p-2 bg-amber-100 text-amber-600 rounded-full"><i class="fa-solid fa-hourglass-half text-xs"></i></div>
+                    <div class="p-2.5 bg-amber-100 text-amber-600 rounded-full"><i class="fa-solid fa-hourglass-half"></i></div>
                 </div>
 
                 <!-- 4. Total MO Close -->
-                <div class="bg-white p-3 rounded-xl shadow-sm border border-indigo-100 flex justify-between items-start">
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-indigo-100 flex justify-between items-start">
                     <div>
-                        <div class="text-[10px] font-bold text-indigo-800 uppercase tracking-tight">Total MO Close</div>
+                        <div class="text-xs font-bold text-indigo-800 uppercase tracking-tight">Total MO Close</div>
                         <div id="cardMOClose" class="text-2xl font-extrabold text-indigo-600 my-1">0</div>
-                        <div class="text-[9px] text-indigo-500 font-medium"><i class="fa-solid fa-lock"></i> MO status Close</div>
+                        <div class="text-[11px] text-indigo-500 font-medium"><i class="fa-solid fa-lock"></i> MO status Close</div>
                     </div>
-                    <div class="p-2 bg-indigo-50 text-indigo-600 rounded-lg"><i class="fa-solid fa-folder-closed text-xs"></i></div>
+                    <div class="p-2.5 bg-indigo-50 text-indigo-600 rounded-lg"><i class="fa-solid fa-folder-closed"></i></div>
                 </div>
 
                 <!-- 5. Available Parts -->
-                <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-100 flex justify-between items-start">
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-start">
                     <div>
-                        <div class="text-[10px] font-bold text-gray-400 uppercase tracking-tight">Available Parts</div>
+                        <div class="text-xs font-bold text-gray-400 uppercase tracking-tight">Available Parts</div>
                         <div id="cardAvailParts" class="text-2xl font-extrabold text-gray-800 my-1">0</div>
-                        <div class="text-[9px] text-emerald-600 font-medium"><i class="fa-solid fa-boxes-stacked"></i> Stok kuantitas part</div>
+                        <div class="text-[11px] text-emerald-600 font-medium"><i class="fa-solid fa-boxes-stacked"></i> Stok kuantitas part</div>
                     </div>
-                    <div class="p-2 bg-emerald-50 text-emerald-600 rounded-lg"><i class="fa-solid fa-box-open text-xs"></i></div>
+                    <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-lg"><i class="fa-solid fa-box-open"></i></div>
                 </div>
 
                 <!-- 6. Out of Stock -->
-                <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-100 flex justify-between items-start">
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-start">
                     <div>
-                        <div class="text-[10px] font-bold text-gray-400 uppercase tracking-tight">Out of Stock</div>
+                        <div class="text-xs font-bold text-gray-400 uppercase tracking-tight">Out of Stock</div>
                         <div id="cardOutOfStock" class="text-2xl font-extrabold text-gray-800 my-1">0</div>
-                        <div class="text-[9px] text-red-500 font-medium"><i class="fa-solid fa-circle-exclamation"></i> Stok habis (SOH 0)</div>
+                        <div class="text-[11px] text-red-500 font-medium"><i class="fa-solid fa-circle-exclamation"></i> Stok habis (SOH 0)</div>
                     </div>
-                    <div class="p-2 bg-red-50 text-red-500 rounded-lg"><i class="fa-solid fa-triangle-exclamation text-xs"></i></div>
+                    <div class="p-2.5 bg-red-50 text-red-500 rounded-lg"><i class="fa-solid fa-triangle-exclamation"></i></div>
                 </div>
 
             </div>
@@ -167,11 +167,11 @@
                 <div class="col-span-12 md:col-span-8 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
                     <h4 class="text-xs font-bold text-gray-500 uppercase mb-3"><i class="fa-solid fa-chart-column mr-1"></i> Top MO Terbanyak</h4>
                     <div class="h-36 bg-indigo-50/40 rounded-lg flex items-end justify-around p-3 border-b border-indigo-100">
-                        <div class="w-5 bg-indigo-600 h-full rounded-t" title="MO 150018856"></div>
-                        <div class="w-5 bg-indigo-500 h-4/5 rounded-t" title="MO 150022096"></div>
-                        <div class="w-5 bg-indigo-500 h-3/4 rounded-t" title="MO 150022760"></div>
-                        <div class="w-5 bg-indigo-400 h-1/2 rounded-t" title="MO 150019052"></div>
-                        <div class="w-5 bg-indigo-400 h-2/5 rounded-t" title="MO 150019054"></div>
+                        <div class="w-6 bg-indigo-600 h-full rounded-t" title="MO 150018856"></div>
+                        <div class="w-6 bg-indigo-500 h-4/5 rounded-t" title="MO 150022096"></div>
+                        <div class="w-6 bg-indigo-500 h-3/4 rounded-t" title="MO 150022760"></div>
+                        <div class="w-6 bg-indigo-400 h-1/2 rounded-t" title="MO 150019052"></div>
+                        <div class="w-6 bg-indigo-400 h-2/5 rounded-t" title="MO 150019054"></div>
                     </div>
                 </div>
 
@@ -181,7 +181,7 @@
                             <span class="bg-indigo-700/60 px-2.5 py-1 rounded border border-indigo-400/30">VALUATION SUMMARY</span>
                             <span class="text-indigo-200 text-[10px]">TOTAL PRICE</span>
                         </div>
-                        <div class="text-[11px] uppercase text-indigo-200 tracking-wider">Total Biaya Backlog</div>
+                        <div class="text-xs uppercase text-indigo-200 tracking-wider">Total Biaya Backlog</div>
                         <div id="cardTotalPrice" class="text-2xl font-extrabold my-2">Rp 0</div>
                     </div>
                     <div class="flex justify-between items-center text-[10px] text-indigo-200 pt-3 border-t border-indigo-500/50">
@@ -191,7 +191,7 @@
                 </div>
             </div>
 
-            <!-- RINCIAN DETAIL TABEL BACKLOG -->
+            <!-- TABEL DETAIL ITEM BACKLOG -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
                 <div class="flex justify-between items-center mb-4">
                     <div>
@@ -226,9 +226,9 @@
         </main>
     </div>
 
-    <!-- JAVASCRIPT LOGIKA HITUNG & FILTER DATA SPREADSHEET -->
+    <!-- JAVASCRIPT LOGIKA SPREADSHEET -->
     <script>
-        // Simulasi Dataset yang merefleksikan Spreadsheet (Kolom X = Status MO)
+        // Simulasi Dataset yang merefleksikan Kolom X Spreadsheet
         const mockRawData = [
             { mo: "150018856", unit: "DT-101", cluster: "WHEEL DT", partNo: "207-70-14151", desc: "GET-TOOTH", statusPart: "Available", statusMOKolomX: "Ready Eksekusi", price: 1250000 },
             { mo: "150018856", unit: "DT-101", cluster: "WHEEL DT", partNo: "01010-51865", desc: "BOLT", statusPart: "Available", statusMOKolomX: "Ready Eksekusi", price: 45000 },
@@ -255,14 +255,13 @@
                         mo: item.mo,
                         unit: item.unit,
                         cluster: item.cluster,
-                        statusMOX: item.statusMOKolomX, // Sumber Kolom X Spreadsheet
+                        statusMOX: item.statusMOKolomX,
                         items: []
                     };
                 }
                 moGroups[item.mo].items.push(item);
             });
 
-            // Evaluasi MO Unik
             const moList = Object.values(moGroups);
             const totalUniqueMO = moList.length;
 
@@ -287,8 +286,7 @@
                 countClose,
                 totalAvailParts,
                 totalOutOfStockParts,
-                totalPrice,
-                moGroups
+                totalPrice
             };
         }
 
@@ -299,7 +297,6 @@
             const searchQuery = document.getElementById('searchInput').value.toLowerCase();
 
             let filteredItems = mockRawData.filter(item => {
-                // Filter Kesiapan MO berdasarkan status Kolom X
                 let matchKesiapan = true;
                 if (filterKesiapan === 'ready') matchKesiapan = item.statusMOKolomX === 'Ready Eksekusi';
                 if (filterKesiapan === 'not_ready') matchKesiapan = item.statusMOKolomX === 'Tidak Ready';
@@ -320,7 +317,6 @@
         function renderDashboard(itemsToRender = mockRawData) {
             const stats = processData(itemsToRender);
 
-            // Update Kartu Metrik
             document.getElementById('cardTotalMO').innerText = stats.totalUniqueMO.toLocaleString('id-ID');
             document.getElementById('cardMOReady').innerText = stats.countReady.toLocaleString('id-ID');
             document.getElementById('cardMONotReady').innerText = stats.countNotReady.toLocaleString('id-ID');
@@ -329,7 +325,6 @@
             document.getElementById('cardOutOfStock').innerText = stats.totalOutOfStockParts.toLocaleString('id-ID');
             document.getElementById('cardTotalPrice').innerText = 'Rp ' + stats.totalPrice.toLocaleString('id-ID');
 
-            // Render Tabel Detail
             const tbody = document.getElementById('backlogTableBody');
             document.getElementById('tableCountBadge').innerText = itemsToRender.length + " Items";
 
@@ -366,7 +361,6 @@
             `).join('');
         }
 
-        // Jalankan awal
         document.addEventListener('DOMContentLoaded', () => {
             renderDashboard();
         });
