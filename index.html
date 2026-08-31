@@ -127,7 +127,7 @@
                 </div>
 
                 <div class="pt-8 text-[11px] text-indigo-200 font-medium relative z-10">
-                    Copyright © PT. Mitra Parama Gemilang - 2026 | MONRES System
+                    Copyright © Edwin Yulius Santoso | Plant Engineer
                 </div>
             </div>
 
@@ -797,19 +797,38 @@
             const notReadyMoSet = new Set();
             const closeMoSet = new Set();
 
+            // 1. Petakan status per Nomor MO secara unik agar tidak duplikat
+            const moStatusMap = {};
+
             rawData.forEach(row => {
                 const moColP = getColumnPValue(row).trim();
                 if (moColP) {
                     totalMoSet.add(moColP);
-
                     const valX = getColumnXValue(row).toUpperCase().trim();
-                    if (valX === 'READY EKSEKUSI') {
-                        readyMoSet.add(moColP);
-                    } else if (valX.includes('CLOSE') || valX.includes('CLSD') || valX.includes('TECO')) {
-                        closeMoSet.add(moColP);
-                    } else {
-                        notReadyMoSet.add(moColP);
+
+                    if (!moStatusMap[moColP]) {
+                        moStatusMap[moColP] = { hasReady: 0, hasClose: 0, hasNotReady: 0 };
                     }
+
+                    if (valX.includes('CLOSE') || valX.includes('CLSD') || valX.includes('TECO')) {
+                        moStatusMap[moColP].hasClose++;
+                    } else if (valX === 'READY EKSEKUSI') {
+                        moStatusMap[moColP].hasReady++;
+                    } else {
+                        moStatusMap[moColP].hasNotReady++;
+                    }
+                }
+            });
+
+            // 2. Kategorikan setiap Unique MO secara mutually exclusive
+            Object.keys(moStatusMap).forEach(mo => {
+                const status = moStatusMap[mo];
+                if (status.hasClose > 0 && status.hasNotReady === 0) {
+                    closeMoSet.add(mo);
+                } else if (status.hasNotReady === 0 && status.hasReady > 0) {
+                    readyMoSet.add(mo);
+                } else {
+                    notReadyMoSet.add(mo);
                 }
             });
 
