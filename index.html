@@ -792,15 +792,18 @@
         }
 
         function updateDashboard() {
+            // 1. Ambil data yang sudah terfilter terlebih dahulu secara dinamis
+            filteredDataCache = getFilteredData();
+
             const totalMoSet = new Set();
             const readyMoSet = new Set();
             const notReadyMoSet = new Set();
             const closeMoSet = new Set();
 
-            // 1. Petakan status per Nomor MO secara unik agar tidak duplikat
             const moStatusMap = {};
 
-            rawData.forEach(row => {
+            // 2. Petakan status per Nomor MO berdasarkan data terfilter
+            filteredDataCache.forEach(row => {
                 const moColP = getColumnPValue(row).trim();
                 if (moColP) {
                     totalMoSet.add(moColP);
@@ -820,7 +823,6 @@
                 }
             });
 
-            // 2. Kategorikan setiap Unique MO secara mutually exclusive
             Object.keys(moStatusMap).forEach(mo => {
                 const status = moStatusMap[mo];
                 if (status.hasClose > 0 && status.hasNotReady === 0) {
@@ -832,32 +834,34 @@
                 }
             });
 
-            filteredDataCache = getFilteredData();
-
             let totalAmount = 0;
-            let stockOutCount = 0;
-            let totalStockQuantity = 0;
+            let stockOutParts = new Set();
+            let availableParts = new Set();
 
+            // 3. Hitung valuation, Available Parts unik, dan Out of Stock unik berdasarkan filteredDataCache
             filteredDataCache.forEach(row => {
                 const amount = cleanNumber(getValue(row, 'Total Price')); 
+                const partNumber = getValue(row, 'Part Number');
                 const stock = cleanNumber(getValue(row, 'Stock On Hand'));
 
                 totalAmount += amount;
-                totalStockQuantity += stock;
 
                 if (stock <= 0) {
-                    stockOutCount++;
+                    stockOutParts.add(partNumber);
+                } else {
+                    availableParts.add(partNumber);
                 }
             });
 
             const formattedCost = 'Rp ' + totalAmount.toLocaleString('id-ID', {maximumFractionDigits: 0});
 
-            document.getElementById('exec-safe').innerText = totalStockQuantity.toLocaleString('id-ID');
+            // 4. Update tampilan KPI secara dinamis
+            document.getElementById('exec-safe').innerText = availableParts.size.toLocaleString('id-ID');
             document.getElementById('kpi-mo').innerText = totalMoSet.size.toLocaleString('id-ID');
             document.getElementById('kpi-mo-ready').innerText = readyMoSet.size.toLocaleString('id-ID');
             document.getElementById('kpi-mo-not-ready').innerText = notReadyMoSet.size.toLocaleString('id-ID');
             document.getElementById('kpi-mo-close').innerText = closeMoSet.size.toLocaleString('id-ID');
-            document.getElementById('kpi-stockout').innerText = stockOutCount.toLocaleString('id-ID');
+            document.getElementById('kpi-stockout').innerText = stockOutParts.size.toLocaleString('id-ID');
 
             const activeBadge = document.getElementById('active-filter-badge');
             const readinessVal = document.getElementById('filter-mo-readiness').value;
