@@ -69,6 +69,16 @@
         .animate-spin-custom {
             animation: spin 1s linear infinite;
         }
+
+        /* Custom Modern Sidebar Styles */
+        .sidebar-link {
+            transition: all 0.2s ease;
+        }
+        .sidebar-link:hover {
+            background-color: #f1f5f9;
+            color: #4f46e5;
+            transform: translateX(3px);
+        }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col justify-between">
@@ -198,7 +208,7 @@
         <div class="bg-white border border-slate-200 p-6 rounded-2xl w-full max-w-lg shadow-2xl space-y-5">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                 <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
-                    <i class="fa-solid fa-user-plus text-indigo-600"></i> Manajemen Akses Pengguna
+                    <i class="fa-solid fa-user-gear text-indigo-600"></i> Manajemen Akses Pengguna
                 </h3>
                 <button onclick="toggleUserModal(false)" class="text-slate-400 hover:text-slate-600 text-sm"><i class="fa-solid fa-xmark"></i></button>
             </div>
@@ -264,58 +274,84 @@
 
     <div class="flex flex-1 overflow-hidden">
         
-        <!-- Sidebar Navigation -->
-        <aside class="w-64 bg-white text-slate-600 p-4 hidden md:flex flex-col justify-between border-r border-slate-200 shrink-0">
-            <div class="space-y-5">
-                <div class="relative">
-                    <input type="text" id="filter-search" placeholder="Cari Part / MO / Desc..." class="w-full bg-slate-50 border border-slate-200 text-xs text-slate-800 placeholder-slate-400 rounded-xl py-2.5 pl-3.5 pr-9 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition shadow-inner">
-                    <i class="fa-solid fa-magnifying-glass absolute right-3 top-3 text-slate-400 text-xs"></i>
+        <!-- SIDE NAVIGATOR SECTION (REDESIGNED) -->
+        <aside class="w-72 bg-white text-slate-600 p-5 hidden md:flex flex-col justify-between border-r border-slate-200 shrink-0 shadow-sm">
+            <div class="space-y-6">
+                
+                <!-- Quick Search Input -->
+                <div>
+                    <label class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Pencarian Cepat</label>
+                    <div class="relative">
+                        <input type="text" id="filter-search" placeholder="Cari Part / MO / Desc..." class="w-full bg-slate-50 border border-slate-200 text-xs text-slate-800 placeholder-slate-400 rounded-xl py-2.5 pl-3.5 pr-9 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/10 transition shadow-inner">
+                        <i class="fa-solid fa-magnifying-glass absolute right-3 top-3 text-slate-400 text-xs"></i>
+                    </div>
                 </div>
 
-                <nav class="space-y-1.5 text-xs">
-                    <a href="#" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-indigo-600 text-white font-bold shadow-lg shadow-indigo-600/30">
-                        <span class="flex items-center gap-2.5"><i class="fa-solid fa-chart-pie text-indigo-200"></i> Dashboard Executive</span>
+                <!-- Navigation Links -->
+                <div class="space-y-1">
+                    <p class="px-2 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-2">Menu Utama</p>
+                    <a href="#" class="flex items-center justify-between px-3.5 py-3 rounded-xl bg-indigo-600 text-white font-bold shadow-lg shadow-indigo-600/25 text-xs">
+                        <span class="flex items-center gap-3"><i class="fa-solid fa-chart-pie text-indigo-200 text-sm"></i> Dashboard Executive</span>
+                        <i class="fa-solid fa-chevron-right text-[10px] opacity-75"></i>
                     </a>
-                    
-                    <div class="pt-4 pb-1">
-                        <p class="px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Filter Controls</p>
+                </div>
+
+                <!-- Filter Controls Container -->
+                <div class="space-y-4 pt-1 border-t border-slate-100">
+                    <div class="flex items-center justify-between pt-3">
+                        <p class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Filter Kontrol Data</p>
+                        <button onclick="resetAllFilters()" class="text-[10px] font-bold text-indigo-600 hover:underline">Reset Filter</button>
                     </div>
 
-                    <div class="space-y-3 px-1">
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-600 mb-1.5">Filter Kesiapan MO</label>
-                            <select id="filter-mo-readiness" class="w-full bg-slate-50 border border-slate-200 text-xs text-slate-700 rounded-xl p-2.5 focus:outline-none focus:border-indigo-600 transition font-bold text-indigo-600">
+                    <div class="space-y-3.5">
+                        <div class="bg-slate-50/70 p-3 rounded-xl border border-slate-200/80 space-y-1.5 transition hover:border-indigo-200">
+                            <label class="block text-[11px] font-bold text-slate-700 flex items-center gap-1.5">
+                                <i class="fa-solid fa-filter text-indigo-600 text-[10px]"></i> Kesiapan MO
+                            </label>
+                            <select id="filter-mo-readiness" class="w-full bg-white border border-slate-200 text-xs text-indigo-600 rounded-lg p-2 focus:outline-none focus:border-indigo-600 transition font-bold shadow-sm">
                                 <option value="ALL">Semua Status MO</option>
                                 <option value="READY">Ready Eksekusi</option>
                                 <option value="NOT_READY">Not Ready</option>
                                 <option value="CLOSE">Close</option>
                             </select>
                         </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-600 mb-1.5">No Unit</label>
-                            <select id="filter-unit" class="w-full bg-slate-50 border border-slate-200 text-xs text-slate-700 rounded-xl p-2.5 focus:outline-none focus:border-indigo-600 transition font-medium">
+
+                        <div class="bg-slate-50/70 p-3 rounded-xl border border-slate-200/80 space-y-1.5 transition hover:border-indigo-200">
+                            <label class="block text-[11px] font-bold text-slate-700 flex items-center gap-1.5">
+                                <i class="fa-solid fa-truck-monster text-indigo-600 text-[10px]"></i> No Unit
+                            </label>
+                            <select id="filter-unit" class="w-full bg-white border border-slate-200 text-xs text-slate-700 rounded-lg p-2 focus:outline-none focus:border-indigo-600 transition font-medium shadow-sm">
                                 <option value="ALL">Semua No Unit</option>
                             </select>
                         </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-600 mb-1.5">Cluster (Section)</label>
-                            <select id="filter-section" class="w-full bg-slate-50 border border-slate-200 text-xs text-slate-700 rounded-xl p-2.5 focus:outline-none focus:border-indigo-600 transition font-medium">
+
+                        <div class="bg-slate-50/70 p-3 rounded-xl border border-slate-200/80 space-y-1.5 transition hover:border-indigo-200">
+                            <label class="block text-[11px] font-bold text-slate-700 flex items-center gap-1.5">
+                                <i class="fa-solid fa-layer-group text-indigo-600 text-[10px]"></i> Cluster (Section)
+                            </label>
+                            <select id="filter-section" class="w-full bg-white border border-slate-200 text-xs text-slate-700 rounded-lg p-2 focus:outline-none focus:border-indigo-600 transition font-medium shadow-sm">
                                 <option value="ALL">Semua Cluster</option>
                             </select>
                         </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-600 mb-1.5">Status Part</label>
-                            <select id="filter-status" class="w-full bg-slate-50 border border-slate-200 text-xs text-slate-700 rounded-xl p-2.5 focus:outline-none focus:border-indigo-600 transition font-medium">
+
+                        <div class="bg-slate-50/70 p-3 rounded-xl border border-slate-200/80 space-y-1.5 transition hover:border-indigo-200">
+                            <label class="block text-[11px] font-bold text-slate-700 flex items-center gap-1.5">
+                                <i class="fa-solid fa-boxes-stacked text-indigo-600 text-[10px]"></i> Status Part
+                            </label>
+                            <select id="filter-status" class="w-full bg-white border border-slate-200 text-xs text-slate-700 rounded-lg p-2 focus:outline-none focus:border-indigo-600 transition font-medium shadow-sm">
                                 <option value="ALL">Semua Status Part</option>
                             </select>
                         </div>
                     </div>
-                </nav>
+                </div>
+
             </div>
 
-            <div class="bg-indigo-50/50 p-3 rounded-xl border border-indigo-100 text-center">
-                <span id="data-status" class="text-[11px] font-bold text-amber-600">
-                    <i class="fa-solid fa-spinner fa-spin mr-1.5"></i> Memuat Data...
+            <!-- Sidebar Footer Status -->
+            <div class="bg-gradient-to-r from-slate-50 to-indigo-50/30 p-3 rounded-xl border border-slate-200/80 flex items-center justify-between text-center mt-4">
+                <span class="text-[11px] font-semibold text-slate-500">Status Sinkronisasi</span>
+                <span id="data-status" class="text-[11px] font-extrabold text-amber-600 flex items-center gap-1">
+                    <i class="fa-solid fa-spinner fa-spin"></i> Memuat...
                 </span>
             </div>
         </aside>
@@ -649,8 +685,8 @@
 
         function fetchSheetData() {
             const statusBadge = document.getElementById('data-status');
-            statusBadge.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> Memuat Data...';
-            statusBadge.className = 'text-[11px] font-bold text-amber-600';
+            statusBadge.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> Memuat...';
+            statusBadge.className = 'text-[11px] font-extrabold text-amber-600';
 
             Papa.parse(GOOGLE_SHEET_CSV_URL, {
                 download: true,
@@ -662,15 +698,15 @@
                         rawData = results.data.filter(row => getValue(row, 'No Unit') || getColumnPValue(row));
                     }
 
-                    statusBadge.innerHTML = '<i class="fa-solid fa-circle-check mr-1.5"></i> Connected';
-                    statusBadge.className = 'text-[11px] font-bold text-emerald-600';
+                    statusBadge.innerHTML = '<i class="fa-solid fa-circle-check mr-1.5"></i> Terhubung';
+                    statusBadge.className = 'text-[11px] font-extrabold text-emerald-600';
                     
                     populateFilterOptions();
                     updateDashboard();
                 },
                 error: function(err) {
                     statusBadge.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1.5"></i> Error';
-                    statusBadge.className = 'text-[11px] font-bold text-rose-600';
+                    statusBadge.className = 'text-[11px] font-extrabold text-rose-600';
                 }
             });
         }
@@ -741,6 +777,15 @@
             onFilterChange();
         }
 
+        function resetAllFilters() {
+            document.getElementById('filter-mo-readiness').value = 'ALL';
+            document.getElementById('filter-unit').value = 'ALL';
+            document.getElementById('filter-section').value = 'ALL';
+            document.getElementById('filter-status').value = 'ALL';
+            document.getElementById('filter-search').value = '';
+            onFilterChange();
+        }
+
         function getFilteredData() {
             const moReadiness = document.getElementById('filter-mo-readiness').value;
             const selectedUnit = document.getElementById('filter-unit').value;
@@ -792,7 +837,6 @@
         }
 
         function updateDashboard() {
-            // 1. Ambil data yang sudah terfilter terlebih dahulu secara dinamis
             filteredDataCache = getFilteredData();
 
             const totalMoSet = new Set();
@@ -802,7 +846,6 @@
 
             const moStatusMap = {};
 
-            // 2. Petakan status per Nomor MO berdasarkan data terfilter
             filteredDataCache.forEach(row => {
                 const moColP = getColumnPValue(row).trim();
                 if (moColP) {
@@ -838,7 +881,6 @@
             let stockOutParts = new Set();
             let availableParts = new Set();
 
-            // 3. Hitung valuation, Available Parts unik, dan Out of Stock unik berdasarkan filteredDataCache
             filteredDataCache.forEach(row => {
                 const amount = cleanNumber(getValue(row, 'Total Price')); 
                 const partNumber = getValue(row, 'Part Number');
@@ -855,7 +897,6 @@
 
             const formattedCost = 'Rp ' + totalAmount.toLocaleString('id-ID', {maximumFractionDigits: 0});
 
-            // 4. Update tampilan KPI secara dinamis
             document.getElementById('exec-safe').innerText = availableParts.size.toLocaleString('id-ID');
             document.getElementById('kpi-mo').innerText = totalMoSet.size.toLocaleString('id-ID');
             document.getElementById('kpi-mo-ready').innerText = readyMoSet.size.toLocaleString('id-ID');
