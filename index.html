@@ -12,10 +12,31 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <!-- FontAwesome untuk Icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS TAMBAHAN KHUSUS MOBILE AGAR TIDAK BERANTAKAN -->
+    <style>
+        @media (max-width: 768px) {
+            /* Membuat sidebar dan konten utama turun ke bawah secara fleksibel di HP */
+            .flex.h-screen, .flex.min-h-screen {
+                flex-direction: column !important;
+                height: auto !important;
+            }
+            /* Menyesuaikan lebar sidebar di HP agar penuh ke samping */
+            aside, .w-64 {
+                width: 100% !important;
+                min-height: auto !important;
+            }
+            /* Mencegah chart atau tabel meluber keluar layar */
+            canvas {
+                max-width: 100% !important;
+                height: auto !important;
+            }
+        }
+    </style>
 </head>
 <body class="bg-slate-100 font-sans text-slate-800 antialiased selection:bg-indigo-500 selection:text-white">
 
-    <!-- HALAMAN LOGIN (Default Tampil Jika Belum Login) -->
+    <!-- HALAMAN LOGIN -->
     <div id="loginPage" class="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-indigo-900 via-blue-900 to-slate-900">
         <div class="mb-4 text-center">
             <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl shadow-xl inline-block mb-3 border border-white/20">
@@ -57,7 +78,7 @@
                 </div>
 
                 <div class="flex items-center gap-3 pt-2">
-                    <button type="button" onclick="alert('Silakan hubungi Administrator sistem untuk reset password.')" class="w-1/3 py-3 px-4 bg-rose-50 text-rose-600 hover:bg-rose-100 font-semibold rounded-xl text-xs transition flex items-center justify-center gap-2">
+                    <button type="button" onclick="alert('Silakan hubungi Administrator.')" class="w-1/3 py-3 px-4 bg-rose-50 text-rose-600 hover:bg-rose-100 font-semibold rounded-xl text-xs transition flex items-center justify-center gap-2">
                         <i class="fa-solid fa-circle-exclamation"></i> Forgot
                     </button>
                     <button type="submit" class="w-2/3 py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-sm shadow-lg shadow-indigo-200 transition flex items-center justify-center gap-2">
@@ -70,27 +91,19 @@
                 <i class="fa-solid fa-shield-halved text-indigo-600 mt-0.5"></i>
                 <div>
                     <strong class="text-slate-700 block mb-0.5">Authorized users only</strong>
-                    All activity may be monitored to protect operational data and company assets.
+                    All activity may be monitored to protect operational data.
                 </div>
             </div>
-        </div>
-        
-        <div class="mt-6 text-indigo-200/60 text-xs">
-            MONRES 2026 &bull; monitoringcontrolplant-eng.github.io
         </div>
     </div>
 
 
-    <!-- HALAMAN UTAMA DASHBOARD (Hidden sebelum login) -->
+    <!-- HALAMAN UTAMA DASHBOARD (Struktur Asli Dipertahankan) -->
     <div id="dashboardApp" class="hidden min-h-screen flex flex-col">
         
         <!-- TOP NAVBAR -->
         <header class="bg-white border-b border-slate-200 sticky top-0 z-40 px-4 py-3 flex items-center justify-between shadow-sm">
             <div class="flex items-center gap-3">
-                <!-- Hamburger Button untuk Mobile Sidebar Toggle -->
-                <button onclick="toggleMobileSidebar()" class="md:hidden text-slate-700 p-2 rounded-lg hover:bg-slate-100 transition">
-                    <i class="fa-solid fa-bars text-lg"></i>
-                </button>
                 <div class="flex items-center gap-2">
                     <div class="bg-indigo-600 text-white font-black px-2.5 py-1 rounded-lg text-sm">BSS</div>
                     <div>
@@ -101,8 +114,8 @@
             </div>
 
             <div class="flex items-center gap-2 md:gap-4">
-                <button onclick="refreshData()" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-medium transition">
-                    <i class="fa-solid fa-rotate"></i> Refresh
+                <button onclick="refreshData()" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-medium transition">
+                    <i class="fa-solid fa-rotate"></i> <span class="hidden sm:inline">Refresh</span>
                 </button>
                 <button onclick="alertPanel()" class="hidden md:flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg text-xs font-semibold transition">
                     <i class="fa-solid fa-user-gear"></i> Kelola Akses
@@ -123,29 +136,9 @@
         <!-- CONTAINER UTAMA (SIDEBAR & KONTEN) -->
         <div class="flex-1 flex flex-col md:flex-row relative">
             
-            <!-- OVERLAY MOBILE SIDEBAR -->
-            <div id="sidebarOverlay" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-slate-900/50 z-30 hidden md:hidden backdrop-blur-sm transition-opacity"></div>
-
-            <!-- SIDEBAR -->
-            <aside id="sidebarPanel" class="fixed md:static inset-y-0 left-0 z-40 w-72 md:w-64 bg-slate-900 text-slate-300 p-4 transform -translate-x-full md:translate-x-0 transition-transform duration-300 flex flex-col shadow-2xl md:shadow-none min-h-screen">
+            <!-- SIDEBAR ASLI -->
+            <aside class="w-full md:w-64 bg-slate-900 text-slate-300 p-4 flex flex-col shadow-md min-h-screen">
                 
-                <!-- Close Button Mobile -->
-                <div class="flex items-center justify-between mb-4 md:hidden pb-3 border-b border-slate-800">
-                    <span class="text-xs font-bold text-white uppercase tracking-wider">Menu Navigasi</span>
-                    <button onclick="toggleMobileSidebar()" class="text-slate-400 hover:text-white p-1">
-                        <i class="fa-solid fa-xmark text-lg"></i>
-                    </button>
-                </div>
-
-                <!-- User Card Mini di Sidebar (Mobile) -->
-                <div class="bg-slate-800/80 p-3 rounded-2xl mb-4 flex items-center justify-between border border-slate-700/50">
-                    <div>
-                        <div class="text-xs font-bold text-white" id="sidebarUsername">admin</div>
-                        <div class="text-[10px] text-slate-400">Maintenance Planner</div>
-                    </div>
-                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                </div>
-
                 <!-- Pencarian Cepat -->
                 <div class="mb-4">
                     <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Pencarian Cepat</label>
@@ -160,7 +153,7 @@
                 <!-- Menu Utama -->
                 <div class="mb-6">
                     <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Menu Utama</label>
-                    <a href="#" class="flex items-center justify-between px-3 py-2.5 bg-indigo-600 text-white rounded-xl text-xs font-semibold shadow-md shadow-indigo-900/50">
+                    <a href="#" class="flex items-center justify-between px-3 py-2.5 bg-indigo-600 text-white rounded-xl text-xs font-semibold shadow-md">
                         <span class="flex items-center gap-2"><i class="fa-solid fa-chart-pie"></i> Dashboard Executive</span>
                         <i class="fa-solid fa-chevron-right text-[10px]"></i>
                     </a>
@@ -209,24 +202,18 @@
             </aside>
 
             <!-- KONTEN UTAMA DASHBOARD -->
-            <main class="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto max-w-full">
+            <main class="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto">
                 
                 <!-- Judul Section -->
-                <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                    <div>
-                        <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Executive Dashboard</h2>
-                        <p class="text-xs md:text-sm text-slate-500">Ringkasan Operasional & Evaluasi Valuation Backlog</p>
-                    </div>
-                    <div class="text-xs font-semibold text-slate-500 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-sm self-start sm:self-auto">
-                        <i class="fa-solid fa-clock text-indigo-600 mr-1"></i> Live Data Sync
-                    </div>
+                <div class="mb-6">
+                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Executive Dashboard</h2>
+                    <p class="text-xs md:text-sm text-slate-500">Ringkasan Operasional & Evaluasi Valuation Backlog</p>
                 </div>
 
-                <!-- KARTU KPI (Grid Responsif 1 Kolom di HP, 2 di Tablet, 3-6 di Desktop) -->
+                <!-- KARTU KPI (Grid Asli Anda) -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">
                     
-                    <!-- KPI 1 -->
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden">
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-[10px] font-bold text-slate-400 tracking-wider">TOTAL UNIQUE MO</span>
                             <i class="fa-solid fa-file-invoice text-indigo-500 bg-indigo-50 p-2 rounded-xl text-xs"></i>
@@ -235,8 +222,7 @@
                         <div class="text-[10px] text-slate-400 mt-1">Total nomor MO unik</div>
                     </div>
 
-                    <!-- KPI 2 -->
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 border-l-4 border-l-emerald-500 relative overflow-hidden">
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 border-l-4 border-l-emerald-500">
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-[10px] font-bold text-slate-400 tracking-wider">MO READY</span>
                             <i class="fa-solid fa-circle-check text-emerald-500 bg-emerald-50 p-2 rounded-xl text-xs"></i>
@@ -245,8 +231,7 @@
                         <div class="text-[10px] text-slate-400 mt-1">Ready Eksekusi</div>
                     </div>
 
-                    <!-- KPI 3 -->
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 border-l-4 border-l-amber-500 relative overflow-hidden">
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 border-l-4 border-l-amber-500">
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-[10px] font-bold text-slate-400 tracking-wider">MO NOT READY</span>
                             <i class="fa-solid fa-clock-rotate-left text-amber-500 bg-amber-50 p-2 rounded-xl text-xs"></i>
@@ -255,8 +240,7 @@
                         <div class="text-[10px] text-slate-400 mt-1">Belum Ready</div>
                     </div>
 
-                    <!-- KPI 4 -->
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 border-l-4 border-l-blue-500 relative overflow-hidden">
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 border-l-4 border-l-blue-500">
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-[10px] font-bold text-slate-400 tracking-wider">MO CLOSE</span>
                             <i class="fa-solid fa-circle-xmark text-blue-500 bg-blue-50 p-2 rounded-xl text-xs"></i>
@@ -265,8 +249,7 @@
                         <div class="text-[10px] text-slate-400 mt-1">Status Close/TECO</div>
                     </div>
 
-                    <!-- KPI 5 -->
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 border-l-4 border-l-teal-500 relative overflow-hidden">
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 border-l-4 border-l-teal-500">
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-[10px] font-bold text-slate-400 tracking-wider">AVAILABLE PARTS</span>
                             <i class="fa-solid fa-boxes-stacked text-teal-500 bg-teal-50 p-2 rounded-xl text-xs"></i>
@@ -275,8 +258,7 @@
                         <div class="text-[10px] text-slate-400 mt-1">Total stok part</div>
                     </div>
 
-                    <!-- KPI 6 -->
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 border-l-4 border-l-rose-500 relative overflow-hidden">
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 border-l-4 border-l-rose-500">
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-[10px] font-bold text-slate-400 tracking-wider">OUT OF STOCK</span>
                             <i class="fa-solid fa-triangle-exclamation text-rose-500 bg-rose-50 p-2 rounded-xl text-xs"></i>
@@ -290,7 +272,6 @@
                 <!-- BAGIAN GRAFIK & VALUATION SUMMARY -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                     
-                    <!-- Grafik Top 10 MO -->
                     <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col">
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
@@ -302,7 +283,6 @@
                         </div>
                     </div>
 
-                    <!-- Grafik Sebaran Cluster -->
                     <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col">
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
@@ -314,7 +294,6 @@
                         </div>
                     </div>
 
-                    <!-- Valuation Summary Card -->
                     <div class="bg-gradient-to-br from-indigo-900 via-indigo-800 to-slate-900 text-white p-6 rounded-2xl shadow-xl flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-6">
@@ -344,9 +323,8 @@
         </div>
     </div>
 
-    <!-- SCRIPT LOGIKA APLIKASI -->
+    <!-- SCRIPT -->
     <script>
-        // Fungsi Simulasi Login (Menyesuaikan fungsionalitas asli template Anda)
         function handleLogin(e) {
             e.preventDefault();
             const user = document.getElementById('username').value.trim();
@@ -355,7 +333,7 @@
             if(user === 'admin' && pass === 'admin123') {
                 document.getElementById('loginPage').classList.add('hidden');
                 document.getElementById('dashboardApp').classList.remove('hidden');
-                initCharts(); // Inisialisasi chart saat login sukses
+                initCharts();
             } else {
                 alert('User ID atau Password salah! Gunakan admin / admin123');
             }
@@ -365,14 +343,6 @@
             document.getElementById('dashboardApp').classList.add('hidden');
             document.getElementById('loginPage').classList.remove('hidden');
             document.getElementById('loginForm').reset();
-        }
-
-        // Toggle Sidebar di Mobile
-        function toggleMobileSidebar() {
-            const sidebar = document.getElementById('sidebarPanel');
-            const overlay = document.getElementById('sidebarOverlay');
-            sidebar.classList.toggle('-translate-x-full');
-            overlay.classList.toggle('hidden');
         }
 
         function alertPanel() {
@@ -391,9 +361,7 @@
             alert('Memperbarui data dari Google Sheets...');
         }
 
-        // Inisialisasi Chart.js Contoh Tampilan
         function initCharts() {
-            // Chart Top 10 MO
             const ctxMo = document.getElementById('topMoChart').getContext('2d');
             new Chart(ctxMo, {
                 type: 'bar',
@@ -417,7 +385,6 @@
                 }
             });
 
-            // Chart Cluster Sebaran
             const ctxCluster = document.getElementById('clusterChart').getContext('2d');
             new Chart(ctxCluster, {
                 type: 'doughnut',
